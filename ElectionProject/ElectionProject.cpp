@@ -6,7 +6,10 @@
 int main()
 {
     std::cout << "Hello World!\n";
+	for (int i = 0; i < 3; i++)
+	{
 
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
