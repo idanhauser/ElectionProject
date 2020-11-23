@@ -8,7 +8,9 @@ int main()
     std::cout << "Hello World!\n";
 	for (int i = 0; i < 3; i++)
 	{
-
+		while (true)
+		{}
+		
 	}
 }
 
