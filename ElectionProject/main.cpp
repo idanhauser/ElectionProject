@@ -8,7 +8,7 @@ using namespace elec;
 using namespace std;
 
 
-
+//idan is the king
 void mainMenu()
 {
 	short userChoise;
