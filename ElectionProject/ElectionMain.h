@@ -1,5 +1,13 @@
 #pragma once
-namespace elec
+#include <iostream>
+#include <ostream>
+#include "Party.h"
+#include "District.h"
+#include "Citizen.h"
+using namespace elec;
+using namespace std;
+
+namespace elecMain
 {
 
 
@@ -17,7 +25,7 @@ namespace elec
 		exit_menu
 	};
 
-	void mainMenu();
+	 void mainMenu();
 
 	void addDistrict();
 	void addCitizen();
