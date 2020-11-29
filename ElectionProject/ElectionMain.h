@@ -1,4 +1,5 @@
 #pragma once
+#pragma  warning(disable:4996)
 #include <iostream>
 #include <ostream>
 #include "Party.h"
@@ -7,6 +8,12 @@
 using namespace elec;
 using namespace std;
 
+namespace elec
+{
+	const int MAX_SIZE = 1024;
+
+	
+}
 namespace elecMain
 {
 
