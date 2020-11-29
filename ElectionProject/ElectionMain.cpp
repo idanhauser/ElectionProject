@@ -1,6 +1,27 @@
 ﻿#include "ElectionMain.h"
 
+
+namespace elec
+{
+	//TODO ///need to be checked
+	Citizen**& reallocCitizenArray(Citizen** old_memory, int old_size, int new_size)
+	{
+		Citizen** new_memory = new Citizen * [new_size];
+		for (int i = 0; i < min(old_size, new_size); i++)
+			new_memory[i] = old_memory[i];
+
+		delete[] old_memory;
+		//old_memory = new_memory;
+		return new_memory;
+	}
+}
+
+
+
+
 namespace elecMain {
+
+
 	void mainMenu()
 	{
 		short userChoise;
@@ -24,40 +45,60 @@ namespace elecMain {
 			switch (choice)
 			{
 			case Menu_Choices::addDistrict:
-				cout << "Add a district \n";
-				// rest of code here
+				cout << endl;
+				cout << "-------------" << endl;
+				cout << "Add District" << endl;
+				cout << "-------------" << endl;
+				addDistrict();
 				break;
 			case Menu_Choices::addCitizen:
-				cout << "Add a citizen\n";
-				// rest of code here
+				cout << endl;
+				cout << "-------------" << endl;
+				cout << "Add Citizen" << endl;
+				cout << "-------------" << endl;
+				addCitizen();
 				break;
 			case Menu_Choices::addParty:
-				cout << "Add a party\n";
-				// rest of code here
+				cout << endl;
+				cout << "-------------" << endl;
+				cout << "Add A Party" << endl;
+				cout << "-------------" << endl;
+				addParty();
 				break;
 			case Menu_Choices::addPartyRepresentative:
-				cout << "Add a citizen as a party representative\n";
-				// rest of code here
+				cout << endl;
+				cout << "-------------" << endl;
+				cout << "Add A Party Representative" << endl;
+				cout << "-------------" << endl;
+				addPartyRepresentative();
 				break;
-			case Menu_Choices::viewCountie:
-				cout << "View all counties\n";
-				// rest of code here
+			case Menu_Choices::viewDistricts:
+				cout << "-------------" << endl;
+				cout << "View Districts" << endl;
+				cout << "-------------" << endl;
+				viewDistricts();
 				break;
 			case Menu_Choices::viewCitizens:
-				cout << "View all citizens\n";
-				// rest of code here
+				cout << "-------------" << endl;
+				cout << "View Citizens" << endl;
+				cout << "-------------" << endl;
+				viewCitizens();
 				break;
 			case Menu_Choices::viewParties:
-				cout << "View all parties.\n";
-				// rest of code here
+				cout << "-------------" << endl;
+				cout << "View Parties" << endl;
+				cout << "-------------" << endl;
+				viewParties();
 				break;
 			case Menu_Choices::voting:
-				cout << "Voting\n";
-				// rest of code here
+				cout << "-------------" << endl;
+				cout << "Voting" << endl;
+				cout << "-------------" << endl;
 				break;
 			case Menu_Choices::results:
-				cout << "Results\n";
-				// rest of code here
+				cout << "-------------" << endl;
+				cout << "Results" << endl;
+				cout << "-------------" << endl;
 				break;
 			case Menu_Choices::exit_menu:
 				cout << "Bye-bye.\n";
@@ -70,4 +111,58 @@ namespace elecMain {
 			}
 		}
 	}
+
+	void addDistrict()
+	{
+		char name[MAX_SIZE];
+		int numberRepresentatives;
+		cout << "Insert a district's name and a number of representatives:" << endl;
+		cin >> name >> numberRepresentatives;
+
+	}
+
+	void addCitizen()
+	{
+		int id, birtyear, districtId;
+		char name[MAX_SIZE];
+
+
+		cout << "Insert a citizen name,id ,birth year, district:" << endl;
+		cin >> name >> id >> birtyear >> districtId;
+
+	}
+
+	void addParty()
+	{
+		int idPd;
+		char name[MAX_SIZE];
+
+
+		cout << "Insert a party name,id of PD of party:" << endl;
+		cin >> name >> idPd >> idPd;
+		
+	}
+
+	void addPartyRepresentative()
+	{
+		int partyId, representId,districtId;
+
+
+		cout << "Insert a representative citizen's id ,district's id, party's id:" << endl;
+		cin >> representId >> districtId >> partyId >> districtId;
+	}
+
+	void viewDistricts()
+	{
+		
+	}
+
+	void viewCitizens()
+	{
+	}
+
+	void viewParties()
+	{
+	}
 }
+

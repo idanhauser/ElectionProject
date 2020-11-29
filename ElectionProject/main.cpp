@@ -15,7 +15,9 @@ int main()
 {
 	cout << "Election" << endl;
 	cout << "-------------" << endl;
+
 	mainMenu();
+
 	
 
 
