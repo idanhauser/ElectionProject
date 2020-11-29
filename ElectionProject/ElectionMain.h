@@ -12,7 +12,7 @@ namespace elec
 {
 	const int MAX_SIZE = 1024;
 
-	
+
 }
 namespace elecMain
 {
@@ -32,7 +32,7 @@ namespace elecMain
 		exit_menu
 	};
 
-	 void mainMenu();
+	void mainMenu();
 
 	void addDistrict();
 	void addCitizen();
@@ -43,5 +43,5 @@ namespace elecMain
 	void voting();
 	void results();
 
-	
+
 }
