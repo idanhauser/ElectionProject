@@ -18,13 +18,13 @@ namespace elec
 		
 		int phySizeEligciti;
 		int logicSizeEligciti;
-
-
+		District(const District& other);//we don't want the ability to duplicate a district
+		
 	public:
-
+		friend class Citizen;
 		District() = delete;///we delete default constructor
 		District(const char* name);
-		District(const District& other)=delete;//we don't want the ability to duplicate a district
+	
 		~District();
 
 		bool setName(const char* name);

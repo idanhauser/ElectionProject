@@ -2,18 +2,22 @@
 #pragma  warning(disable:4996)
 #include <iostream>
 #include <ostream>
-#include "Party.h"
-#include "District.h"
-#include "Citizen.h"
-using namespace elec;
+class District;
+class Citizen;
+class Party;
+
 using namespace std;
+
+
 
 namespace elec
 {
 	const int MAX_SIZE = 1024;
 
-	Citizen**& reallocCitizenArray(Citizen** old_memory, int old_size, int new_size);
+	Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size);
 }
+
+using namespace elec;
 //TODO:To watch keren about maneger class..its going to be changed
 namespace elecMain
 {
@@ -48,7 +52,7 @@ namespace elecMain
 		exit_menu
 	};
 
-	void mainMenu();
+	void showMainMenu();//TODO:do you think we need to move it to class electionRound?
 	void addDistrict();
 	void addCitizen();
 	void addParty();

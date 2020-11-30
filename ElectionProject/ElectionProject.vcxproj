@@ -142,6 +142,7 @@
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="District.cpp" />
     <ClCompile Include="ElectionMain.cpp" />
+    <ClCompile Include="ElectionRound.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Party.cpp" />
   </ItemGroup>
@@ -149,6 +150,7 @@
     <ClInclude Include="Citizen.h" />
     <ClInclude Include="District.h" />
     <ClInclude Include="ElectionMain.h" />
+    <ClInclude Include="ElectionRound.h" />
     <ClInclude Include="Party.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

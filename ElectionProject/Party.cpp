@@ -11,12 +11,12 @@ namespace elec {
 	}
 
 	///idan commented - do we want to duplicate a party?
-	/*
+	
 	Party::Party(const Party& other) : _partyID(other._partyID), _PMCandidateID(other._PMCandidateID)
 	{
 		set_partyName(other._partyName);
 		set_partyMembers(other._partyMembers, other.logicSizePartyMembers);
-	}*/
+	}
 
 
 	Party::~Party()
@@ -71,6 +71,8 @@ namespace elec {
 		return _partyMembers;
 	}
 
+	///todo:need to be removed after roee divide builds the vectors...
+	Citizen** reallocCitizenArray(Citizen** citizen, int old_size, int new_size);
 
 	bool Party::addPartyMembers(Citizen* citizen)
 	{

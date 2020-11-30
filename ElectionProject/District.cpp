@@ -8,6 +8,15 @@ namespace elec
 	int District::snGenerator = 100;
 
 
+	District::District(const District& other)
+	{
+		this->_serialNum = other._serialNum;
+		this->_electionResult = other._electionResult;
+		setName(const_cast<const char*>(other._name));
+
+		setEligibleCitizens(other._eligibleCitizens, other.logicSizeEligciti);
+	}
+
 	/**
 	 * \brief constructor for district
 	 * \param name the name of the district
@@ -32,6 +41,7 @@ namespace elec
 	bool District::setName(const char* name)
 	{
 		long namelen = strlen(name);
+		delete[] name;
 		this->_name = new char[namelen + 1];
 		strncpy(this->_name, name, namelen);
 		return true;

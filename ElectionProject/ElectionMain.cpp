@@ -1,10 +1,12 @@
-﻿#include "ElectionMain.h"
+﻿
+#include "ElectionMain.h"
 
+#include "Citizen.h"
 
 namespace elec
 {
 	//TODO ///need to be checked
-	Citizen**& reallocCitizenArray(Citizen** old_memory, int old_size, int new_size)
+	Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size)
 	{
 		Citizen** new_memory = new Citizen * [new_size];
 		for (int i = 0; i < min(old_size, new_size); i++)
@@ -22,7 +24,7 @@ namespace elec
 namespace elecMain {
 
 
-	void mainMenu()
+	void showMainMenu()
 	{
 		short userChoise;
 		Menu_Choices	choice = Menu_Choices::addDistrict;

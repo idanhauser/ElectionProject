@@ -12,7 +12,7 @@ namespace elec
 		int _partyID; //should be made automatic using contsructor
 		char* _partyName;
 		int _PMCandidateID;
-		Citizen** _partyMembers;
+		 Citizen** _partyMembers;
 		
 		int phySizePartyMembers;
 		int logicSizePartyMembers;
@@ -20,7 +20,7 @@ namespace elec
 	public:
 		Party() = delete;
 		Party(const char* partyName, int _PMCandidateID);
-		Party(const Party& other)=delete;//idan changed we dont want the ability to duplicate a praty?
+		Party(const Party& other);//=delete;//TODO:idan changed we dont want the ability to duplicate a praty?
 		~Party();
 
 
