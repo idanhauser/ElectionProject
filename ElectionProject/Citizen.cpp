@@ -5,46 +5,48 @@
 namespace elec
 {
 	//roee original cto'r
-	Citizen::Citizen(const char* citizen_name, int id_num, int birthDate[8], int districtNum) :
+/*	Citizen::Citizen(const char* citizen_name, int id_num, int birthDate[4], int districtNum) :
 		_citizen_name(new char[MAX_SIZE])
 	{
 		setCitizenName(citizen_name);
 		this->_id_num = id_num;
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 4; i++) {
 			this->_birthDate[i] = birthDate[i];
 		}
 		this->_districtNum = districtNum;
 		_district = nullptr;
 		_party = nullptr;
 	}
+	*/
 
-	//idan TODO -> do we want to duplicate a citizen?
 
-	Citizen::Citizen(const Citizen& other)
+	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum,
+		 const Party* party /*const District& district,*/) :
+		_citizen_name(new char[strlen(citizen_name + 1)]), _id_num(id_num), _birthYear(0), _party(nullptr), _districtNum(districtNum)
+	{
+		setCitizenName(citizen_name);
+		
+	//	this->_id_num = id_num;               //roee: I moved them all to the func name line
+	//  this->_districtNum = districtNum;
+	//	_district = new District(district);
+
+	}
+	
+	
+	//idan TODO -> do we want to duplicate a citizen? //roee: Canceled it
+/*	Citizen::Citizen(const Citizen& other): _district(other._district)
 	{
 		setCitizenName(other._citizen_name);
 		this->_id_num = other._id_num;
 		setBirthDate(other._birthDate);
-		this->_districtNum = other._districtNum;
+		//this->_districtNum = other._districtNum;
 	}
 	//idan added ctor TODO: need to talk with roee
-	Citizen::Citizen(const char* citizen_name, int id_num, int birthDate[8], int districtNum, const District& district,
-		const Party* party) : _citizen_name(new char[strlen(citizen_name + 1)]), _id_num(id_num), _districtNum(districtNum),
-		_party(party)
-	{
-		setCitizenName(citizen_name);
-		this->_id_num = id_num;
-		for (int i = 0; i < 8; i++) {
-			this->_birthDate[i] = birthDate[i];
-		}
-		this->_districtNum = districtNum;
-		_district = new District(district);
+	*/
 
-	}
 
 	Citizen::~Citizen()
 	{
-		delete[] _birthDate;
 		delete[] _citizen_name;
 	}
 
@@ -56,19 +58,30 @@ namespace elec
 		return true;
 	}
 
-	bool Citizen::setBirthDate(const int* birthDate)
-	{
-		for (int i = 0; i < 8; i++)
-		{
-			this->_birthDate[i] = birthDate[i];
-		}
+
+	bool Citizen::setCitizenID(int idnum) {
+		_id_num = idnum;
 		return true;
 	}
 
-	bool Citizen::setDistrict(const District& district)
+	bool Citizen::setBirthYear(const int birthYear)
 	{
-		_district = new District(district);
-		return true;
+		if (birthYear >= 2002 && birthYear <= 1900)
+			return false;
+		else
+		{
+			_birthYear = birthYear;
+			return true;
+		}
+	}
+	
+	bool Citizen::setDistrictNum(int DistrictNum) 
+	{
+	//	_district = new District(district);
+		_districtNum = DistrictNum;
+		District* district = findDistrictByNum(DistrictNum); //roee: The idea is to add the citizen to his district's eligible list after the user entered the number
+		district.addEligibleCitizens(DistrictNum); //roee: we should implement. not sure in which class to implement both funcs.
+		return true;                                     //for now I added  one func at district.h bottom
 	}
 
 	bool Citizen::setParty(const Party* party)
@@ -90,9 +103,9 @@ namespace elec
 	}
 
 
-	const int* Citizen::getCitizenBD() const
+	int Citizen::getCitizenBY() const
 	{
-		return _birthDate;
+		return _birthYear;
 
 	}
 

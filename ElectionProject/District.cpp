@@ -46,7 +46,7 @@ namespace elec
 		strncpy(this->_name, name, namelen);
 		return true;
 	}
-
+	//roee: I think now when we have the list func it will be better to chagne it
 	bool District::setEligibleCitizens(Citizen** eligibleCitizens, int size)
 	{
 		delete[] this->_eligibleCitizens;

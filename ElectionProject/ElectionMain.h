@@ -14,7 +14,7 @@ namespace elec
 {
 	const int MAX_SIZE = 1024;
 
-	Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size);
+	Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size); //roee: copied to citizensllist.h
 }
 
 using namespace elec;

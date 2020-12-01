@@ -1,28 +1,32 @@
 ﻿#include "Party.h"
-
+#include "List.h"
 namespace elec {
 
 	int Party::pdGenerator;
 
 	Party::Party(const char* partyName, int PMCandidateID) :
-		_partyID(++pdGenerator), _partyName(new char[MAX_SIZE]), _PMCandidateID(PMCandidateID), _partyMembers(new Citizen* [MAX_SIZE]), phySizePartyMembers(MAX_SIZE), logicSizePartyMembers(0)
+		_partyID(++pdGenerator), _partyName(new char[MAX_SIZE]), _PMCandidateID(PMCandidateID) 
+		//_partyMembers() //roee: matala says u add a party using the pmCandidate. should we initiate it with citizens in it? does it auto initiates?
 	{
+		Citizen* PMCandidate = findCitizenByID(PMCandidateID); //roee: need to implement the func. where does the func belongs to?
+		addPartyMembers(PMCandidate); //roee: And whats the best way to find in the eligibleCitizens List the pmCandidate BY his ID?
 		set_partyName(partyName);
 	}
 
 	///idan commented - do we want to duplicate a party?
+	 //roee: CANCELED IT
 	
-	Party::Party(const Party& other) : _partyID(other._partyID), _PMCandidateID(other._PMCandidateID)
+	/*Party::Party(const Party& other) : _partyID(other._partyID), _PMCandidateID(other._PMCandidateID)
 	{
 		set_partyName(other._partyName);
-		set_partyMembers(other._partyMembers, other.logicSizePartyMembers);
-	}
+		set_party(other._partyMembers, other.logicSizePartyMembers);
+	}*/
 
 
 	Party::~Party()
 	{
 		delete[] _partyName;
-		delete[] _partyMembers;
+		_partyMembers.deleteList(); //roee: updated from del[] partymembers
 	}
 
 
@@ -34,11 +38,12 @@ namespace elec {
 		return true;
 	}
 
+	bool Party::setPMCandidateID(int idnum) {
+		_PMCandidateID = idnum;
+		return true;
+	}
 
-
-
-
-	bool Party::set_partyMembers(Citizen** partyMembers, int size)
+/*	bool Party::set_party(Citizen** partyMembers, int size) //roee: changed it - it does the same as list constructor
 	{
 		delete[] this->_partyMembers;
 		phySizePartyMembers = size * 2;
@@ -49,7 +54,9 @@ namespace elec {
 			this->_partyMembers[i] = partyMembers[i];
 		}
 		return true;
-	}
+
+
+	}*/
 
 	const int Party::getPartyID() const
 	{
@@ -66,19 +73,19 @@ namespace elec {
 		return _PMCandidateID;
 	}
 
-	Citizen** Party::getPartypartyMembers() const
+	List Party::getPartyMembers() const //roee: Im not sure if I should implement getter in List class or keep it that way
 	{
 		return _partyMembers;
 	}
 
 	///todo:need to be removed after roee divide builds the vectors...
-	Citizen** reallocCitizenArray(Citizen** citizen, int old_size, int new_size);
-
-	bool Party::addPartyMembers(Citizen* citizen)
+	//Citizen** reallocCitizenArray(Citizen** citizen, int old_size, int new_size);
+	
+	bool Party::addPartyMembers(Citizen* citizen) //roee: the name just covers the list func
 	{
-		if (logicSizePartyMembers == phySizePartyMembers)
+		/*if (logicSizePartyMembers == phySizePartyMembers)
 		{
-			_partyMembers = reallocCitizenArray(_partyMembers, phySizePartyMembers, phySizePartyMembers * 2);
+			List::reallocCitizenArray(partyMembers, phySizePartyMembers, phySizePartyMembers * 2);
 			phySizePartyMembers *= 2;
 		}
 		if (logicSizePartyMembers < phySizePartyMembers)
@@ -90,7 +97,9 @@ namespace elec {
 			//error
 			return false;
 		}
-		return true;
+		return true;*/
+
+		return _partyMembers.addListMember(citizen); //roee: was added instead of in each class
 	}
 
 
