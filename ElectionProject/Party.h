@@ -16,13 +16,13 @@ namespace elec
 		
 		int phySizePartyMembers;
 		int logicSizePartyMembers;
-
+		const Party& operator=(const Party&);
 	public:
 		Party() = delete;
 		Party(const char* partyName, int _PMCandidateID);
 		Party(const Party& other);//=delete;//TODO:idan changed we dont want the ability to duplicate a praty?
 		~Party();
-
+		friend ostream& operator<<(ostream& os, const Party& party);
 
 		bool set_partyName(const char* partyName);
 		bool set_partyMembers(Citizen** partyMembers, int size);

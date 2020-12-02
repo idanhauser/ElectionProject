@@ -4,15 +4,15 @@ using namespace std;
 
 
 namespace elec {
-
+	//todo: need to add an operator to print the election round.
 	class ElectionRound
 	{
-		
-
+	private:
+		const ElectionRound& operator=(const ElectionRound&);
 		int _date[8];
 	public:
 		ElectionRound(int date[8]);
-		~ElectionRound()=default;
+		~ElectionRound() = default;
 		enum class Menu_Choices
 		{
 			addDistrict = 1,
@@ -39,7 +39,7 @@ namespace elec {
 		void results();//todo:roee
 
 
-		
+
 	};
 
 }

@@ -102,6 +102,11 @@ namespace elec
 
 	}
 
+	ostream& operator<<(ostream& os, const Citizen& citizen)
+	{
+		os << citizen._citizen_name << ", his id :" << (int)citizen._id_num << " and his year birth : " << (int)citizen._birthDate << endl;
+		return os;
+	}
 }
 
 

@@ -94,4 +94,9 @@ namespace elec {
 	}
 
 
+	ostream& operator<<(ostream& os, const Party& party)
+	{
+		os << party._partyName << ", it's is id :" << (int)party._partyID << "  the PM Candidate ID is " << (int)party._PMCandidateID << endl;
+		return os;
+	}
 }

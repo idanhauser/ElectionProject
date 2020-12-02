@@ -19,14 +19,15 @@ namespace elec
 		int phySizeEligciti;
 		int logicSizeEligciti;
 		District(const District& other);//we don't want the ability to duplicate a district
-		
+		const District& operator=(const District&);
+
 	public:
 		friend class Citizen;
 		District() = delete;///we delete default constructor
 		District(const char* name);
 	
 		~District();
-
+		friend ostream& operator<<(ostream& os, const District& district);
 		bool setName(const char* name);
 		bool setEligibleCitizens(Citizen** eligible_Citizens, int size);
 

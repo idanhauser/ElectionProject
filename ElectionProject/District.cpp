@@ -3,8 +3,7 @@
 #include <iostream>
 #include "District.h"
 
-namespace elec
-{
+namespace elec {
 	int District::snGenerator = 100;
 
 
@@ -85,11 +84,11 @@ namespace elec
 	{
 		return _serialNum;
 	}
-	//TODO:print function with operator..
-	/*
-	ostream& operator<<(ostream& os, const District& district) 
+
+
+	ostream& operator<<(ostream& os, const District& district)
 	{
-		os << "the district: " << district.getName() << " its id is: " << (int)district.getSerialNum() <<" the voters percentage is: " << (double)district.getVotersPercentage() << "and the election's result: " << (int)district.getElectionResults() << endl;
+		os << "the district: " << district.getName() << " its id is: " << (int)district.getSerialNum() << " the voters percentage is: " << (double)district.getVotersPercentage() << "and the election's result: " << (int)district.getElectionResults() << endl;
 		return os;
-	}*/
+	}
 }
