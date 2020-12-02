@@ -33,12 +33,12 @@
     <ClCompile Include="ElectionRound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ElectionMain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="District.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Citizen.h">
@@ -48,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ElectionRound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

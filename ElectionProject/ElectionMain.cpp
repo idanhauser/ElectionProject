@@ -6,7 +6,7 @@
 namespace elec
 {
 	//TODO ///need to be checked
-	Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size)
+	Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size) //roee: copied to citizensllist.cpp
 	{
 		Citizen** new_memory = new Citizen * [new_size];
 		for (int i = 0; i < min(old_size, new_size); i++)
