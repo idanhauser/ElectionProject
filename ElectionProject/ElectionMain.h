@@ -2,6 +2,8 @@
 #pragma  warning(disable:4996)
 #include <iostream>
 #include <ostream>
+
+#include "Citizen.h"
 class District;
 class Citizen;
 class Party;
@@ -14,7 +16,7 @@ namespace elec
 {
 	const int MAX_SIZE = 1024;
 
-	Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size); //roee: copied to citizensllist.h
+	//idan commented Citizen** reallocCitizenArray(Citizen** old_memory, int old_size, int new_size); //roee: copied to citizensllist.h
 }
 
 using namespace elec;

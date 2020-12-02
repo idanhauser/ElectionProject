@@ -41,9 +41,6 @@
     <ClInclude Include="ElectionMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="District.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Citizen.h">
       <Filter>Header Files</Filter>
     </ClInclude>

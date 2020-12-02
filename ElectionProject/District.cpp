@@ -23,7 +23,7 @@ namespace elec
 	 */
 	District::District(const char* name) : _name(new char[strlen(_name) + 1]), _serialNum(snGenerator++),
 		_eligibleCitizens(new Citizen* [MAX_SIZE]), logicSizeEligciti(0),
-		phySizeEligciti(MAX_SIZE), _votersPercentage(0)
+		phySizeEligciti(MAX_SIZE), _votersPercentage(0), _electionResult(0)
 	{
 		long namelen = strlen(name);
 		this->_name = new char[namelen + 1];

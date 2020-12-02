@@ -4,6 +4,7 @@
 
 namespace elec
 {
+	class List;
 	class Citizen;
 	class Party
 	{

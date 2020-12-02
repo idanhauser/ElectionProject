@@ -10,26 +10,27 @@ namespace elec
 	private:
 		char* _citizen_name;
 		int _id_num;
-		int _birthYear;//TODO:not that i read again the matala 1 we need only birth year.. not the day and month lets change it like keren(basketball) need to change to _yearOfBirth yes? //roee: done
+		int _birthYear;
 		int _districtNum;
 		const Party* _party;
-		//const District& _district; - //roee: We can have only the number, but check the only problem it makes at setDistrictNum func
+		const District& _district;  //roee: We can have only the number, but check the only problem it makes at setDistrictNum func//TODO:so what? the this memeber is for us, the id of district is for the user
 
-	//	Citizen(const Citizen/***/& other);///idan cahnged ->//TODO:we don't want the ability to duplicate a citizen
+		Citizen(const Citizen& other);///idan cahnged ->//TODO:we don't want the ability to duplicate a citizen
 		
 	public:
 		Citizen() = delete;
 //		Citizen(const char* citizen_name, int id_num, int birthDate[8], int districtNum);
-		Citizen(const char* citizen_name, int id_num, int birthYear, int _districtNum
-			/*,const District &district*/ ,const Party* party);//TODO:Added after watching at keren vids, i think we should do it like this.
 		
+		Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
+		        const District& district);
+		//TODO: copy constructor
 		~Citizen();
 
 	
-		bool setCitizenName(const char* citizen_name);
-		bool setCitizenID(int idnum);
+		bool setCitizenName(const char* citizenName);
+		bool setCitizenID(int idNum);
 		bool setBirthYear(const int birthYear);
-		bool setDistrictNum(int DistrictNum);
+		//bool setDistrictNum(int districtNum); citizen can't change a district
 		bool setParty(const Party* party);
 		
 		const char* getCitizenName() const;

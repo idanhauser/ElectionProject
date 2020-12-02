@@ -149,7 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h" />
-    <ClInclude Include="District.h" />
     <ClInclude Include="ElectionMain.h" />
     <ClInclude Include="ElectionRound.h" />
     <ClInclude Include="List.h" />

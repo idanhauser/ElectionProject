@@ -1,15 +1,18 @@
 ﻿#include "Party.h"
 #include "List.h"
+
+
 namespace elec {
 
 	int Party::pdGenerator;
 
-	Party::Party(const char* partyName, int PMCandidateID) :
-		_partyID(++pdGenerator), _partyName(new char[MAX_SIZE]), _PMCandidateID(PMCandidateID) 
-		//_partyMembers() //roee: matala says u add a party using the pmCandidate. should we initiate it with citizens in it? does it auto initiates?
+	Party::Party(const char* partyName, int PMCandidateID) :_partyID(pdGenerator++),_partyName(new char[strlen(partyName)]),_PMCandidateID(PMCandidateID)
 	{
-		Citizen* PMCandidate = findCitizenByID(PMCandidateID); //roee: need to implement the func. where does the func belongs to?
-		addPartyMembers(PMCandidate); //roee: And whats the best way to find in the eligibleCitizens List the pmCandidate BY his ID?
+
+		//_partyMembers() //roee: matala says u add a party using the pmCandidate. should we initiate it with citizens in it? does it auto initiates?
+
+	//todo:idan->	Citizen* PMCandidate = findCitizenByID(PMCandidateID); //roee: need to implement the func. where does the func belongs to?
+	//todo:idan->	addPartyMembers(PMCandidate); //roee: And whats the best way to find in the eligibleCitizens List the pmCandidate BY his ID?
 		set_partyName(partyName);
 	}
 
@@ -72,11 +75,11 @@ namespace elec {
 	{
 		return _PMCandidateID;
 	}
-
+	/*//todo:idan->
 	List Party::getPartyMembers() const //roee: Im not sure if I should implement getter in List class or keep it that way
 	{
 		return _partyMembers;
-	}
+	}*/
 
 	///todo:need to be removed after roee divide builds the vectors...
 	//Citizen** reallocCitizenArray(Citizen** citizen, int old_size, int new_size);

@@ -1,9 +1,11 @@
-#include "List.h"
 
+using namespace std;
+#include "Citizen.h"
+#include "List.h"
 namespace elec {
 
 
-	List::List() : phySizeMembers(2), logicSizeMembers(1) //roee: not sure about these values for the sizes
+	List::List() : phySizeMembers(MAX_SIZE), logicSizeMembers(0) //roee: not sure about these values for the sizes...//idan : these are the values.
 	{
 		delete[] this->_List;
 		this->_List = new Citizen * [phySizeMembers];
@@ -13,7 +15,7 @@ namespace elec {
 		}*/
 	}
 
-	List::List(Citizen* pmCandidate) : phySizeMembers(2), logicSizeMembers(1) //roee: same here
+	List::List(Citizen* pmCandidate) :phySizeMembers(MAX_SIZE), logicSizeMembers(0) //roee: same here//idan : these are the values.
 	{
 		delete[] this->_List;
 		this->_List = new Citizen * [phySizeMembers];
@@ -21,20 +23,20 @@ namespace elec {
 		{
 			this->_List[i] = Members[i];
 		}*/
-		addListMember(pmCandidate);
+	//	addListMember(pmCandidate);
 	}
-
+	
 	Citizen** List::reallocCitizenArray(Citizen** old_memory, int old_size, int new_size) //roee: moved yours over here.
-	{																					 //just added to min std, But Im not sure its cool..
+	{																					 //just added to min std, But Im not sure its cool..//idan:i just changed it to using namespace
 		Citizen** new_memory = new Citizen * [new_size];
-		for (int i = 0; i < std::min(old_size, new_size); i++)
+		for (int i = 0; i <min(old_size, new_size); i++)
 			new_memory[i] = old_memory[i];
 
 		delete[] old_memory;
 		//old_memory = new_memory;
 		return new_memory;
 	}
-
+	
 	bool List::addListMember(Citizen* citizen) //roee: changed the origin u gave me. Do u think it should get one citizen at a time?
 	{
 		if (logicSizeMembers == phySizeMembers)

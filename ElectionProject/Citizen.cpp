@@ -20,19 +20,17 @@ namespace elec
 	*/
 
 
-	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum,
-		 const Party* party /*const District& district,*/) :
-		_citizen_name(new char[strlen(citizen_name + 1)]), _id_num(id_num), _birthYear(0), _party(nullptr), _districtNum(districtNum)
+	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party, const District& district) : _citizen_name(new char[strlen(citizen_name + 1)]), _id_num(id_num), _birthYear(0), _party(nullptr), _districtNum(districtNum), _district(district)
 	{
 		setCitizenName(citizen_name);
-		
-	//	this->_id_num = id_num;               //roee: I moved them all to the func name line
-	//  this->_districtNum = districtNum;
-	//	_district = new District(district);
+
+		//	this->_id_num = id_num;               //roee: I moved them all to the func name line
+		//  this->_districtNum = districtNum;
+		//	_district = new District(district);
 
 	}
-	
-	
+
+
 	//idan TODO -> do we want to duplicate a citizen? //roee: Canceled it
 /*	Citizen::Citizen(const Citizen& other): _district(other._district)
 	{
@@ -43,6 +41,8 @@ namespace elec
 	}
 	//idan added ctor TODO: need to talk with roee
 	*/
+
+
 
 
 	Citizen::~Citizen()
@@ -74,16 +74,16 @@ namespace elec
 			return true;
 		}
 	}
-	
-	bool Citizen::setDistrictNum(int DistrictNum) 
+	/* citizen can or can not change a district
+	bool Citizen::setDistrictNum(int DistrictNum)
 	{
-	//	_district = new District(district);
+		//	_district = new District(district);
 		_districtNum = DistrictNum;
-		District* district = findDistrictByNum(DistrictNum); //roee: The idea is to add the citizen to his district's eligible list after the user entered the number
-		district.addEligibleCitizens(DistrictNum); //roee: we should implement. not sure in which class to implement both funcs.
+	//todo idan	District* district = findDistrictByNum(DistrictNum); //roee: The idea is to add the citizen to his district's eligible list after the user entered the number
+	//todo idan	district.addEligibleCitizens(DistrictNum); //roee: we should implement. not sure in which class to implement both funcs.
 		return true;                                     //for now I added  one func at district.h bottom
 	}
-
+	*/
 	bool Citizen::setParty(const Party* party)
 	{
 		_party = party;
