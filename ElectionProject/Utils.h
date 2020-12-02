@@ -3,10 +3,6 @@
 #include <iostream>
 #include <ostream>
 
-#include "Citizen.h"
-class District;
-class Citizen;
-class Party;
 
 using namespace std;
 
@@ -14,9 +10,6 @@ using namespace std;
 namespace elec
 {
 	const int MAX_SIZE = 1024;
-
-
-
 
 	enum class Menu_Choices
 	{
@@ -32,6 +25,16 @@ namespace elec
 		exit_menu
 	};
 
+	void showMainMenu();
+	void addDistrict();
+	void addCitizen();
+	void addParty();
+	void addPartyRepresentative();
+	void viewDistricts();
+	void viewCitizens();
+	void viewParties();
+	void voting();//todo:roee
+	void results();//todo:roee
 
 
 }

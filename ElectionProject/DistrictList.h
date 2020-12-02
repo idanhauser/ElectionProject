@@ -12,12 +12,13 @@ namespace elec {
 		int _phySize;
 		District** _districts;
 
-		DistrictList(const DistrictList& other);
+	
+		const DistrictList& operator=(const DistrictList&);
 
 	public:
 		DistrictList();
 		~DistrictList();
-		const DistrictList& operator=(const DistrictList&);//idan:should be in private and with friend class, but cant make it work
+		DistrictList(const DistrictList& other);//idan:should be in private and with friend class, but cant make it work
 		//friend class District;
 		void realloc(int new_size);
 		bool addToList(District* district);
