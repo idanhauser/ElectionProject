@@ -1,45 +1,47 @@
 ﻿#include "Party.h"
-#include "List.h"
+#include "CitizenList.h"
 
 
 namespace elec {
 
 	int Party::pdGenerator;
 
-	Party::Party(const char* partyName, int PMCandidateID) :_partyID(pdGenerator++),_partyName(new char[strlen(partyName)]),_PMCandidateID(PMCandidateID)
+	Party::Party(const char* partyName, int PMCandidateID) : _partyID(pdGenerator++),
+	                                                         _partyName(new char[strlen(partyName) + 1]),
+	                                                         _PMCandidateID(PMCandidateID), _partyMembers(CitizenList())
 	{
-
 		//_partyMembers() //roee: matala says u add a party using the pmCandidate. should we initiate it with citizens in it? does it auto initiates?
-
 	//todo:idan->	Citizen* PMCandidate = findCitizenByID(PMCandidateID); //roee: need to implement the func. where does the func belongs to?
 	//todo:idan->	addPartyMembers(PMCandidate); //roee: And whats the best way to find in the eligibleCitizens List the pmCandidate BY his ID?
-		set_partyName(partyName);
+		strcpy(this->_partyName, partyName);
+		//TODO://_partyMembers.addToList() ->Idan: it should be something like that -> i will think about it
+		//maybe Party will get a citizen in the paramters who's the prime minister?
 	}
 
 	///idan commented - do we want to duplicate a party?
 	 //roee: CANCELED IT
-	
-	/*Party::Party(const Party& other) : _partyID(other._partyID), _PMCandidateID(other._PMCandidateID)
+	/*
+	Party::Party(const Party& other) : _partyID(other._partyID), _PMCandidateID(other._PMCandidateID)
 	{
 		set_partyName(other._partyName);
 		set_party(other._partyMembers, other.logicSizePartyMembers);
-	}*/
-
+	}
+	*/
 
 	Party::~Party()
 	{
 		delete[] _partyName;
-		_partyMembers.deleteList(); //roee: updated from del[] partymembers
+		//delete _partyMembers; //roee: updated from del[] partymembers//idan returned it to delete..but anyway im not sure we need it.
 	}
 
-
+	/*
 	bool Party::set_partyName(const char* partyName)
 	{
 		long namelen = strlen(partyName);
 		this->_partyName = new char[namelen + 1];
 		strncpy(this->_partyName, partyName, namelen);
 		return true;
-	}
+	}*/
 
 	bool Party::setPMCandidateID(int idnum) {
 		_PMCandidateID = idnum;
@@ -102,7 +104,7 @@ namespace elec {
 		}
 		return true;*/
 
-		return _partyMembers.addListMember(citizen); //roee: was added instead of in each class
+		return _partyMembers.addToList(citizen); //roee: was added instead of in each class
 	}
 
 

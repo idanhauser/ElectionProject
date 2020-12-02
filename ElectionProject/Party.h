@@ -1,11 +1,10 @@
 ﻿#pragma once
-#include "ElectionMain.h"
-#include "List.h"
+#include "Utils.h"
+#include "CitizenList.h"
 
 namespace elec
 {
-	class List;
-	class Citizen;
+	class CitizenList;
 	class Party
 	{
 	private:
@@ -14,7 +13,7 @@ namespace elec
 		int _partyID; 
 		char* _partyName;
 		int _PMCandidateID;
-		List _partyMembers;
+		CitizenList _partyMembers;
 		
 		Party(const Party& other);
 		const Party& operator=(const Party&);
@@ -24,24 +23,24 @@ namespace elec
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
-
-		bool set_partyName(const char* partyName);
+		friend class PartyList;
+	
 		bool setPMCandidateID(int idnum);
 
 		bool addPartyMembers(Citizen* citizen); //roee: Should it get few partyMembers?
 
-		// bool set_party(/*Citizen** partyMembers, int size*/); //roee: no need - does the same as constructor
-
+		
 
 		const char* getPartyName() const;
 		const int getPartyID() const; 
 		int getPartyPMCandidateID() const;
-		List getPartyMembers() const;
+		CitizenList getPartyMembers() const;
 
 
 
 
-
+		// bool set_party(/*Citizen** partyMembers, int size*/); //roee: no need - does the same as constructor
+			//bool set_partyName(const char* partyName);// idan commented
 	};
 
 }

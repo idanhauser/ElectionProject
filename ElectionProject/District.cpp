@@ -2,11 +2,23 @@
 #include <string>
 #include <iostream>
 #include "District.h"
+#include "CitizenList.h"
+using namespace std;
 
 namespace elec {
 	int District::snGenerator = 100;
 
 
+	/**
+	 * \brief constructor for district
+	 * \param name the name of the district
+	 */
+	District::District(const char* name) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
+	                                       _Citizens( CitizenList()), _votersPercentage(0), _electionResult(0)
+	{
+		strcpy(this->_name, name);
+	}
+/*
 	District::District(const District& other)
 	{
 		this->_serialNum = other._serialNum;
@@ -15,61 +27,49 @@ namespace elec {
 
 		setEligibleCitizens(other._eligibleCitizens, other.logicSizeEligciti);
 	}
+	*/
 
-	/**
-	 * \brief constructor for district
-	 * \param name the name of the district
-	 */
-	District::District(const char* name) : _name(new char[strlen(_name) + 1]), _serialNum(snGenerator++),
-		_eligibleCitizens(new Citizen* [MAX_SIZE]), logicSizeEligciti(0),
-		phySizeEligciti(MAX_SIZE), _votersPercentage(0), _electionResult(0)
-	{
-		long namelen = strlen(name);
-		this->_name = new char[namelen + 1];
-		strncpy(this->_name, name, namelen);
-		_eligibleCitizens = nullptr;
 
-	}
 
 	District::~District()
 	{
 		delete[] _name;
-		delete[] _eligibleCitizens;
+		//delete[] _Citizens;//idan : im not sure
 	}
-
-	bool District::setName(const char* name)
-	{
-		long namelen = strlen(name);
-		delete[] name;
-		this->_name = new char[namelen + 1];
-		strncpy(this->_name, name, namelen);
-		return true;
-	}
-	//roee: I think now when we have the list func it will be better to chagne it
-	bool District::setEligibleCitizens(Citizen** eligibleCitizens, int size)
-	{
-		delete[] this->_eligibleCitizens;
-		phySizeEligciti = size * 2;
-		logicSizeEligciti = size;
-		this->_eligibleCitizens = new Citizen * [phySizeEligciti];
-		for (int i = 0; i < size; ++i)
+	/*
+		bool District::setName(const char* name)
 		{
-			this->_eligibleCitizens[i] = eligibleCitizens[i];
+			long namelen = strlen(name);
+			delete[] name;
+			this->_name = new char[namelen + 1];
+			strncpy(this->_name, name, namelen);
+			return true;
 		}
-		return true;
-	}
-
+		//roee: I think now when we have the list func it will be better to chagne it
+		bool District::setEligibleCitizens(Citizen** eligibleCitizens, int size)
+		{
+			delete[] this->_eligibleCitizens;
+			phySizeEligciti = size * 2;
+			logicSizeEligciti = size;
+			this->_eligibleCitizens = new Citizen * [phySizeEligciti];
+			for (int i = 0; i < size; ++i)
+			{
+				this->_eligibleCitizens[i] = eligibleCitizens[i];
+			}
+			return true;
+		}
+		*/
 
 	const char* District::getName() const
 	{
 		return _name;
 	}
-	//idan commented
-	/*	Citizen** District::getEligibleCitizens() const
+
+	const CitizenList& District::getEligibleCitizens() const
 		{
-			return _eligibleCitizens;
+			return _Citizens;
 		}
-		*/
+		
 	double District::getVotersPercentage() const
 	{
 		return _votersPercentage;
@@ -85,10 +85,19 @@ namespace elec {
 		return _serialNum;
 	}
 
+	int District::getNumberOfCitizens() const
+	{
+		return _Citizens.getLogicSize();
+	}
+
 
 	ostream& operator<<(ostream& os, const District& district)
 	{
-		os << "the district: " << district.getName() << " its id is: " << (int)district.getSerialNum() << " the voters percentage is: " << (double)district.getVotersPercentage() << "and the election's result: " << (int)district.getElectionResults() << endl;
+		os << "District " << district._name << ", id: " << (int)district._serialNum <<
+			"has " << district.getNumberOfCitizens() << " citizens." << endl;
+		os << "The voters percentage is: " << (double)district._votersPercentage << "and the election's result is " << 
+			(int)district._electionResult << "." << endl;
+		os << "The people that live in this district are:" <<endl << district._Citizens << endl;
 		return os;
 	}
 }

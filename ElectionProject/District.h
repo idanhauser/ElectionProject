@@ -1,9 +1,13 @@
 ﻿#pragma once
-#include "ElectionMain.h"
+
+#include <string>
+#include <iostream>
+#include "CitizenList.h"
+#include "Utils.h"
 namespace elec
 {
+	class CitizenList;
 
-	class Citizen;
 
 	class District
 	{
@@ -11,39 +15,43 @@ namespace elec
 		static int snGenerator;
 		int _serialNum;
 		char* _name;
-		Citizen** _eligibleCitizens; //roee: should change to "List" type
+		CitizenList _Citizens;// or CitizenList* _Citizens; or CitizenList** _Citizens;
 		double _votersPercentage;
 		int _electionResult;
 
-		
-		int phySizeEligciti;  //roee: =delete
-		int logicSizeEligciti; //roee: =delete
-		District(const District& other);//we don't want the ability to duplicate a district
+
+		District(const District& other);
 		const District& operator=(const District&);
 
 	public:
-		//friend class Citizen;
+		//friend class Citizen;//TODO:idan do we need it? 
 		District() = delete;///we delete default constructor
 		District(const char* name);
-	
+
 		~District();
 		friend ostream& operator<<(ostream& os, const District& district);
-		bool setName(const char* name);
-		bool setEligibleCitizens(Citizen** eligible_Citizens, int size); //roee: need to change from citizen** to list.
+		friend class CitizenList;
+		
 
+		const CitizenList& getEligibleCitizens() const;
 		const char* getName() const;
 		double getVotersPercentage() const;
 		int getElectionResults()const;
 		int getSerialNum() const;
-		//TODO:print function with operator..
-	//	friend ostream& operator<<(ostream& os, const District& district);
-	
-	
-	/* //roee: 
-		bool Party::addEligibleCitizens(Citizen* citizen)
-		{
-			return _eligibleCitizens.addListMember(citizen);
-		}*/
+		int getNumberOfCitizens() const;
+
+
+
+		/* //roee:
+			bool Party::addEligibleCitizens(Citizen* citizen)
+			{
+				return _eligibleCitizens.addListMember(citizen);
+			}*/
+
+
+
+			//bool setName(const char* name);
+			//bool setEligibleCitizens(Citizen** eligible_Citizens, int size); //roee: need to change from citizen** to list.
 
 	};
 }
