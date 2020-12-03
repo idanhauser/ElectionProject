@@ -1,5 +1,6 @@
 // main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+//code verison 1.0
 
 #include <iostream>
 

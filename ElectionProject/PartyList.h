@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//code verison 1.0
+#pragma once
 using namespace std;
 namespace elec {
 	class Party;

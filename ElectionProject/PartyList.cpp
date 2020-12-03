@@ -1,4 +1,5 @@
-﻿using namespace std;
+﻿//code verison 1.0
+using namespace std;
 #include "Party.h"
 #include "PartyList.h"
 namespace elec {

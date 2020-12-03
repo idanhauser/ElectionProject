@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//code verison 1.0
+#pragma once
 #include "Utils.h"
 using namespace std;
 namespace elec

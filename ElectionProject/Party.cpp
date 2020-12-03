@@ -1,4 +1,5 @@
-﻿#include "Party.h"
+﻿//code verison 1.0
+#include "Party.h"
 #include "CitizenList.h"
 
 
