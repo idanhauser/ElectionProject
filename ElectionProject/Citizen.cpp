@@ -19,30 +19,6 @@ namespace elec
 		delete[] _citizen_name;
 	}
 
-	/*	bool Citizen::setCitizenName(const char* citizen_name) {
-			int namelen = strlen(citizen_name);
-			this->_citizen_name = new char[namelen + 1];
-			strncpy(this->_citizen_name, citizen_name, namelen);
-			return true;
-
-		}
-
-		/
-		bool Citizen::setCitizenID(int idNum) {
-			_id_num = idNum;
-			return true;
-		}
-
-		bool Citizen::setBirthYear(const int birthYear)
-		{
-			if (birthYear >= 2002 && birthYear <= 1900)
-				return false;
-			else
-			{
-				_birthYear = birthYear;
-				return true;
-			}
-		}*/
 
 		/* citizen can or can not change a district
 		bool Citizen::setDistrictNum(int DistrictNum)

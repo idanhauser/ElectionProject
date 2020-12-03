@@ -31,37 +31,14 @@ namespace elec {
 	Party::~Party()
 	{
 		delete[] _partyName;
-		//delete _partyMembers; //roee: updated from del[] partymembers//idan returned it to delete..but anyway im not sure we need it.
+		
 	}
 
-	/*
-	bool Party::set_partyName(const char* partyName)
-	{
-		long namelen = strlen(partyName);
-		this->_partyName = new char[namelen + 1];
-		strncpy(this->_partyName, partyName, namelen);
-		return true;
-	}*/
 
 	bool Party::setPMCandidateID(int idnum) {
 		_PMCandidateID = idnum;
 		return true;
 	}
-
-/*	bool Party::set_party(Citizen** partyMembers, int size) //roee: changed it - it does the same as list constructor
-	{
-		delete[] this->_partyMembers;
-		phySizePartyMembers = size * 2;
-		logicSizePartyMembers = size;
-		this->_partyMembers = new Citizen * [phySizePartyMembers];
-		for (int i = 0; i < size; ++i)
-		{
-			this->_partyMembers[i] = partyMembers[i];
-		}
-		return true;
-
-
-	}*/
 
 	const int Party::getPartyID() const
 	{
@@ -83,8 +60,7 @@ namespace elec {
 		return _partyMembers;
 	}*/
 
-	///todo:need to be removed after roee divide builds the vectors...
-	//Citizen** reallocCitizenArray(Citizen** citizen, int old_size, int new_size);
+
 	
 	bool Party::addPartyMembers(Citizen* citizen) //roee: the name just covers the list func
 	{

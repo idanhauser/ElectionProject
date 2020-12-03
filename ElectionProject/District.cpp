@@ -36,30 +36,7 @@ namespace elec {
 		delete[] _name;
 		//delete[] _Citizens;//idan : im not sure
 	}
-	/*
-		bool District::setName(const char* name)
-		{
-			long namelen = strlen(name);
-			delete[] name;
-			this->_name = new char[namelen + 1];
-			strncpy(this->_name, name, namelen);
-			return true;
-		}
-		//roee: I think now when we have the list func it will be better to chagne it
-		bool District::setEligibleCitizens(Citizen** eligibleCitizens, int size)
-		{
-			delete[] this->_eligibleCitizens;
-			phySizeEligciti = size * 2;
-			logicSizeEligciti = size;
-			this->_eligibleCitizens = new Citizen * [phySizeEligciti];
-			for (int i = 0; i < size; ++i)
-			{
-				this->_eligibleCitizens[i] = eligibleCitizens[i];
-			}
-			return true;
-		}
-		*/
-
+	
 	const char* District::getName() const
 	{
 		return _name;

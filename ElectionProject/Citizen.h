@@ -16,9 +16,9 @@ namespace elec
 		bool _hasVoted;
 		const Party* _party;
 		//reference to an existing district 
-		const District& _district;  //roee: We can have only the number, but check the only problem it makes at setDistrictNum func//TODO:so what? the this memeber is for us, the id of district is for the user, and also moshe does that..read my mail.
+		const District& _district; 
 
-		Citizen(const Citizen& other);///idan cahnged ->//TODO:we don't want the ability to duplicate a citizen
+		Citizen(const Citizen& other);
 		const Citizen& operator=(const Citizen&);
 
 	public:
@@ -38,13 +38,7 @@ namespace elec
 		bool hasVoted()const;
 
 
-		/*
-		//Idan: we don't allow changing name, id or birthyear..i also show it on moshe citizen class.
-		bool setCitizenName(const char* citizenName);
-		bool setCitizenID(int idNum);
-		bool setBirthYear(const int birthYear);
-		bool setDistrictNum(int districtNum);//Idan citizen can't change a district
-		*/
+	
 	};
 
 

@@ -15,7 +15,7 @@ namespace elec
 		static int snGenerator;
 		int _serialNum;
 		char* _name;
-		CitizenList _Citizens;// or CitizenList* _Citizens; or CitizenList** _Citizens;
+		CitizenList _Citizens;
 		double _votersPercentage;
 		int _electionResult;
 
@@ -42,16 +42,6 @@ namespace elec
 
 
 
-		/* //roee:
-			bool Party::addEligibleCitizens(Citizen* citizen)
-			{
-				return _eligibleCitizens.addListMember(citizen);
-			}*/
-
-
-
-			//bool setName(const char* name);
-			//bool setEligibleCitizens(Citizen** eligible_Citizens, int size); //roee: need to change from citizen** to list.
 
 	};
 }

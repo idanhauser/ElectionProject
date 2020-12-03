@@ -10,13 +10,6 @@ namespace elec {
 	{
 	}
 
-	//let remove it, and the ctor of the Party will add this prime sminister to the list
-	/*CitizenList::CitizenList(Citizen* pmCandidate) : _logicSize(0), _phySize(MAX_SIZE), _citizens(new Citizen* [MAX_SIZE])//roee: same here//idan : these are the values.
-	{
-		addToList(pmCandidate);
-	}*/
-	//roee: is it good? lol//idan:yes, but you also need to delete the array itself + in the for you delete an object not an array..so it
-   //, and also it should be void not bool(?)
 
 	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
 	{
@@ -56,8 +49,8 @@ namespace elec {
 	}
 
 
-	bool CitizenList::addToList(Citizen* citizen) //roee: changed the origin u gave me. Do u think it should get one citizen at a time?
-													 //idan: yes because in the menu i have option of "add a citizen" so everytime i add only one citizen
+	bool CitizenList::addToList(Citizen* citizen) 
+													 
 	{
 		if (_logicSize == _phySize)
 		{

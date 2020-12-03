@@ -27,7 +27,7 @@ namespace elec
 	
 		bool setPMCandidateID(int idnum);
 
-		bool addPartyMembers(Citizen* citizen); //roee: Should it get few partyMembers?
+		bool addPartyMembers(Citizen* citizen);
 
 		
 
@@ -38,9 +38,6 @@ namespace elec
 
 
 
-
-		// bool set_party(/*Citizen** partyMembers, int size*/); //roee: no need - does the same as constructor
-			//bool set_partyName(const char* partyName);// idan commented
 	};
 
 }
