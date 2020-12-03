@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -141,15 +141,23 @@
   <ItemGroup>
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="District.cpp" />
-    <ClCompile Include="ElectionMain.cpp" />
+    <ClCompile Include="DistrictList.cpp" />
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="ElectionRound.cpp" />
+    <ClCompile Include="CitizenList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Party.cpp" />
+    <ClCompile Include="PartyList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h" />
     <ClInclude Include="District.h" />
-    <ClInclude Include="ElectionMain.h" />
+    <ClInclude Include="DistrictList.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="ElectionRound.h" />
+    <ClInclude Include="CitizenList.h" />
     <ClInclude Include="Party.h" />
+    <ClInclude Include="PartyList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

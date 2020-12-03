@@ -1,15 +1,16 @@
+//code verison 1.0
 #pragma once
+#pragma  warning(disable:4996)
 #include <iostream>
 #include <ostream>
-#include "Party.h"
-#include "District.h"
-#include "Citizen.h"
-using namespace elec;
+
+
 using namespace std;
 
-namespace elecMain
-{
 
+namespace elec
+{
+	const int MAX_SIZE = 1024;
 
 	enum class Menu_Choices
 	{
@@ -17,7 +18,7 @@ namespace elecMain
 		addCitizen,
 		addParty,
 		addPartyRepresentative,
-		viewCountie,
+		viewDistricts,
 		viewCitizens,
 		viewParties,
 		voting,
@@ -25,16 +26,17 @@ namespace elecMain
 		exit_menu
 	};
 
-	 void mainMenu();
-
+	void showMainMenu();
 	void addDistrict();
 	void addCitizen();
 	void addParty();
 	void addPartyRepresentative();
-	void viewCountie();
+	void viewDistricts();
+	void viewCitizens();
 	void viewParties();
-	void voting();
-	void results();
+	void voting();//todo:roee
+	void results();//todo:roee
 
-	
+
 }
+

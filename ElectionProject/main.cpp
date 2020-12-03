@@ -1,21 +1,29 @@
 // main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+//code verison 1.0
 
 #include <iostream>
 
-#include "ElectionMain.h"
-using namespace elecMain;
+
+#include "ElectionRound.h"
+#include "Utils.h"
+
 using namespace std;
 
-
+using namespace elec;
 
 
 
 int main()
 {
-	cout << "Election" << endl;
-	cout << "-------------" << endl;
-	mainMenu();
+	int dateArr[] = { 2,7,0,1,1,9,9,5 };
+	ElectionRound election(dateArr);
+	cout << "Election ";
+	election.printElectionDate();
+	
+	cout <<endl <<"-------------" << endl;
+
+
 	
 
 
