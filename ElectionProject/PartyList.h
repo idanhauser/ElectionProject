@@ -18,12 +18,12 @@ namespace elec {
 	public:
 		PartyList();
 		~PartyList();
-		PartyList(const PartyList& other);//idan:should be in private and with friend class, but cant make it work
+		//PartyList(const PartyList& other);//idan:should be in private and with friend class, but cant make it work
 		//friend class Citizen;
 		void realloc(int new_size);
 		bool addToList(Party* Party);
 		int getLogicSize() const;
-		friend ostream& operator<<(ostream& os, const PartyList& district);
+		//friend ostream& operator<<(ostream& os, const PartyList& district);
 
 	};
 }

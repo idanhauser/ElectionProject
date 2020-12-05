@@ -19,14 +19,13 @@ namespace elec {
 
 	public:
 		CitizenList();
-		CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
-		//	friend class Citizen;
-		
+	//	CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
+
 		~CitizenList();
 		void realloc(int new_size);
 		bool addToList(Citizen* citizen);
 		int getLogicSize() const;
-		friend ostream& operator<<(ostream& os, const CitizenList& citizen);
+		//friend ostream& operator<<(ostream& os, const CitizenList& citizen);
 
 		//CitizenList(Citizen* pmCandidate);
 	};

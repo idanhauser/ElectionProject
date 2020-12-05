@@ -1,10 +1,10 @@
 ﻿//code verison 1.0
 #pragma once
-
-#include <string>
-#include <iostream>
 #include "CitizenList.h"
-#include "Utils.h"
+using namespace std;
+#include <string>
+
+
 namespace elec
 {
 	class CitizenList;
@@ -19,6 +19,7 @@ namespace elec
 		CitizenList _Citizens;
 		double _votersPercentage;
 		int _electionResult;
+		int _numOfReps;
 
 
 		District(const District& other);
@@ -27,11 +28,10 @@ namespace elec
 	public:
 		//friend class Citizen;//TODO:idan do we need it? 
 		District() = delete;///we delete default constructor
-		District(const char* name);
-
+		District(const char* name, int numOfReps);
 		~District();
 		friend ostream& operator<<(ostream& os, const District& district);
-		friend class CitizenList;
+		//friend class CitizenList;
 		
 
 		const CitizenList& getEligibleCitizens() const;

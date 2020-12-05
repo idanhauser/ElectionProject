@@ -1,6 +1,6 @@
 ﻿//code verison 1.0
 #include "Citizen.h"
-#include "District.h"
+//#include "District.h"
 #include "Party.h"
 
 namespace elec
@@ -8,9 +8,9 @@ namespace elec
 
 
 	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
-	                 const District& district) : _citizen_name(new char[strlen(citizen_name + 1)]), _id_num(id_num),
-	                                             _birthYear(0), _districtNum(districtNum), _party(nullptr),
-	                                             _district(district), _hasVoted(false)
+	                const District& district) : _citizen_name(new char[strlen(citizen_name + 1)]), _id_num(id_num),
+	                                             _birthYear(0), _districtNum(districtNum), _hasVoted(false),
+	                                             _party(nullptr), _district(district)
 	{
 		strcpy(this->_citizen_name, citizen_name);
 	}
@@ -63,7 +63,7 @@ namespace elec
 
 	}
 
-	const int Citizen::getCitizenDistrictNum() const
+	const int Citizen::getDistrictNum() const
 	{
 		return _districtNum;
 
@@ -74,6 +74,15 @@ namespace elec
 		return _hasVoted;
 	}
 
+	const Party* Citizen::getParty() const
+	{
+		return _party;
+	}
+
+	const District& Citizen::getDistrict() const
+	{
+		return _district;
+	}
 	ostream& operator<<(ostream& os, const Citizen& citizen)
 	{
 		os << citizen._citizen_name << ", his id :" << (int)citizen._id_num << " and his year birth : " << (int)citizen._birthYear;

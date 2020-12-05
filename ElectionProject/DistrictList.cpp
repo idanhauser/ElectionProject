@@ -1,4 +1,5 @@
 ﻿//code verison 1.0
+#include "Utils.h"
 using namespace std;
 #include "District.h"
 #include "DistrictList.h"
@@ -17,14 +18,16 @@ namespace elec {
 		delete[] _districts;
 	}
 
-	DistrictList::DistrictList(const DistrictList& other) :_logicSize(other._logicSize),_phySize(other._phySize), _districts(new District*[other._phySize])
-	{
-		int len = other.getLogicSize();
-		for (int i = 0; i < len; ++i)
-		{
-			_districts[i] = other._districts[i];
-		}
-	}
+
+
+	//DistrictList::DistrictList(const DistrictList& other) :_logicSize(other._logicSize),_phySize(other._phySize), _districts(new District*[other._phySize])
+	//{
+	//	int len = other.getLogicSize();
+	//	for (int i = 0; i < len; ++i)
+	//	{
+	//		_districts[i] = other._districts[i];
+	//	}
+	//}
 
 
 	void DistrictList::realloc(int new_size)
@@ -45,14 +48,14 @@ namespace elec {
 	}
 
 
-	bool DistrictList::addToList(District* District)
+	bool DistrictList::addToList(District& District)
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_districts[_logicSize++] = District;
+		_districts[_logicSize++] = &District;
 		return true;
 	}
 
@@ -62,14 +65,14 @@ namespace elec {
 		return _logicSize;
 	}
 
-	ostream& operator<<(ostream& os, const DistrictList& district)
-	{
+	//ostream& operator<<(ostream& os, const DistrictList& district)
+	//{
 
-		int len = district.getLogicSize();
-		for (int i = 0; i < len; i++)
-		{
-			os << district._districts[i] << endl;
-		}
-		return os;
-	}
+	//	int len = district.getLogicSize();
+	//	for (int i = 0; i < len; i++)
+	//	{
+	//		os << district._districts[i] << endl;
+	//	}
+	//	return os;
+	//}
 }

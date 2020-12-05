@@ -16,7 +16,7 @@ namespace elec {
 		delete[] _parties;
 	}
 
-	PartyList::PartyList(const PartyList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _parties(new Party*[other._phySize])
+/*	PartyList::PartyList(const PartyList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _parties(new Party*[other._phySize])
 	{
 		int len = other.getLogicSize();
 		for (int i = 0; i < len; ++i)
@@ -24,7 +24,7 @@ namespace elec {
 			_parties[i] = other._parties[i];
 		}
 	}
-
+	*/
 
 
 
@@ -64,13 +64,13 @@ namespace elec {
 		return _logicSize;
 	}
 
-	ostream& operator<<(ostream& os, const PartyList& party)
-	{
-		int len = party.getLogicSize();
-		for (int i = 0; i < len; i++)
-		{
-			os << party._parties[i] << endl;
-		}
-		return os;
-	}
+	//ostream& operator<<(ostream& os, const PartyList& party)
+	//{
+	//	int len = party.getLogicSize();
+	//	for (int i = 0; i < len; i++)
+	//	{
+	//		os << party._parties[i] << endl;
+	//	}
+	//	return os;
+	//}
 }

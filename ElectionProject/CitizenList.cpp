@@ -4,21 +4,19 @@ using namespace std;
 #include "CitizenList.h"
 namespace elec {
 
-
-
 	CitizenList::CitizenList() : _logicSize(0), _phySize(MAX_SIZE), _citizens(new Citizen* [MAX_SIZE]) //roee: not sure about these values for the sizes...//idan : these are the values.
 	{
 	}
 
 
-	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
+/*	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
 	{
 		int len = other.getLogicSize();
 		for (int i = 0; i < len; ++i)
 		{
 			_citizens[i] = other._citizens[i];
 		}
-	}
+	}*/
 
 
 
@@ -68,14 +66,25 @@ namespace elec {
 		return _logicSize;
 	}
 
-	ostream& operator<<(ostream& os, const CitizenList& citizen)
+
+
+
+	const CitizenList& CitizenList::operator=(const CitizenList& other)
 	{
-		int len = citizen.getLogicSize();
-		for (int i = 0; i < len; i++)
-		{
-			os << citizen._citizens[i] << endl;
-		}
-		return os;
+		this->_citizens = other._citizens;
+		this->_logicSize = other._logicSize;
+		this->_phySize = other._phySize;
+		return *this;
 	}
+
+	//ostream& operator<<(ostream& os, const CitizenList& citizen)
+	//{
+	//	int len = citizen.getLogicSize();
+	//	for (int i = 0; i < len; i++)
+	//	{
+	//		os << citizen._citizens[i] << endl;
+	//	}
+	//	return os;
+	//}
 }
 

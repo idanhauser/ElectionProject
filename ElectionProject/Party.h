@@ -24,7 +24,7 @@ namespace elec
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
-		friend class PartyList;
+		//friend class PartyList;
 	
 		bool setPMCandidateID(int idnum);
 

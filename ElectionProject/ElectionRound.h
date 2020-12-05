@@ -1,13 +1,17 @@
 ﻿//code verison 1.0
 #pragma once
 
+#include "CitizenList.h"
+#include "DistrictList.h"
+#include "PartyList.h"
+#include "District.h"
+
 
 using namespace std;
 
 
 
 namespace elec {
-	//idan todo: need to add an operator to print the election round.
 	class DistrictList;
 	class CitizenList;
 	class PartyList;
@@ -16,20 +20,19 @@ namespace elec {
 	{
 	private:
 		int _date[8];
-
-	/*	DistrictList &_districts;
-		CitizenList &_citizens;
-		PartyList &_parties;
-		*/
+		DistrictList _districts;
+		CitizenList _citizens;
+		PartyList _parties;
 
 	const ElectionRound& operator=(const ElectionRound&);
 
 	public:
-		ElectionRound() = delete;
+		ElectionRound()=default;
 		ElectionRound(int date[8]);
 		~ElectionRound() = default;
 
 		void printElectionDate() const;
+		void addNewDistrict(char str[1024], int number_representatives);
 
 		enum class Menu_Choices
 		{
@@ -46,7 +49,7 @@ namespace elec {
 		};
 
 		//void showMainMenu();
-		void addNewDistrict();
+
 		void addNewCitizen();
 		void addNewParty();
 		void addNewPartyRepresentative();

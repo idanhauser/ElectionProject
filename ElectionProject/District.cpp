@@ -1,35 +1,19 @@
 ﻿//code verison 1.0
-#include <string>
-#include <iostream>
 #include "District.h"
+#include "Citizen.h"
+#include <iostream>
 #include "CitizenList.h"
+
 using namespace std;
 
 namespace elec {
 	int District::snGenerator = 100;
 
-
-	/**
-	 * \brief constructor for district
-	 * \param name the name of the district
-	 */
-	District::District(const char* name) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-	                                       _Citizens( CitizenList()), _votersPercentage(0), _electionResult(0)
+	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
+		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps)
 	{
 		strcpy(this->_name, name);
 	}
-/*
-	District::District(const District& other)
-	{
-		this->_serialNum = other._serialNum;
-		this->_electionResult = other._electionResult;
-		setName(const_cast<const char*>(other._name));
-
-		setEligibleCitizens(other._eligibleCitizens, other.logicSizeEligciti);
-	}
-	*/
-
-
 
 	District::~District()
 	{
@@ -74,7 +58,7 @@ namespace elec {
 			"has " << district.getNumberOfCitizens() << " citizens." << endl;
 		os << "The voters percentage is: " << (double)district._votersPercentage << "and the election's result is " << 
 			(int)district._electionResult << "." << endl;
-		os << "The people that live in this district are:" <<endl << district._Citizens << endl;
+		os << "The people that live in this district are:" <<endl <</* district._Citizens<<*/ endl;
 		return os;
 	}
 }
