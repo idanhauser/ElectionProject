@@ -64,6 +64,10 @@ namespace elec {
 		return _logicSize;
 	}
 
+	Party* PartyList::findPartyByID(int id) {
+		return _parties[id];
+	}
+
 	ostream& operator<<(ostream& os, const PartyList& party)
 	{
 		int len = party.getLogicSize();

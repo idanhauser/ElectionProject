@@ -27,7 +27,9 @@ namespace elec {
 		bool addToList(Citizen* citizen);
 		int getLogicSize() const;
 		friend ostream& operator<<(ostream& os, const CitizenList& citizen);
-
+		Citizen* findCitizenByID(int citizenID);
+		Citizen* getCitizenByIndex(int indx);
+		void printList();
 		//CitizenList(Citizen* pmCandidate);
 	};
 }

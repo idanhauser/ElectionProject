@@ -27,5 +27,22 @@ namespace elec {
 		int getLogicSize() const;
 		friend ostream& operator<<(ostream& os, const DistrictList& district);
 
+	
+
+
+
+
+/*********************************/
+//roee:
+	District* findDistrictByID( int id);
+
+
+
+
+
+
+/*********************************/
+
+
 	};
 }

@@ -1,6 +1,10 @@
 ﻿//code verison 1.0
 #pragma once
-
+#include "Citizen.h"
+#include "resultsArr.h"
+#include "DistrictList.h"
+#include "District.h"
+#include "Party.h"
 
 using namespace std;
 
@@ -11,23 +15,35 @@ namespace elec {
 	class DistrictList;
 	class CitizenList;
 	class PartyList;
-	
+
+	class Citizen;
+	class Party;
+
+
 	class ElectionRound
 	{
 	private:
 		int _date[8];
+		int _citizenID;
+		int _PartyID;
 
-	/*	DistrictList &_districts;
-		CitizenList &_citizens;
-		PartyList &_parties;
-		*/
+		DistrictList& _districts;
+		CitizenList& _citizens;
+		PartyList& _parties;
 
-	const ElectionRound& operator=(const ElectionRound&);
+		
+		const ElectionRound& operator=(const ElectionRound&);
 
 	public:
+
+
 		ElectionRound() = delete;
 		ElectionRound(int date[8]);
 		~ElectionRound() = default;
+
+
+
+
 
 		void printElectionDate() const;
 
@@ -53,11 +69,10 @@ namespace elec {
 		void viewAllDistricts();
 		void viewAllCitizens();
 		void viewAllParties();
-		void votingAction();//todo:roee
+		void votingAction(CitizenList _citizens);//todo:roee
 		void theResults();//todo:roee
-
-
+		int checkWinnerInDistrict(int districtID, resultsArr results);
+		int checkWinnigPM(int* TotalPMsRepsArr);
 
 	};
-
 }

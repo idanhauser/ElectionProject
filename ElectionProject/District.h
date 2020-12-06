@@ -8,7 +8,7 @@
 namespace elec
 {
 	class CitizenList;
-
+	class Citizen;
 
 	class District
 	{
@@ -18,8 +18,8 @@ namespace elec
 		char* _name;
 		CitizenList _Citizens;
 		double _votersPercentage;
-		int _electionResult;
-
+		CitizenList _electedMembersArr;
+		int _numOfReps;
 
 		District(const District& other);
 		const District& operator=(const District&);
@@ -27,7 +27,7 @@ namespace elec
 	public:
 		//friend class Citizen;//TODO:idan do we need it? 
 		District() = delete;///we delete default constructor
-		District(const char* name);
+		District(const char* name, int numOfReps);
 
 		~District();
 		friend ostream& operator<<(ostream& os, const District& district);
@@ -37,12 +37,11 @@ namespace elec
 		const CitizenList& getEligibleCitizens() const;
 		const char* getName() const;
 		double getVotersPercentage() const;
-		int getElectionResults()const;
+		CitizenList getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
-
-
-
+		int getNumOfReps()const;
+		bool addToElectedMembersArr(Citizen* partyMember) ;
 
 	};
 }

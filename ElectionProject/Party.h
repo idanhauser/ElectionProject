@@ -10,12 +10,12 @@ namespace elec
 	{
 	private:
 		static int pdGenerator;
-		
-		int _partyID; 
+
+		int _partyID;
 		char* _partyName;
 		int _PMCandidateID;
 		CitizenList _partyMembers;
-		
+
 		Party(const Party& other);
 		const Party& operator=(const Party&);
 	public:
@@ -25,20 +25,19 @@ namespace elec
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
 		friend class PartyList;
-	
+
 		bool setPMCandidateID(int idnum);
 
 		bool addPartyMembers(Citizen* citizen);
 
-		
+
 
 		const char* getPartyName() const;
-		const int getPartyID() const; 
+		const int getPartyID() const;
 		int getPartyPMCandidateID() const;
-		CitizenList getPartyMembers() const;
-
-
+		int getPartySize() const;
+		CitizenList getPartyMembers()const;
+		void printSpecificPartyMembersAmount(int amount);
 
 	};
-
 }

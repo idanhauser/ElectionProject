@@ -1,7 +1,7 @@
 ﻿//code verison 1.0
 #include "Party.h"
 #include "CitizenList.h"
-
+#include "Citizen.h"
 
 namespace elec {
 
@@ -61,7 +61,9 @@ namespace elec {
 		return _partyMembers;
 	}*/
 
-
+	int Party::getPartySize() const {
+		return _partyMembers.getLogicSize();
+	}
 	
 	bool Party::addPartyMembers(Citizen* citizen) //roee: the name just covers the list func
 	{
@@ -84,6 +86,15 @@ namespace elec {
 		return _partyMembers.addToList(citizen); //roee: was added instead of in each class
 	}
 
+	CitizenList Party::getPartyMembers()const
+	{
+		return _partyMembers;
+	}
+
+	void Party::printSpecificPartyMembersAmount(int amount) {
+		for (static int lastMember = 0; lastMember < amount; lastMember++)
+			cout << "\n" << _partyMembers.getCitizenByIndex(lastMember)->getCitizenName() ;
+	}
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{

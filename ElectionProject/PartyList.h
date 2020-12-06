@@ -24,6 +24,9 @@ namespace elec {
 		bool addToList(Party* Party);
 		int getLogicSize() const;
 		friend ostream& operator<<(ostream& os, const PartyList& district);
+		Party* findPartyByID(int id);
 
+
+	
 	};
 }
