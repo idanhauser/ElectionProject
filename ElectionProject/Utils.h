@@ -11,11 +11,12 @@ using namespace std;
 
 namespace elec
 {
+	const int DISTRICT_ID = 100;
 	const int MAX_SIZE = 1024;
 
 	enum class Menu_Choices
 	{
-		addDistrict1 = 1,
+		addDistrict = 1,
 		addCitizen,
 		addParty,
 		addPartyRepresentative,
@@ -27,18 +28,8 @@ namespace elec
 		exit_menu
 	};
 
+	enum class ListSearch { not_found = -1, found };
 
-
-	//void showMainMenu();
-	//void addDistrict();
-	//void addCitizen();
-	//void addParty();
-	//void addPartyRepresentative();
-	//void viewDistricts();
-	//void viewCitizens();
-	//void viewParties();
-	//void voting();//todo:roee
-	//void results();//todo:roee
 
 
 }

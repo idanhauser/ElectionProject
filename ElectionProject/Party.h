@@ -20,7 +20,7 @@ namespace elec
 		const Party& operator=(const Party&);
 	public:
 		Party() = delete;
-		Party(const char* partyName, int _PMCandidateID);
+		Party(const char* partyName, int PMCandidateID);
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);

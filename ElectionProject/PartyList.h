@@ -23,7 +23,8 @@ namespace elec {
 		void realloc(int new_size);
 		bool addToList(Party* Party);
 		int getLogicSize() const;
-		//friend ostream& operator<<(ostream& os, const PartyList& district);
+		const Party& getPartyByIndex(int index) const;
+	
 
 	};
 }

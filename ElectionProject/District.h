@@ -32,7 +32,7 @@ namespace elec
 		~District();
 		friend ostream& operator<<(ostream& os, const District& district);
 		//friend class CitizenList;
-		
+
 
 		const CitizenList& getEligibleCitizens() const;
 		const char* getName() const;
@@ -40,9 +40,10 @@ namespace elec
 		int getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
+		bool addCitizen(Citizen& citz);
+		const Citizen& getCitizenById(int id) const;
+		Citizen& getCitizenById(int id);
 
-
-
-
+		bool isCitizenExist(int id) const;
 	};
 }

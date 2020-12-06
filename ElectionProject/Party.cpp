@@ -65,21 +65,7 @@ namespace elec {
 	
 	bool Party::addPartyMembers(Citizen* citizen) //roee: the name just covers the list func
 	{
-		/*if (logicSizePartyMembers == phySizePartyMembers)
-		{
-			List::reallocCitizenArray(partyMembers, phySizePartyMembers, phySizePartyMembers * 2);
-			phySizePartyMembers *= 2;
-		}
-		if (logicSizePartyMembers < phySizePartyMembers)
-		{
-			_partyMembers[logicSizePartyMembers++] = citizen;
-		}
-		else
-		{
-			//error
-			return false;
-		}
-		return true;*/
+		
 
 		return _partyMembers.addToList(citizen); //roee: was added instead of in each class
 	}
@@ -87,7 +73,8 @@ namespace elec {
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{
-		os << party._partyName << ", it's is id :" << (int)party._partyID << "  the PM Candidate ID is " << (int)party._PMCandidateID << endl;
+		os << party._partyName << ", it's is id :" << (int)party._partyID << "  the PM Candidate ID is " << (int)party.
+			_PMCandidateID << endl;
 		return os;
 	}
 }

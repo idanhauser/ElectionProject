@@ -8,7 +8,7 @@
 using namespace std;
 
 using namespace elec;
-int dateArr[] = { 2,7,0,1,1,9,9,5 };
+int dateArr[] = { 2,7,0,1,2,0,2,0 };
 ElectionRound election(dateArr);
 
 void showMainMenu(/*ElectionRound election*/);
@@ -23,16 +23,18 @@ void voting();//todo:roee
 void results();//todo:roee
 
 
+
+
 int main()
 {
 
 
 	cout << "Election ";
 	election.printElectionDate();
-	cout <<endl <<"-------------" << endl;
+	cout << endl << "-------------" << endl;
 	showMainMenu();
 
-	
+	cout << "goodbat" << endl;
 
 
 
@@ -61,7 +63,8 @@ void showMainMenu()
 		choice = static_cast<Menu_Choices>(userChoise);
 		switch (choice)
 		{
-		case Menu_Choices::addDistrict1:
+
+		case Menu_Choices::addDistrict:
 			cout << endl;
 			cout << "-------------" << endl;
 			cout << "Add District" << endl;
@@ -132,7 +135,8 @@ void showMainMenu()
 			cout << "Bye-bye.\n";
 			break;
 		default:
-			cout << "Not a Valid Choice. \n";
+			cout << "Not a Valid Choice. \n Try again";
+
 			cout << endl;
 			break;
 		}
@@ -142,11 +146,19 @@ void showMainMenu()
 
 void addDistrict()
 {
+	int districtId;
 	char name[MAX_SIZE];
 	int numberRepresentatives;
 	cout << "Insert a district's name and a number of representatives:" << endl;
 	cin >> name >> numberRepresentatives;
-	election.addNewDistrict(name, numberRepresentatives);
+	if (!election.addNewDistrict(name, numberRepresentatives, districtId))
+	{
+		cout << "Error:District " << name << " was't added." << endl;
+	}
+	else
+	{
+		cout << "District " << name << " added. \n And its id is " << districtId << endl;
+	}
 
 }
 
@@ -154,22 +166,41 @@ void addCitizen()
 {
 	int id, birtyear, districtId;
 	char name[MAX_SIZE];
-
-
+	const int currYear = election.getYear();
 	cout << "Insert a citizen name,id ,birth year, district:" << endl;
 	cin >> name >> id >> birtyear >> districtId;
-
+	if (currYear - birtyear >= 18)
+	{
+		if (!election.addNewCitizen(name, id, birtyear, districtId))
+		{
+			cout << "Error:District doesn't exist." << endl;
+		}
+		else
+		{
+			cout << "Citizen " << name << " added." << endl;
+		}
+	}
+	else
+	{
+		cout << "Error:" << name << " is too young to vote." << endl;
+	}
 }
 
 void addParty()
 {
 	int idPd;
 	char name[MAX_SIZE];
-
-
+	int partyId;
 	cout << "Insert a party name,id of PD of party:" << endl;
-	cin >> name >> idPd >> idPd;
-
+	cin >> name >> idPd;
+	if (!election.addNewParty(name, idPd, partyId))
+	{
+		cout << "Error:Party leader doesn't exist" << endl;
+	}
+	else
+	{
+		cout << "Party " << name << " added.\nAnd its id is " << partyId << endl;
+	}
 }
 
 void addPartyRepresentative()
@@ -183,15 +214,17 @@ void addPartyRepresentative()
 
 void viewDistricts()
 {
-
+	election.viewAllDistricts();
 }
 
 void viewCitizens()
 {
+	election.viewAllCitizens();
 }
 
 void viewParties()
 {
+	election.viewAllParties();
 }
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu

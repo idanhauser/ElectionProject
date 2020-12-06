@@ -11,7 +11,7 @@ namespace elec {
 
 	DistrictList::~DistrictList()
 	{
-		for (int i = 0; i < _phySize; i++)
+		for (int i = 0; i < _logicSize; i++)
 		{
 			delete _districts[i];
 		}
@@ -59,20 +59,71 @@ namespace elec {
 		return true;
 	}
 
+	District& DistrictList::getDistcritById(int id)
+	{
+		return *_districts[abs(id - DISTRICT_ID)];
+	}
+
+	const District& DistrictList::getDistcritById(int id) const
+	{
+		return *_districts[abs(id - DISTRICT_ID)];
+	}
+
+
+
+	/*const Citizen& DistrictList::getCitizenById(int id) const
+	{
+	 Citizen* citizen;
+		for (int i = 0; i < _logicSize; ++i)
+		{
+			citizen = &_districts[i]->getCitizenById(id);
+		}
+		return  citizen;
+	}*/
+
+	bool DistrictList::isCitizenExist(int id,int & distIndex) const
+	{
+		distIndex = -1;
+		
+		bool found = false;
+		for (int i = 0; i < _logicSize && !found; ++i)
+		{
+			if (_districts[i]->isCitizenExist(id))
+			{
+				distIndex = i;
+				found = true;
+			}
+		}
+		return found;
+	}
 
 	int DistrictList::getLogicSize() const
 	{
 		return _logicSize;
 	}
 
-	//ostream& operator<<(ostream& os, const DistrictList& district)
-	//{
+	bool DistrictList::isDistcritExist(int id) const
+	{
+		bool found = false;
+		for (int i = 0; i < _logicSize && !found; ++i)
+		{
+			if (i == abs(id - DISTRICT_ID))
+			{
+				found = true;
+			}
+		}
+		return found;
+	}
 
-	//	int len = district.getLogicSize();
-	//	for (int i = 0; i < len; i++)
-	//	{
-	//		os << district._districts[i] << endl;
-	//	}
-	//	return os;
-	//}
+	const District& DistrictList::getDistcritByIndex(int index) const
+	{
+		if (index < _logicSize)
+			return *_districts[index];
+	}
+
+	District& DistrictList::getDistcritByIndex(int index)
+	{
+		if (index < _logicSize)
+			return *_districts[index];
+	}
 }

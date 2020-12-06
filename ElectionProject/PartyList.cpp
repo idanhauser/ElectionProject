@@ -9,7 +9,7 @@ namespace elec {
 
 	PartyList::~PartyList()
 	{
-		for (int i = 0; i < _phySize; i++)
+		for (int i = 0; i < _logicSize; i++)
 		{
 			delete _parties[i];
 		}
@@ -46,14 +46,14 @@ namespace elec {
 	}
 
 
-	bool PartyList::addToList(Party* Party)
+	bool PartyList::addToList(Party* party)
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_parties[_logicSize++] = Party;
+		_parties[_logicSize++] = party;
 		return true;
 	}
 
@@ -64,13 +64,12 @@ namespace elec {
 		return _logicSize;
 	}
 
-	//ostream& operator<<(ostream& os, const PartyList& party)
-	//{
-	//	int len = party.getLogicSize();
-	//	for (int i = 0; i < len; i++)
-	//	{
-	//		os << party._parties[i] << endl;
-	//	}
-	//	return os;
-	//}
+	const Party& PartyList::getPartyByIndex(int index) const
+	{
+		if (index < _logicSize)
+			return *_parties[index];
+	}
+
+
+
 }

@@ -1,4 +1,5 @@
 //code verison 1.0
+#include "Utils.h"
 using namespace std;
 #include "Citizen.h"
 #include "CitizenList.h"
@@ -9,21 +10,21 @@ namespace elec {
 	}
 
 
-/*	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
-	{
-		int len = other.getLogicSize();
-		for (int i = 0; i < len; ++i)
+	/*	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
 		{
-			_citizens[i] = other._citizens[i];
-		}
-	}*/
+			int len = other.getLogicSize();
+			for (int i = 0; i < len; ++i)
+			{
+				_citizens[i] = other._citizens[i];
+			}
+		}*/
 
 
 
 	CitizenList::~CitizenList()
 	{
-		for (int i = 0; i < _phySize; i++)
-		{
+		for (int i = 0; i < _logicSize; i++)
+		{//TODO idan: this next line makes the program to fall in the end of the election when we exit. why???
 			delete _citizens[i];
 		}
 		delete[] _citizens;
@@ -47,8 +48,8 @@ namespace elec {
 	}
 
 
-	bool CitizenList::addToList(Citizen* citizen) 
-													 
+	bool CitizenList::addToList(Citizen* citizen)
+
 	{
 		if (_logicSize == _phySize)
 		{
@@ -66,7 +67,31 @@ namespace elec {
 		return _logicSize;
 	}
 
+	const Citizen& CitizenList::getCitizenByIndex(int index) const
+	{
+		if (index < _logicSize)
+			return *_citizens[index];
+	}
 
+	 Citizen& CitizenList::getCitizenByIndex(int index)
+	{
+		if (index < _logicSize)
+			return *_citizens[index];
+	}
+	
+	//int CitizenList::isCitizenExist(int id) const
+	//{
+	//	int savePlace = -1;
+	//	for (int i = 0; i < _logicSize && savePlace == -1; ++i)
+	//	{
+	//		if (_citizens[i]->getCitizenID() == id)
+	//		{
+	//			savePlace = i;
+	//		}
+	//	}
+	//	return savePlace;
+
+	//}
 
 
 	const CitizenList& CitizenList::operator=(const CitizenList& other)
@@ -76,15 +101,7 @@ namespace elec {
 		this->_phySize = other._phySize;
 		return *this;
 	}
+	
 
-	//ostream& operator<<(ostream& os, const CitizenList& citizen)
-	//{
-	//	int len = citizen.getLogicSize();
-	//	for (int i = 0; i < len; i++)
-	//	{
-	//		os << citizen._citizens[i] << endl;
-	//	}
-	//	return os;
-	//}
 }
 
