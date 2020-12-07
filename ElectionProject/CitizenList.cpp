@@ -48,7 +48,7 @@ namespace elec {
 	}
 
 
-	bool CitizenList::addToList(Citizen* citizen)
+	bool CitizenList::addToList(Citizen& citizen)
 
 	{
 		if (_logicSize == _phySize)
@@ -56,7 +56,7 @@ namespace elec {
 			realloc(_phySize * 2);
 
 		}
-		_citizens[_logicSize++] = citizen;
+		_citizens[_logicSize++] = &citizen;
 		return true;
 	}
 

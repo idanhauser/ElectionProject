@@ -7,7 +7,7 @@
 using namespace std;
 
 namespace elec {
-	int District::snGenerator = DISTRICT_ID;
+	int District::snGenerator = DISTRICT_ID_INIT;
 
 	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
 		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps)
@@ -51,9 +51,9 @@ namespace elec {
 		return _Citizens.getLogicSize();
 	}
 
-	bool District::addCitizen(Citizen& citz)
+	bool District::addCitizen(Citizen* citz)
 	{
-		_Citizens.addToList(&citz);
+		_Citizens.addToList(*citz);
 		return true;
 	}
 	//use only if you know that citizen exist

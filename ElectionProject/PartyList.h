@@ -21,7 +21,7 @@ namespace elec {
 		//PartyList(const PartyList& other);//idan:should be in private and with friend class, but cant make it work
 		//friend class Citizen;
 		void realloc(int new_size);
-		bool addToList(Party* Party);
+		bool addToList(Party& Party);
 		int getLogicSize() const;
 		const Party& getPartyByIndex(int index) const;
 	

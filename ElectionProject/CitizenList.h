@@ -23,7 +23,7 @@ namespace elec {
 
 		~CitizenList();
 		void realloc(int new_size);
-		bool addToList(Citizen* citizen);
+		bool addToList(Citizen& citizen);
 		int getLogicSize() const;
 		const Citizen& getCitizenByIndex(int index) const;
 		Citizen& getCitizenByIndex(int index);

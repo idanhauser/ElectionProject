@@ -42,13 +42,16 @@ namespace elec
 
 	bool ElectionRound::addNewCitizen(char* name, int id, int birthyear, int districtId)
 	{
+		int saveDis;
 		bool citizenAdded = false;
-		if (_districts.isDistcritExist(districtId))
+		if (!_districts.isCitizenExist(id, saveDis))
 		{
-			Citizen* citiz = new Citizen(name, id, birthyear, districtId, nullptr, _districts.getDistcritById(districtId));
-			citizenAdded = _districts.getDistcritById(districtId).addCitizen(*citiz);
+			if (_districts.isDistcritExist(districtId))
+			{
+				Citizen* citiz = new Citizen(name, id, birthyear, districtId, nullptr, _districts.getDistcritById(districtId));
+				citizenAdded = _districts.getDistcritById(districtId).addCitizen(citiz);
+			}
 		}
-
 		return citizenAdded;
 	}
 
@@ -61,7 +64,7 @@ namespace elec
 			Party* par = new Party(name, pdId);
 			partyid = par->getPartyID();
 			_districts.getDistcritByIndex(distIndex).getCitizenById(pdId).setParty(par);
-			partyAdded = _parties.addToList(par);
+			partyAdded = _parties.addToList(*par);
 		}
 		return partyAdded;
 	}

@@ -6,8 +6,8 @@
 namespace elec
 {
 	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
-		const District& district) : _citizen_name(new char[strlen(citizen_name + 1)]), _id_num(id_num),
-		_birthYear(0), _districtNum(districtNum), _hasVoted(false),
+		const District& district) : _citizen_name(new char[strlen(citizen_name)+1]), _id_num(id_num),
+		_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false),
 		_party(nullptr), _district(district)
 	{
 		strcpy(this->_citizen_name, citizen_name);

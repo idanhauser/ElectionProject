@@ -48,25 +48,25 @@ namespace elec {
 	}
 
 
-	bool DistrictList::addToList(District& District)
+	bool DistrictList::addToList(District& district)
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_districts[_logicSize++] = &District;
+		_districts[_logicSize++] = &district;
 		return true;
 	}
 
 	District& DistrictList::getDistcritById(int id)
 	{
-		return *_districts[abs(id - DISTRICT_ID)];
+		return *_districts[abs(id - DISTRICT_ID_INIT)];
 	}
 
 	const District& DistrictList::getDistcritById(int id) const
 	{
-		return *_districts[abs(id - DISTRICT_ID)];
+		return *_districts[abs(id - DISTRICT_ID_INIT)];
 	}
 
 
@@ -107,7 +107,7 @@ namespace elec {
 		bool found = false;
 		for (int i = 0; i < _logicSize && !found; ++i)
 		{
-			if (i == abs(id - DISTRICT_ID))
+			if (i == abs(id - DISTRICT_ID_INIT))
 			{
 				found = true;
 			}

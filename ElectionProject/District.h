@@ -40,7 +40,7 @@ namespace elec
 		int getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
-		bool addCitizen(Citizen& citz);
+		bool addCitizen(Citizen* citz);
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
 

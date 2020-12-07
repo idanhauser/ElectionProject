@@ -46,14 +46,14 @@ namespace elec {
 	}
 
 
-	bool PartyList::addToList(Party* party)
+	bool PartyList::addToList(Party& party)
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_parties[_logicSize++] = party;
+		_parties[_logicSize++] = &party;
 		return true;
 	}
 

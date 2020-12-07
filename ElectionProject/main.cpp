@@ -169,11 +169,15 @@ void addCitizen()
 	const int currYear = election.getYear();
 	cout << "Insert a citizen name,id ,birth year, district:" << endl;
 	cin >> name >> id >> birtyear >> districtId;
+
 	if (currYear - birtyear >= 18)
 	{
 		if (!election.addNewCitizen(name, id, birtyear, districtId))
 		{
-			cout << "Error:District doesn't exist." << endl;
+
+
+			cout << "Error:Citizen with that id is already exist or/and cistrict doesn't exist." << endl;
+
 		}
 		else
 		{
