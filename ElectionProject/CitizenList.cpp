@@ -24,7 +24,7 @@ namespace elec {
 	CitizenList::~CitizenList()
 	{
 		for (int i = 0; i < _logicSize; i++)
-		{//TODO idan: this next line makes the program to fall in the end of the election when we exit. why???
+		{
 			delete _citizens[i];
 		}
 		delete[] _citizens;
@@ -73,12 +73,17 @@ namespace elec {
 			return *_citizens[index];
 	}
 
-	 Citizen& CitizenList::getCitizenByIndex(int index)
+	Citizen& CitizenList::getCitizenByIndex(int index)
 	{
 		if (index < _logicSize)
 			return *_citizens[index];
 	}
-	
+
+	Citizen** CitizenList::getCitizens()
+	{
+		return _citizens;
+	}
+
 	//int CitizenList::isCitizenExist(int id) const
 	//{
 	//	int savePlace = -1;
@@ -101,7 +106,7 @@ namespace elec {
 		this->_phySize = other._phySize;
 		return *this;
 	}
-	
+
 
 }
 

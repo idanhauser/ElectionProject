@@ -50,7 +50,7 @@ namespace elec {
 
 		bool addNewCitizen(char* name,int id,int birtyear,int districtId);
 		bool addNewParty(char* name, int pdId,int& partyId);
-		void addNewPartyRepresentative();
+		bool addNewPartyRepresentative(int representId,int partyId,int districtId);
 		void viewAllDistricts() const;
 		void viewAllCitizens() const;
 		void viewAllParties() const;

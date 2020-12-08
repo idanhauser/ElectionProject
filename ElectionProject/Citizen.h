@@ -42,7 +42,7 @@ namespace elec
 		bool hasVoted()const;
 		const Party* getParty() const;
 		const District& getDistrict() const;
-		
+
 	};
 
 

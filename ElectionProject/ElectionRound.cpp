@@ -61,12 +61,30 @@ namespace elec
 		bool partyAdded = false;
 		if (_districts.isCitizenExist(pdId, distIndex))
 		{
-			Party* par = new Party(name, pdId);
+			Party* par = new Party(name, pdId, _districts.getLogicSize());
 			partyid = par->getPartyID();
 			_districts.getDistcritByIndex(distIndex).getCitizenById(pdId).setParty(par);
 			partyAdded = _parties.addToList(*par);
 		}
 		return partyAdded;
+	}
+
+	bool ElectionRound::addNewPartyRepresentative(int representId, int partyId, int districtId)
+	{
+		int distIndex;
+		bool represntAdded = false;
+		if (_districts.isCitizenExist(representId, distIndex))
+		{
+			Citizen& citizenReprenst = _districts.getDistcritByIndex(distIndex).getCitizenById(representId);
+			if (_districts.isDistcritExist(districtId) && _parties.IsPartyExist(partyId))
+			{
+				Party& currParty = _parties.getPartyByIndex(abs(partyId - PARTY_ID_INIT));
+				represntAdded = currParty.addPartyMember(citizenReprenst, distIndex);
+				citizenReprenst.setParty(&currParty);
+			}
+		}
+		return represntAdded;
+
 	}
 
 	void ElectionRound::viewAllDistricts() const

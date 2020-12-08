@@ -27,6 +27,7 @@ namespace elec {
 		int getLogicSize() const;
 		const Citizen& getCitizenByIndex(int index) const;
 		Citizen& getCitizenByIndex(int index);
+		Citizen** getCitizens();
 		//int isCitizenExist(int id) const;
 		////const Citizen& getCitizenById(int id) const;
 		////Citizen& getCitizenById(int id);

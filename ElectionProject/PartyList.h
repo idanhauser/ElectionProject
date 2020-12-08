@@ -24,7 +24,7 @@ namespace elec {
 		bool addToList(Party& Party);
 		int getLogicSize() const;
 		const Party& getPartyByIndex(int index) const;
-	
-
+		Party& getPartyByIndex(int index);
+		bool IsPartyExist(int partyId) const;
 	};
 }

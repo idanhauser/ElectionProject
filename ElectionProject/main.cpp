@@ -34,7 +34,7 @@ int main()
 	cout << endl << "-------------" << endl;
 	showMainMenu();
 
-	cout << "goodbat" << endl;
+	cout << "goodbye" << endl;
 
 
 
@@ -213,7 +213,8 @@ void addPartyRepresentative()
 
 
 	cout << "Insert a representative citizen's id ,district's id, party's id:" << endl;
-	cin >> representId >> districtId >> partyId >> districtId;
+	cin >> representId >> districtId >> partyId ;
+	election.addNewPartyRepresentative(representId, partyId, districtId);
 }
 
 void viewDistricts()
