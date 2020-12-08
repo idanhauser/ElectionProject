@@ -2,39 +2,44 @@
 namespace elec
 {
 	resultsArr::resultsArr():
-		_PMsRepsByPartyID(new int[_partiesAmount]), _districtsByID( new int* [_districtsAmount]), TotalPMsReps(new int [_partiesAmount])
+		_PMsRepsByPartyID(new int[_partiesAmount]), _repsPartiesByID(new int* [_partiesAmount]), _partiesByID( new int* [_partiesAmount]), TotalPMsReps(new int [_partiesAmount])
 	{
-		for (int i = 0; i < _districtsAmount; i++) {
-			_districtsByID[i] = new int[_partiesAmount];
+		for (int i = 0; i < _partiesAmount; i++) {
+			_partiesByID[i] = new int[_districtsAmount];
+			for (int j = 0; j < _districtsAmount; j++)
+				_partiesByID[i][j] = 0;
+		}
+		for (int i = 0; i < _partiesAmount; i++) {
+			_repsPartiesByID[i] = new int[_partiesAmount];
 			for (int j = 0; j < _partiesAmount; j++)
-				_districtsByID[i][j] = 0;
+				_partiesByID[i][j] = 0;
 		}
 	}
 
 
-	int* resultsArr::findDistrictPartiesPntrByID(int districtID) {
-		return _districtsByID[districtID - 100];
+	int* resultsArr::findPartysDistrictsPntrByPartyID(int partyID) {
+		return _partiesByID[partyID - 100];
 	}
 
-	void resultsArr::AddVoteToResultsArr(int party_id, int district_id) {
-		reallocResultsArr();
-		_districtsByID[party_id][district_id - 100]++;
+	void resultsArr::AddSingleVoteToArr(int party_id, int district_id) {
+		reallocResultsArr(); //roee:realloc every vote cause u i dont know if districts/parties amount was change since last time. should I keep it in static variable maybe?
+		_partiesByID[party_id][district_id - 100]++;
 	}
 
 	void resultsArr::reallocResultsArr()
 	{
-		int** newDistrictsByID = new int* [_districtsAmount];
+		int** newPartiesByID = new int* [_partiesAmount];
 
-		for (int i = 0; i < _districtsAmount; i++)
+		for (int i = 0; i < _partiesAmount; i++)
 		{
-			newDistrictsByID[i] = _districtsByID[i];
+			newPartiesByID[i] = _partiesByID[i];
 		}
-		if (_districtsAmount >= 1) //roee: not sure if correct
+		if (_partiesAmount >= 1) //roee: not sure if correct
 		{
-			delete[] _districtsByID;
+			delete[] _partiesByID;
 		}
 
-		_districtsByID = newDistrictsByID;
+		_partiesByID = newPartiesByID;
 	}
 
 
@@ -46,10 +51,12 @@ namespace elec
 		return _districtsAmount;
 	}
 
-	int resultsArr::getPartyNumberOfVotesFromDistrict(int districtSN, int partyID) {
-		return _districtsByID[districtSN][partyID];
+	int resultsArr::getDistrictNumberOfVotesInParty(int partyID, int districtSN ) {
+		return _partiesByID[partyID][districtSN-100];
 	}
-
+	int resultsArr::getPMNumberOfRepsInDistrict(int districtID, int partyID) {
+		return _repsPartiesByID[partyID][districtID - 100];
+	}
 
 	bool resultsArr::setPMsArrByIndex(int partyId, int votes) {
 		_PMsRepsByPartyID[partyId] = votes;
@@ -58,6 +65,11 @@ namespace elec
 
 	bool resultsArr::addToTotalPMsReps(int PartyPmID, int reps) {
 		TotalPMsReps[PartyPmID] = TotalPMsReps[PartyPmID] + reps;
+		return true;
+	}
+
+	bool resultsArr::addToAmountOfVotesForParty(int PartyPmID, int votes) {
+		AmountOfVotesForParty[PartyPmID] = AmountOfVotesForParty[PartyPmID] + votes;
 		return true;
 	}
 }

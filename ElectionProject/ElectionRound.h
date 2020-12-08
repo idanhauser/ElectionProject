@@ -26,7 +26,7 @@ namespace elec {
 		int _date[8];
 		int _citizenID;
 		int _PartyID;
-
+		resultsArr results;
 		DistrictList& _districts;
 		CitizenList& _citizens;
 		PartyList& _parties;
@@ -69,10 +69,10 @@ namespace elec {
 		void viewAllDistricts();
 		void viewAllCitizens();
 		void viewAllParties();
-		void votingAction(CitizenList _citizens);//todo:roee
-		void theResults();//todo:roee
-		int checkWinnerInDistrict(int districtID, resultsArr results);
-		int checkWinnigPM(int* TotalPMsRepsArr);
-
+		void votingAction(CitizenList& _citizens, resultsArr& results);//todo:roee // check if results refrence is fine
+		void theResults(resultsArr& results);//todo:roee
+		int checkWinningPMInDistrict(int districtID, resultsArr results);//inside theResults
+		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//inside theResults
+		int checkTotalPartyVotesAmount(resultsArr results, int partyID);//inside theResults
 	};
 }

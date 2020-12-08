@@ -14,16 +14,16 @@ using namespace std;
 
 namespace elec
 {
-	/*ElectionRound::ElectionRound(int date[8]):
-	_citizens(CitizenList()),_districts(DistrictList()),_parties(PartyList())
+	ElectionRound::ElectionRound(int date[8]) :
+		_citizens(_citizens), _districts(_districts), _parties(_parties), results(resultsArr()) //todo: was initiated thi way: _citizens(CITIZENSlIST()). Check if the fix is fine)
 	{
 
 		for (int i = 0; i < 8; ++i)
 		{
 			this->_date[i] = date[i];
-		}
+		} 
 	}
-	*/
+	
 
 
 
@@ -44,92 +44,108 @@ namespace elec
 
 
 	//todo:roee
-	void ElectionRound::votingAction(CitizenList _citizens)
+	void ElectionRound::votingAction(CitizenList& _citizens, resultsArr& results)//need to change to _districts
 	{
-
 		int id, party_id;
 		cout << "\nType your ID: ";
 		cin >> id;
 		cout << "\nEnter your voted party ID: ";
 		cin >> party_id;
-		Citizen* tempCitizen = _citizens.findCitizenByID(id);
+		Citizen* tempCitizen = _citizens.findCitizenByID(id);//need to change to _districts.findCitizenByID(id)
 		if (tempCitizen->hasVoted() == false) {
 			tempCitizen->setHasVoted(true);
-			resultsArr resultsArr;
-			resultsArr.AddVoteToResultsArr(party_id, tempCitizen->getCitizenDistrictNum());
+			results.AddSingleVoteToArr(party_id, tempCitizen->getCitizenDistrictNum());
 		}
 		else
 			cout << "\nYou've voted already !! ";
 	}
 
-	void ElectionRound::theResults() {
-		resultsArr results;
-		int votes;
-		int totalWinningPMPartyVotes = 0;
+	void ElectionRound::theResults(resultsArr& votesResults) {
+		resultsArr repsCounter;
+		int partyVotesInDistrict;
+		int tempWinnerReps;
+		int totalWinningPMPartyVotes = 0, totalPartyVotes = 0, totalPartyMembersForPM = 0;
 		int AmountOfPartyMembersFromSingleDistrict;
 		int partiesAmount = _parties.getLogicSize();
 		int districtsAmount = _districts.getLogicSize();
-		int WinningPartyID, districtReps;
+		int WinningPMPartyID, districtReps;
 		const char* WinningPMName;
-		double PartyvotesPrecentage, totalVotesPrecentage;
+		double PartyvotesPrecentageInDistrict, totalPartyVotesPrecentage = 0;
 		Party* tempParty;
 		District* tempDistrict;
+		int repsOfWinnerInDistrict;
+
+		/*calc results*/
+		for (int j = 0; j <= partiesAmount; j++) {
+			tempParty = _parties.findPartyByID(j);
+			for (int i = 0; i < districtsAmount; i++) {
+				tempDistrict = _districts.findDistrictByID(j + 100);
+				cout << "\n----------------------------------------------------";
+				cout << "\nDistrict Name: " << tempDistrict->getName();
+				cout << "\nAmount Of Reps: " << tempDistrict->getNumOfReps();
+				partyVotesInDistrict = votesResults.getDistrictNumberOfVotesInParty(i + 100, j);
+				cout << "\nThe District gave " << tempParty->getPartyName() << "  " << partyVotesInDistrict << " votes";
+				PartyvotesPrecentageInDistrict = (partyVotesInDistrict / tempDistrict->getNumberOfCitizens()); //change to getNumberOfCitizensWhichVoted() to get precentage from votes and notfro m district
+				cout << "\nwhich are: " << PartyvotesPrecentageInDistrict * 100 << "% precntages from the district citizens";
+				totalPartyVotes = totalPartyVotes + partyVotesInDistrict;
+				totalPartyVotesPrecentage = totalPartyVotesPrecentage + PartyvotesPrecentageInDistrict;
+				AmountOfPartyMembersFromSingleDistrict = PartyvotesPrecentageInDistrict * (tempParty->getPartySize());
+				totalPartyMembersForPM = totalPartyMembersForPM + AmountOfPartyMembersFromSingleDistrict;
+				repsCounter.AddToPMRepsCount(i, j + 100, AmountOfPartyMembersFromSingleDistrict);
+				votesResults.setPMsArrByIndex(j, AmountOfPartyMembersFromSingleDistrict);//toDelete
+			}
+			//todo: need to add function of printing partyMembers, and figure out the right order using repsCounter
+			
+			cout << "\nThe party got " << totalPartyVotes << "number of votes";
+			cout << "\nwhich are " << totalPartyVotesPrecentage << "precentage of votes from all citizens";//watch commment before
+			totalPartyVotesPrecentage = 0;
+			totalPartyMembersForPM = 0;
+			totalPartyVotes = 0;
+		}
+
+
+		cout << "\nThese are the stats of the PM candidates: ";
+
 		for (int j = 0; j <= districtsAmount; j++) {
-			tempDistrict = _districts.findDistrictByID(j+100);
-			cout << "\nDistrict Name: " << tempDistrict->getName();
-			cout <<"\nAmount Of Reps: "<< tempDistrict->getNumOfReps();
-			tempDistrict = _districts.findDistrictByID(j + 100);
-			totalVotesPrecentage = 0;
-			for (int i = 0; i < partiesAmount; i++) {
-				votes = results.getPartyNumberOfVotesFromDistrict(j + 100, i);
-				tempParty = _parties.findPartyByID(i);
-				cout << " the party " << tempParty->getPartyName() << " got " << votes;
-				PartyvotesPrecentage = (votes / tempDistrict->getNumberOfCitizens());
-				totalVotesPrecentage = totalVotesPrecentage + PartyvotesPrecentage;
-				AmountOfPartyMembersFromSingleDistrict = PartyvotesPrecentage * (tempParty->getPartySize());
-				cout << " which are " << PartyvotesPrecentage << "of all votes. \nHence, "
-					<< AmountOfPartyMembersFromSingleDistrict << " party members are elected from the party ";
-				for (int k = 0; k < AmountOfPartyMembersFromSingleDistrict; k++)
-					tempDistrict->addToElectedMembersArr(tempParty->getPartyMembers().getCitizenByIndex(k));
-				results.setPMsArrByIndex(i, AmountOfPartyMembersFromSingleDistrict);
-			}
-			WinningPartyID = checkWinnerInDistrict(j + 100, results);
-			WinningPMName = _citizens.findCitizenByID(WinningPartyID)->getCitizenName();
-			cout << "\nThe total votes precentage in the District is: " << totalVotesPrecentage;
-			districtReps =tempDistrict->getNumOfReps();
-			cout << "\nThe winning PM in this District is " << WinningPMName << "who's getting all " <<
-				districtReps << " district reps";
-			cout << "\nThe Reps Are: ";
-			for (int l = 0; l < tempDistrict->getElectionResults().getLogicSize(); l++) {
-				tempDistrict->getElectionResults().printList();
-			}
-			results.addToTotalPMsReps(WinningPartyID, districtReps);
+			WinningPMPartyID = checkWinningPMInDistrict(j, votesResults);
+			repsOfWinnerInDistrict = checkWinnigPMRepsAmountInDistrict(repsCounter, j + 100);
+			cout << "\nThe Party PM: " << _citizens.findCitizenByID(_parties.findPartyByID(WinningPMPartyID)->getPartyPMCandidateID()); // can be implemented better if i could find pm from party
+			cout << " earned" << repsOfWinnerInDistrict << " members";
+			cout << " His party got " << checkTotalPartyVotesAmount(votesResults, j) << " votes totally";
 		}
-		int PMPartyID = checkWinnigPM(results.getTotalPMsRepsArr());
-		cout <<"\nthe winner of the elections is: " << _citizens.findCitizenByID(PMPartyID) 
-			<< "with total amount of " << totalWinningPMPartyVotes <<"votes for his party"; //todo
 	}
+		
+																							 
 
-	int ElectionRound::checkWinnigPM(int* TotalPMsRepsArr) {
-		int winner=0;
-		for (int i = 0; i < _parties.getLogicSize(); i++) {
-			if (winner > TotalPMsRepsArr[i])
-				winner = i;
-		}
-		return winner;
-	}
-
-	int ElectionRound::checkWinnerInDistrict(int districtID, resultsArr results) {
+	int ElectionRound::checkWinningPMInDistrict(int districtID, resultsArr results) {
 		int max = 0;
 		int cur;
-		int winnerID = 0;
+		int winnerPartyPmID = 0;
 		for (int j = 0; j < _parties.getLogicSize(); j++) {
-			cur = results.getPartyNumberOfVotesFromDistrict(districtID + 100, j);
+			cur = results.getPMNumberOfRepsInDistrict(j, districtID);
 			if (max < cur) {
 				max = cur;
-				winnerID = j;
+				winnerPartyPmID = j;
 			}
 		}
-		return winnerID;
+		return winnerPartyPmID;
 	}
+
+	int ElectionRound::checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId) {// todelete
+		int count = 0;
+		for (int i = 0; i < _parties.getLogicSize(); i++) {
+			count = count + repsCountArr.getPMNumberOfRepsInDistrict(i, districtId);
+		}
+		return count;
+	}
+
+	int ElectionRound::checkTotalPartyVotesAmount(resultsArr results, int partyID) {
+		int count = 0;
+		for (int i = 0; i < _parties.getLogicSize(); i++) {
+			count = count + results.getDistrictNumberOfVotesInParty(i + 100, partyID);
+		}
+		return count;
+	}
+
+
 }

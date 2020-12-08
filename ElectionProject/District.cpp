@@ -71,7 +71,7 @@ namespace elec {
 		return _numOfReps;
 	}
 
-	ostream& operator<<(ostream& os, const District& district)
+/*	ostream& operator<<(ostream& os, const District& district)
 	{
 		os << "District " << district._name << ", id: " << (int)district._serialNum <<
 			"has " << district.getNumberOfCitizens() << " citizens." << endl;
@@ -80,7 +80,7 @@ namespace elec {
 		os << "The people that live in this district are:" <<endl << district._Citizens << endl;
 		return os;
 	}
-
+*/
 
 	bool District::addToElectedMembersArr(Citizen* partyMember) { //not sure if 'Citizen*'. otherwise creates bug
 		static int i = 0;
