@@ -1,5 +1,6 @@
 ﻿//code verison 1.0
 #pragma once
+#include "Party.h"
 using namespace std;
 namespace elec {
 	class Party;

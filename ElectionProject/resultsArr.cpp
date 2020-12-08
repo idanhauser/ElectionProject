@@ -2,7 +2,7 @@
 namespace elec
 {
 	resultsArr::resultsArr():
-		_PMsRepsByPartyID(new int[_partiesAmount]), _repsPartiesByID(new int* [_partiesAmount]), _partiesByID( new int* [_partiesAmount]), TotalPMsReps(new int [_partiesAmount])
+		_partiesByID(new int* [_partiesAmount]), _repsPartiesByID(new int* [_partiesAmount]), _PMsRepsByPartyID(new int[_partiesAmount]), TotalPMsReps(new int [_partiesAmount])
 	{
 		for (int i = 0; i < _partiesAmount; i++) {
 			_partiesByID[i] = new int[_districtsAmount];
@@ -14,6 +14,18 @@ namespace elec
 			for (int j = 0; j < _partiesAmount; j++)
 				_partiesByID[i][j] = 0;
 		}
+	}
+
+
+	resultsArr::~resultsArr() {
+		for (int i = 0; i < _partiesAmount; i++) {
+			delete[] _partiesByID[i];
+		}
+		delete _partiesByID;
+		for (int i = 0; i < _partiesAmount; i++) {
+			delete[] _repsPartiesByID[i];
+		}
+		delete _repsPartiesByID;
 	}
 
 
@@ -68,8 +80,8 @@ namespace elec
 		return true;
 	}
 
-	bool resultsArr::addToAmountOfVotesForParty(int PartyPmID, int votes) {
+	/*bool resultsArr::addToAmountOfVotesForParty(int PartyPmID, int votes) {
 		AmountOfVotesForParty[PartyPmID] = AmountOfVotesForParty[PartyPmID] + votes;
 		return true;
-	}
+	}*/
 }

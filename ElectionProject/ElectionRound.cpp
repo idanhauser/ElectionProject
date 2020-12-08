@@ -8,16 +8,15 @@
 #include "DistrictList.h"
 #include "CitizenList.h"
 #include "PartyList.h"
-#include "resultsArr.h"
 
 using namespace std;
 
 namespace elec
 {
 	ElectionRound::ElectionRound(int date[8]) :
-		_citizens(_citizens), _districts(_districts), _parties(_parties), results(resultsArr()) //todo: was initiated thi way: _citizens(CITIZENSlIST()). Check if the fix is fine)
+		_citizens(CitizenList()), _districts(DistrictList()), _parties(PartyList()), results(resultsArr()) //todo: was initiated thi way: _citizens(CITIZENSlIST()). Check if the fix is fine)
 	{
-
+		//_citizens should be deleted
 		for (int i = 0; i < 8; ++i)
 		{
 			this->_date[i] = date[i];
@@ -49,9 +48,11 @@ namespace elec
 		int id, party_id;
 		cout << "\nType your ID: ";
 		cin >> id;
-		cout << "\nEnter your voted party ID: ";
+		cout << "\nEnter your vote party ID: ";
 		cin >> party_id;
-		Citizen* tempCitizen = _citizens.findCitizenByID(id);//need to change to _districts.findCitizenByID(id)
+		//should  isCitizenExist() if returned distIndex => getCitizenByIndex(getDIstrictByIndex( distIndex))
+		//if true: use 
+		Citizen* tempCitizen = _citizens.findCitizenByID(id);//need to change to _districts.findCitizenByID(id) or upper comment
 		if (tempCitizen->hasVoted() == false) {
 			tempCitizen->setHasVoted(true);
 			results.AddSingleVoteToArr(party_id, tempCitizen->getCitizenDistrictNum());
@@ -109,7 +110,7 @@ namespace elec
 		for (int j = 0; j <= districtsAmount; j++) {
 			WinningPMPartyID = checkWinningPMInDistrict(j, votesResults);
 			repsOfWinnerInDistrict = checkWinnigPMRepsAmountInDistrict(repsCounter, j + 100);
-			cout << "\nThe Party PM: " << _citizens.findCitizenByID(_parties.findPartyByID(WinningPMPartyID)->getPartyPMCandidateID()); // can be implemented better if i could find pm from party
+			cout << "\nThe Party PM: " << _parties.findPartyByID(WinningPMPartyID)->getPartyLeader()); // idan new party Leader getter
 			cout << " earned" << repsOfWinnerInDistrict << " members";
 			cout << " His party got " << checkTotalPartyVotesAmount(votesResults, j) << " votes totally";
 		}

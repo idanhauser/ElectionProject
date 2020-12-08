@@ -19,7 +19,7 @@ namespace elec {
 
 	public:
 		CitizenList();
-		CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
+	//	CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
 		//	friend class Citizen;
 		
 		~CitizenList();

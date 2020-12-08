@@ -1,10 +1,12 @@
 ﻿//code verison 1.0
 #pragma once
-#include "Citizen.h"
 #include "resultsArr.h"
+
+
 #include "DistrictList.h"
+#include "PartyList.h"
+#include "Citizen.h"
 #include "District.h"
-#include "Party.h"
 
 using namespace std;
 
@@ -27,10 +29,9 @@ namespace elec {
 		int _citizenID;
 		int _PartyID;
 		resultsArr results;
-		DistrictList& _districts;
-		CitizenList& _citizens;
-		PartyList& _parties;
-
+		DistrictList _districts;
+		PartyList _parties;
+		CitizenList _citizens; //_citizens should be deleted
 		
 		const ElectionRound& operator=(const ElectionRound&);
 

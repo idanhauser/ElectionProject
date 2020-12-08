@@ -62,7 +62,7 @@ namespace elec {
 		return _logicSize;
 	}
 
-	ostream& operator<<(ostream& os, const DistrictList& district)
+/*	ostream& operator<<(ostream& os, const DistrictList& district) 
 	{
 
 		int len = district.getLogicSize();
@@ -72,7 +72,7 @@ namespace elec {
 		}
 		return os;
 	}
-
+	*/
 
 
 	/**************************************/

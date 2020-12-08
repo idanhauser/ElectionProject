@@ -11,14 +11,14 @@ namespace elec {
 	}
 
 
-	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
+	/*CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
 	{
 		int len = other.getLogicSize();
 		for (int i = 0; i < len; ++i)
 		{
 			_citizens[i] = other._citizens[i];
 		}
-	}
+	}*/
 
 
 

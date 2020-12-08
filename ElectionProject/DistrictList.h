@@ -25,7 +25,7 @@ namespace elec {
 		bool addToList(District* district);
 		
 		int getLogicSize() const;
-		friend ostream& operator<<(ostream& os, const DistrictList& district);
+	//	friend ostream& operator<<(ostream& os, const DistrictList& district);
 
 	
 

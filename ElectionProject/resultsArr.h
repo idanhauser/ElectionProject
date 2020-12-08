@@ -8,7 +8,7 @@ namespace elec {
 		const static int _districtsAmount = 1, _partiesAmount = 1;
 		int* _PMsRepsByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 		int* TotalPMsReps=0;
-		int* AmountOfVotesForParty;
+	//	int* AmountOfVotesForParty;
 	public:
 		
 		resultsArr();
@@ -40,7 +40,7 @@ namespace elec {
 			_repsPartiesByID[RepPartyID][DistrictID-100] = _repsPartiesByID[RepPartyID][DistrictID-100] + amountOfReps;
 			return true;
 		}
-		bool addToAmountOfVotesForParty(int PartyPmID, int reps); //maybe delete
+	//	bool addToAmountOfVotesForParty(int PartyPmID, int reps); //maybe delete
 	};
 
 }
