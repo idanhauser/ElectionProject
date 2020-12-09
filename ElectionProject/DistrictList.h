@@ -29,7 +29,7 @@ namespace elec {
 		int getLogicSize() const;
 		bool isDistcritExist(int id) const;
 		const District& getDistcritByIndex(int index) const;
-	 District& getDistcritByIndex(int index) ;
+		 District& getDistcritByIndex(int index) ;
 
 
 	};

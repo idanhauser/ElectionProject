@@ -15,11 +15,11 @@ namespace elec {
 		Citizen** _citizens;
 
 
-		const CitizenList& operator=(const CitizenList&);
 
 	public:
 		CitizenList();
 		//	CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
+		const CitizenList& operator=(const CitizenList&);
 
 		~CitizenList();
 		void realloc(int new_size);
@@ -28,6 +28,11 @@ namespace elec {
 		const Citizen& getCitizenByIndex(int index) const;
 		Citizen& getCitizenByIndex(int index);
 		Citizen** getCitizens();
+
+
+
+	
+		
 		//int isCitizenExist(int id) const;
 		////const Citizen& getCitizenById(int id) const;
 		////Citizen& getCitizenById(int id);

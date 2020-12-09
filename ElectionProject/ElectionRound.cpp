@@ -36,6 +36,10 @@ namespace elec
 		District* dist = new District(name, numberResentatives);
 		districtId = dist->getSerialNum();
 		districtAdded = _districts.addToList(*dist);
+		for (int i = 0; i < _parties.getLogicSize(); ++i)
+		{
+			_parties.getPartyByIndex(i).AddAnotherColumn();
+		}
 		return districtAdded;
 	}
 
@@ -58,12 +62,15 @@ namespace elec
 	bool ElectionRound::addNewParty(char* name, int pdId, int& partyid)
 	{
 		int distIndex;
+
+		Citizen* leader = nullptr;
 		bool partyAdded = false;
 		if (_districts.isCitizenExist(pdId, distIndex))
 		{
-			Party* par = new Party(name, pdId, _districts.getLogicSize());
+			leader = &(_districts.getDistcritByIndex(distIndex).getCitizenById(pdId));
+			Party* par = new Party(name, pdId, _districts.getLogicSize(), *leader);
 			partyid = par->getPartyID();
-			_districts.getDistcritByIndex(distIndex).getCitizenById(pdId).setParty(par);
+			leader->setParty(par);
 			partyAdded = _parties.addToList(*par);
 		}
 		return partyAdded;

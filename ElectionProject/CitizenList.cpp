@@ -84,6 +84,8 @@ namespace elec {
 		return _citizens;
 	}
 
+
+
 	//int CitizenList::isCitizenExist(int id) const
 	//{
 	//	int savePlace = -1;

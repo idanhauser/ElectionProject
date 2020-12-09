@@ -15,14 +15,14 @@ namespace elec
 		char* _partyName;
 		int _PMCandidateID;
 		CitizenList *_partyMembers;
-		CitizenList* _representatives;
-
-		
+		CitizenList* _representativesByDist;
+		const Citizen& _partyLeader;
 		Party(const Party& other);
 		const Party& operator=(const Party&);
+		int _numOfDist;
 	public:
 		Party() = delete;
-		Party(const char* partyName, int PMCandidateID, int numOfDist);
+		Party(const char* partyName, int PMCandidateID, int numOfDist,const Citizen& partyLeader);
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
@@ -38,9 +38,13 @@ namespace elec
 		const int getPartyID() const; 
 		int getPartyPMCandidateID() const;
 		CitizenList getPartyMembers() const;
+		CitizenList* getRepresentativesByDis();
 		bool addPartyMember(Citizen& citizen,int distIndex);
 		bool addToMembers( Citizen& citizen) ;
-		bool addToRepresentativesBydis(Citizen& citizen, int distIndex);
+		bool AddAnotherColumn();
+
+		bool addToRepresentativesByDis(Citizen& citizen, int distIndex);
+		const Citizen& getPartyLeader() const;
 	};
 
 }
