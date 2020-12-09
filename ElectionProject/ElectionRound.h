@@ -75,5 +75,33 @@ namespace elec {
 		int checkWinningPMInDistrict(int districtID, resultsArr results);//inside theResults
 		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//inside theResults
 		int checkTotalPartyVotesAmount(resultsArr results, int partyID);//inside theResults
+		int checkWinningPMInDistrict(int districtID, resultsArr results) {
+			int max = 0;
+			int cur;
+			int winnerPartyPmID = 0;
+			for (int j = 0; j < _parties.getLogicSize(); j++) {
+				cur = results.getPMNumberOfRepsInDistrict(j, districtID);
+				if (max < cur) {
+					max = cur;
+					winnerPartyPmID = j;
+				}
+			}
+			return winnerPartyPmID;
+		}
+		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId) {// todelete
+			int count = 0;
+			for (int i = 0; i < _parties.getLogicSize(); i++) {
+				count = count + repsCountArr.getPMNumberOfRepsInDistrict(i, districtId);
+			}
+			return count;
+		}
+		int checkTotalPartyVotesAmount(resultsArr results, int partyID) {
+			int count = 0;
+			for (int i = 0; i < _parties.getLogicSize(); i++) {
+				count = count + results.getDistrictNumberOfVotesInParty(i + 100, partyID);
+			}
+			return count;
+		}
+
 	};
 }

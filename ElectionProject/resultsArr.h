@@ -30,8 +30,10 @@ namespace elec {
 		}
 		int getDistrictNumberOfVotesInParty(int districtSN, int partyID);
 		int getPMNumberOfRepsInDistrict(int partyID, int districtSN);
-	
-		int getPmsVotesByPartyID(int index) {
+		int setPmsRepsByPartyID(int index) {
+			return _PMsRepsByPartyID[index];
+		}
+		int getPmsRepsByPartyID(int index) {
 			return _PMsRepsByPartyID[index];
 		}
 		bool setPMsArrByIndex(int partyId, int votes);

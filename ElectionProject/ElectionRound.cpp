@@ -50,9 +50,10 @@ namespace elec
 		cin >> id;
 		cout << "\nEnter your vote party ID: ";
 		cin >> party_id;
+		//todo: fix lines after merge:
 		//should  isCitizenExist() if returned distIndex => getCitizenByIndex(getDIstrictByIndex( distIndex))
 		//if true: use 
-		Citizen* tempCitizen = _citizens.findCitizenByID(id);//need to change to _districts.findCitizenByID(id) or upper comment
+		Citizen* tempCitizen = _citizens.findCitizenByID(id);//need to change to find the right way after merge or upper comment
 		if (tempCitizen->hasVoted() == false) {
 			tempCitizen->setHasVoted(true);
 			results.AddSingleVoteToArr(party_id, tempCitizen->getCitizenDistrictNum());
@@ -62,91 +63,99 @@ namespace elec
 	}
 
 	void ElectionRound::theResults(resultsArr& votesResults) {
-		resultsArr repsCounter;
-		int partyVotesInDistrict;
-		int tempWinnerReps;
-		int totalWinningPMPartyVotes = 0, totalPartyVotes = 0, totalPartyMembersForPM = 0;
-		int AmountOfPartyMembersFromSingleDistrict;
-		int partiesAmount = _parties.getLogicSize();
-		int districtsAmount = _districts.getLogicSize();
-		int WinningPMPartyID, districtReps;
-		const char* WinningPMName;
-		double PartyvotesPrecentageInDistrict, totalPartyVotesPrecentage = 0;
-		Party* tempParty;
-		District* tempDistrict;
-		int repsOfWinnerInDistrict;
+	
 
-		/*calc results*/
-		for (int j = 0; j <= partiesAmount; j++) {
-			tempParty = _parties.findPartyByID(j);
-			for (int i = 0; i < districtsAmount; i++) {
-				tempDistrict = _districts.findDistrictByID(j + 100);
-				cout << "\n----------------------------------------------------";
-				cout << "\nDistrict Name: " << tempDistrict->getName();
-				cout << "\nAmount Of Reps: " << tempDistrict->getNumOfReps();
-				partyVotesInDistrict = votesResults.getDistrictNumberOfVotesInParty(i + 100, j);
-				cout << "\nThe District gave " << tempParty->getPartyName() << "  " << partyVotesInDistrict << " votes";
-				PartyvotesPrecentageInDistrict = (partyVotesInDistrict / tempDistrict->getNumberOfCitizens()); //change to getNumberOfCitizensWhichVoted() to get precentage from votes and notfro m district
-				cout << "\nwhich are: " << PartyvotesPrecentageInDistrict * 100 << "% precntages from the district citizens";
-				totalPartyVotes = totalPartyVotes + partyVotesInDistrict;
-				totalPartyVotesPrecentage = totalPartyVotesPrecentage + PartyvotesPrecentageInDistrict;
-				AmountOfPartyMembersFromSingleDistrict = PartyvotesPrecentageInDistrict * (tempParty->getPartySize());
-				totalPartyMembersForPM = totalPartyMembersForPM + AmountOfPartyMembersFromSingleDistrict;
-				repsCounter.AddToPMRepsCount(i, j + 100, AmountOfPartyMembersFromSingleDistrict);
-				votesResults.setPMsArrByIndex(j, AmountOfPartyMembersFromSingleDistrict);//toDelete
-			}
-			//todo: need to add function of printing partyMembers, and figure out the right order using repsCounter
-			
-			cout << "\nThe party got " << totalPartyVotes << "number of votes";
-			cout << "\nwhich are " << totalPartyVotesPrecentage << "precentage of votes from all citizens";//watch commment before
-			totalPartyVotesPrecentage = 0;
-			totalPartyMembersForPM = 0;
-			totalPartyVotes = 0;
-		}
-
-
-		cout << "\nThese are the stats of the PM candidates: ";
-
-		for (int j = 0; j <= districtsAmount; j++) {
-			WinningPMPartyID = checkWinningPMInDistrict(j, votesResults);
-			repsOfWinnerInDistrict = checkWinnigPMRepsAmountInDistrict(repsCounter, j + 100);
-			cout << "\nThe Party PM: " << _parties.findPartyByID(WinningPMPartyID)->getPartyLeader()); // idan new party Leader getter
-			cout << " earned" << repsOfWinnerInDistrict << " members";
-			cout << " His party got " << checkTotalPartyVotesAmount(votesResults, j) << " votes totally";
-		}
-	}
+/*******************************************************************************************/
+		District* tempDis;
+		resultsArr countReps;
+		char* pmWithTheMostRepsName;
+		Citizen *partyLeader;
+		int totalDistrictVotes = 0, partyLeaderReps, maxRepsForPm=0, totalPartyVotesPrecentage, partyVotesInDistrict;
+		int districtAmount = countReps.getdistrictsAmount(), partiesAmount = countReps.getpartiesAmount();
 		
-																							 
+		for (int j = 0; j <= districtAmount; j++) {
+			tempDis = _districts.findDistrictByID(j + 100);
+			cout << "\n----------------------------------------------------";
+			cout << "\nDistrict Name: " << tempDis->getName();
+			cout << "\nAmount Of Reps: " << tempDis->getNumOfReps();
+			for (int k = 0; k < partiesAmount; k++) {
+				partyVotesInDistrict = votesResults.getDistrictNumberOfVotesInParty(j + 100, k);
+				totalPartyVotesPrecentage = partyVotesInDistrict / tempDis->getNumberOfCitizens() * 100;//from all citizens - not only voting ones
+				cout << "\nThe party " << _parties.findPartyByID(k) << " got " << partyVotesInDistrict << " votes"<< //delete after fix of the next comment
+					"\nwhich are " << totalPartyVotesPrecentage << "precentage of votes from all citizens";
+				
+				/*todo: allow these lines after adding "getVotingCitizensAmountInDistrict()" func:
+				
+				totalPartyVotesPrecentage = partyVotesInDistrict / tempDis->getVotingCitizensAmountInDistrict() * 100;
+				cout << "\nThe party " << _parties.findPartyByID(k) << " got " << partyVotesInDistrict << " votes"<< 
+					"\nwhich are " << partyVotesInDistrict/getVotingCitizensAmountInDistrict()*100 <<
+					"precentages of voting citizens in the district";
+				
+				*/
+				
+				partyLeaderReps = partyVotesInDistrict / tempDis->getNumberOfCitizens() * (tempDis->getNumOfReps());
+				
+				/*todo: allow these lines after adding "printPartyRepsFromDistrictByAmount()" func:
+				
+				printPartyRepsFromDistrictByAmount(partyLeaderReps)
+				partyLeader = _parties.findPartyByID(k).getPartyLeader();
+				cout << "\nThe Party leader " << partyLeader.getCitizenName() << " got " <<
+					partyLeaderReps << "Reps";
+					
+					*/
 
-	int ElectionRound::checkWinningPMInDistrict(int districtID, resultsArr results) {
-		int max = 0;
-		int cur;
-		int winnerPartyPmID = 0;
-		for (int j = 0; j < _parties.getLogicSize(); j++) {
-			cur = results.getPMNumberOfRepsInDistrict(j, districtID);
-			if (max < cur) {
-				max = cur;
-				winnerPartyPmID = j;
+				if (partyLeaderReps > maxRepsForPm) {
+					maxRepsForPm = partyLeaderReps;
+					strcpy(pmWithTheMostRepsName, partyLeader->getCitizenName());
+				}
 			}
-		}
-		return winnerPartyPmID;
-	}
+			
+			/*todo: allow these lines after adding "getVotingCitizensAmountInDistrict()" func:
 
-	int ElectionRound::checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId) {// todelete
-		int count = 0;
-		for (int i = 0; i < _parties.getLogicSize(); i++) {
-			count = count + repsCountArr.getPMNumberOfRepsInDistrict(i, districtId);
-		}
-		return count;
-	}
+			cout << "The precentage of voting citizens in the District is: " <<
+				tempDis.getVotingCitizensAmountInDistrict()/tempDis->getEligibleCitizens() * 100;
+				
+				*/
 
-	int ElectionRound::checkTotalPartyVotesAmount(resultsArr results, int partyID) {
-		int count = 0;
-		for (int i = 0; i < _parties.getLogicSize(); i++) {
-			count = count + results.getDistrictNumberOfVotesInParty(i + 100, partyID);
+
+			//district winner check:
+
+
+			cout << "the Pm party with the most reps is: " << partyLeader->getCitizenName() << " who get all " <<
+				tempDis->getNumOfReps() << " reps ";
+			
+			countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID());
+			maxRepsForPm = 0;
+			/*todo: allow this line after adding "setLeader(Citizen)" func:
+
+			tempDis.setLeader(partyLeader);
+			
+			*/
 		}
-		return count;
-	}
+		
+		// elections winner check:
+		
+		/* todo: allow these lines after =>
+		//=>fix  _parties.findPartyByID(i).PartyLeader() to get in some other working way the citizen partyLeader
+		
+		
+		for (int i = 0; i < partiesAmount; i++)
+			if (maxRepsForPm < countReps.getPmsRepsByPartyID(i)) {
+				//Citizen winner = _parties.findPartyByID(i).PartyLeader(); 
+				maxRepsForPm = countReps.getPmsRepsByPartyID(i);
+			}
+		cout << "the ELECTIONS WINNER is: " << winner->getCitizenName() << "with" <<
+			countReps.getPmsRepsByPartyID(winner->getParty().getPartyID()) << "electors";
+
+
+		*/
+
+
+
+
+
+
+
 
 
 }

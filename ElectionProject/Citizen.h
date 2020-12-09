@@ -37,7 +37,10 @@ namespace elec
 		int getCitizenBirthYear() const;
 		const int getCitizenDistrictNum() const;
 		bool hasVoted()const;
-
+		const Party* getParty() const
+		{
+			return _party;
+		}
 
 	
 	};
