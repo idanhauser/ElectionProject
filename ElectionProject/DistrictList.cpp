@@ -5,7 +5,7 @@ using namespace std;
 #include "DistrictList.h"
 
 namespace elec {
-
+	
 
 	DistrictList::DistrictList() : _logicSize(0), _phySize(MAX_SIZE), _districts(new District* [MAX_SIZE]) {}
 
@@ -126,4 +126,26 @@ namespace elec {
 		if (index < _logicSize)
 			return *_districts[index];
 	}
+
+	
+	//todo idan to check.
+
+	///**************************************/
+	//	//roee:
+	//class DistrictList;
+
+	//District* DistrictList::findDistrictByID( int id) { //return 0 for ignoring not finding error even its not possible
+	//	for (int i = 0; i < getLogicSize(); i++)
+	//		if (_districts[i]->getSerialNum() == id)
+	//			return _districts[i];
+	//	return 0;
+	//}
+	///**************************************/
+
+
+
+
+
+
+
 }

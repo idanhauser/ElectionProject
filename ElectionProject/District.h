@@ -8,7 +8,7 @@ using namespace std;
 namespace elec
 {
 	class CitizenList;
-
+	class Citizen;
 
 	class District
 	{
@@ -21,7 +21,7 @@ namespace elec
 		int _electionResult;
 		int _numOfReps;
 		const Citizen*  _partyLeaderInDist;
-
+		//CitizenList _electedMembersArr;
 		District(const District& other);
 		const District& operator=(const District&);
 
@@ -37,7 +37,7 @@ namespace elec
 		const CitizenList& getEligibleCitizens() const;
 		const char* getName() const;
 		double getVotersPercentage() const;
-		int getElectionResults()const;
+		CitizenList getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
 		bool addCitizen(Citizen* citz);
@@ -47,5 +47,6 @@ namespace elec
 		bool setLeaderInDist( Citizen* leader);
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
+		bool addToElectedMembersArr(Citizen* partyMember);
 	};
 }

@@ -32,5 +32,11 @@ namespace elec {
 		 District& getDistcritByIndex(int index) ;
 
 
+
+//		/*********************************/
+////roee:
+//		District* findDistrictByID(int id);
+//
+//		/*********************************/
 	};
 }

@@ -142,6 +142,7 @@
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="District.cpp" />
     <ClCompile Include="DistrictList.cpp" />
+    <ClCompile Include="resultsArr.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="ElectionRound.cpp" />
     <ClCompile Include="CitizenList.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Citizen.h" />
     <ClInclude Include="District.h" />
     <ClInclude Include="DistrictList.h" />
+    <ClInclude Include="resultsArr.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ElectionRound.h" />
     <ClInclude Include="CitizenList.h" />

@@ -10,8 +10,8 @@ namespace elec
 	{
 	private:
 		static int pdGenerator;
-		
-		int _partyID; 
+
+		int _partyID;
 		char* _partyName;
 		int _PMCandidateID;
 		CitizenList *_partyMembers;
@@ -26,16 +26,16 @@ namespace elec
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
-		//friend class PartyList;
+		friend class PartyList;
 	
 		bool setPMCandidateID(int idnum);
 
 		bool addPartyMembers(Citizen* citizen);
 
-		
+
 
 		const char* getPartyName() const;
-		const int getPartyID() const; 
+		const int getPartyID() const;
 		int getPartyPMCandidateID() const;
 		CitizenList getPartyMembers() const;
 		CitizenList* getRepresentativesByDis();
@@ -45,6 +45,12 @@ namespace elec
 		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex);
 		const Citizen& getPartyLeader() const;
-	};
 
+
+		///ROEEE TODO = what are those functions?
+		int getPartySize() const;
+		CitizenList getPartyMembers()const;
+		void printSpecificPartyMembersAmount(int amount);
+		
+	};
 }
