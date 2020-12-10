@@ -1,5 +1,7 @@
 ﻿//code verison 1.0
 #include "Party.h"
+
+#include "Citizen.h"
 #include "CitizenList.h"
 
 
@@ -7,7 +9,7 @@ namespace elec {
 
 	int Party::pdGenerator = PARTY_ID_INIT;
 
-	
+
 	Party::Party(const char* partyName, int PMCandidateID, int numOfDist, const Citizen& partyLeader) : _partyID(pdGenerator++),
 		_partyName(new char[strlen(partyName) + 1]),
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
@@ -52,8 +54,8 @@ namespace elec {
 
 	bool Party::AddAnotherColumn()
 	{
-		CitizenList* new_memory = new CitizenList  [_numOfDist+1];
-		for (int i = 0; i < min(_numOfDist+1, _numOfDist); ++i)
+		CitizenList* new_memory = new CitizenList[_numOfDist + 1];
+		for (int i = 0; i < min(_numOfDist + 1, _numOfDist); ++i)
 		{
 			new_memory[i] = (_representativesByDist[i]);
 		}
@@ -61,14 +63,23 @@ namespace elec {
 		_numOfDist++;
 		return true;
 	}
-	
+
+	//todo:idan have to check
+	void Party::printPartyRepsFromDistrictByAmount(int num, int districtID) const
+	{
+		CitizenList& represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];
+		int amountToPrint = min(num, represnts.getLogicSize());
+		for (int i = 0; i < amountToPrint; ++i)
+		{
+			cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
+		
+		}
+	}
 
 
-
-	
 	bool Party::addToRepresentativesByDis(Citizen& citizen, int distIndex)
 	{
-		 return  _representativesByDist[distIndex].addToList(citizen);
+		return  _representativesByDist[distIndex].addToList(citizen);
 	}
 
 	const Citizen& Party::getPartyLeader() const
@@ -88,9 +99,9 @@ namespace elec {
 	/// <param name="citizen">the citizen we want to add to the lists</param>
 	/// <param name="distIndex">the distcrit he represnt</param>
 	/// <returns>true if everything is ok else false </returns>
-	bool Party::addPartyMember( Citizen& citizen, int distIndex) 
+	bool Party::addPartyMember(Citizen& citizen, int distIndex)
 	{
-		bool addtodis=false, addtomembers=false;
+		bool addtodis = false, addtomembers = false;
 		addtodis = addToRepresentativesByDis(citizen, distIndex);
 		addtomembers = addToMembers(citizen);
 		return addtomembers && addtodis;

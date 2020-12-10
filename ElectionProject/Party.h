@@ -42,7 +42,7 @@ namespace elec
 		bool addPartyMember(Citizen& citizen,int distIndex);
 		bool addToMembers( Citizen& citizen) ;
 		bool AddAnotherColumn();
-
+		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex);
 		const Citizen& getPartyLeader() const;
 	};

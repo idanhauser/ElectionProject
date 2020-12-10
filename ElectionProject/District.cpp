@@ -10,7 +10,7 @@ namespace elec {
 	int District::snGenerator = DISTRICT_ID_INIT;
 
 	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps)
+		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps),_partyLeaderInDist(nullptr)
 	{
 		strcpy(this->_name, name);
 	}
@@ -85,6 +85,21 @@ namespace elec {
 		return _Citizens.getCitizenByIndex(savePlace);
 	}
 
+	int District::getNumOfReps() const
+	{
+		return _numOfReps;
+	}
+
+	bool District::setLeaderInDist(Citizen* leader)
+	{
+		if(leader!=nullptr)
+		{
+			_partyLeaderInDist = leader;
+			return true;
+		}
+		return false;
+	}
+
 
 	bool District::isCitizenExist(int id) const
 	{
@@ -98,6 +113,23 @@ namespace elec {
 			}
 		}
 		return found;
+	}
+
+	/// <summary>
+	/// the function counts how many citizen voted in this distcrit.
+	/// </summary>
+	/// <returns>the amount people who voted</returns>
+	int District::getVotingCitizensAmountInDistrict() const
+	{
+		int counter = 0;
+		for (int i = 0; i < _Citizens.getLogicSize(); ++i)
+		{
+			if(_Citizens.getCitizenByIndex(i).hasVoted())
+			{
+				counter++;
+			}
+		}
+		return counter;
 	}
 
 

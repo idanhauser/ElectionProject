@@ -20,7 +20,7 @@ namespace elec
 		double _votersPercentage;
 		int _electionResult;
 		int _numOfReps;
-
+		const Citizen*  _partyLeaderInDist;
 
 		District(const District& other);
 		const District& operator=(const District&);
@@ -43,7 +43,9 @@ namespace elec
 		bool addCitizen(Citizen* citz);
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
-
+		int getNumOfReps() const;
+		bool setLeaderInDist( Citizen* leader);
 		bool isCitizenExist(int id) const;
+		int getVotingCitizensAmountInDistrict() const;
 	};
 }

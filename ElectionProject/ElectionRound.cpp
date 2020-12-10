@@ -149,5 +149,7 @@ namespace elec
 			cout << "There are no parties to show." << endl;
 		}
 	}
+
+
 }
 
