@@ -5,9 +5,10 @@ namespace elec {
 	private:
 		int** _partiesByID; //arr of parties holding in each cell all districts votes
 		int** _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
-		const static int _districtsAmount = 1, _partiesAmount = 1;
+		const static int _districtsAmount = 1;
+		const static int _partiesAmount = 1;
 		int* _PMsRepsByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
-		int* TotalPMsReps=0;
+		int* TotalPMsReps=nullptr;
 	//	int* AmountOfVotesForParty;
 	public:
 		

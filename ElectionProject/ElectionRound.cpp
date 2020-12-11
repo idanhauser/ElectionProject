@@ -176,14 +176,14 @@ namespace elec {
 	}
 
 	///TODO:idan
-	void ElectionRound::theResults()
+	void ElectionRound::theResults() 
 	{
 
 
 		/*******************************************************************************************/
 		resultsArr countReps;
 		char* pmWithTheMostRepsName=nullptr;
-		Citizen* partyLeader=nullptr;
+		const Citizen* partyLeader=nullptr;
 		int partyLeaderReps;
 		int maxRepsForPm = 0;
 		int totalPartyVotesPrecentage;
@@ -197,7 +197,7 @@ namespace elec {
 			//לכל מחוז יש לההציג את שם המחוז
 			cout << "District Name: " << tempDis.getName() << endl;
 			//מספר הנציגים שהמחוז מעניק
-			cout << "\nAmount Of Reps: " << tempDis.getNumOfReps() << endl;
+			cout << endl<<" Amount Of Reps: " << tempDis.getNumOfReps() << endl;
 			for (int k = 0; k < partiesAmount; k++) {
 				partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(j + 100, k);
 				//מספר ואחוז הקולות שקיבלה כל מפלגה
@@ -207,12 +207,12 @@ namespace elec {
 					"Which are " << partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100 <<
 					"precentages of voting citizens in the district";
 				partyLeaderReps = partyVotesInDistrict / tempDis.getNumberOfCitizens() * (tempDis.getNumOfReps());
-				//roee answer: checked. 
+			
 				countReps.AddToPMRepsCount(j + 100, k, partyLeaderReps);
 				//להציג לכל מחוז את רשימת הנציגים שנבחרה מכל מפלגה
 				_parties.getPartyByIndex(k).printPartyRepsFromDistrictByAmount(partyLeaderReps, j + 100);
 				partyLeader = &(_parties.getPartyByIndex(k).getPartyLeader());
-				cout << "\nThe Party leader " << partyLeader->getCitizenName() << " got " <<
+				cout << endl <<"The Party leader " << partyLeader->getCitizenName() << " got " <<
 					partyLeaderReps << "Reps";
 				if (partyLeaderReps > maxRepsForPm) {
 					maxRepsForPm = partyLeaderReps;
@@ -222,15 +222,12 @@ namespace elec {
 			}
 			cout << "The precentage of voting citizens in the District is: " <<
 				tempDis.getVotingCitizensAmountInDistrict() / (tempDis.getNumberOfCitizens() * 100);
-			//todo idan need to ask roee what he means here? its an array not an int//tempDis.getEligibleCitizens()
-			//roee answer: you r right. fixed it
 
 			//district winner check:
 			//מועמד המפלגה אליה המחוז משויך
 			cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
 				tempDis.getNumOfReps() << " reps ";
-			////TODO:roee check please if its fine my change
-			//roee answer: checked
+		
 			countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID());
 			maxRepsForPm = 0;
 
@@ -239,10 +236,6 @@ namespace elec {
 		}
 
 		/********* ADDED creating arr with pairs and sorting the repsAmount with selectionSort *******************/
-		struct pair {
-			int index;
-			int repsAmount;
-		};
 		pair* pmCandidatesRepsArrSorted = new pair[partiesAmount];
 
 		for (int m = 0; m < partiesAmount; m++) {
@@ -272,7 +265,7 @@ namespace elec {
 				totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l + 100, i);
 			cout << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[i].index).getPartyLeader().getCitizenName() <<
 				" got total amount of " << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[i].index) << " reps " <<
-				"\nhis party got total amount of" << totalPartyVotes << " votes";
+				endl<< "His party got total amount of" << totalPartyVotes << " votes";
 		}
 		cout << "the ELECTIONS WINNER is: " << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[0].index).getPartyLeader().getCitizenName()
 			<< " with" << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[0].repsAmount) << "electors";

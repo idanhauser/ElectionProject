@@ -27,6 +27,10 @@ namespace elec {
 		const ElectionRound& operator=(const ElectionRound&);
 
 	public:
+		struct pair {
+			int index;
+			int repsAmount;
+		};
 		ElectionRound() = delete;//todo:idan delete or defult?
 		ElectionRound(int date[8]);
 		~ElectionRound() = default;
@@ -52,23 +56,15 @@ namespace elec {
 		void viewAllDistricts() const;
 		void viewAllCitizens() const;
 		void viewAllParties() const;
-		void votingAction();//todo:roee
-		void theResults();//todo:roee
+		void votingAction();
+		void theResults();
 
 
-		////void showMainMenu();
-		//void addNewDistrict();
-		//void addNewCitizen();
-		//void addNewParty();
-		//void addNewPartyRepresentative();
-		//void viewAllDistricts();
-		//void viewAllCitizens();
-		//void viewAllParties();
 
 		
 		//--------roee
 		bool votingAction(int citizenId, int partyId);
-		void theResults(resultsArr& results);//todo:roee
+		void theResults(resultsArr& results);
 		int checkWinningPMInDistrict(int districtID, resultsArr results);//inside theResults
 		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//inside theResults
 		int checkTotalPartyVotesAmount(resultsArr results, int partyID);//inside theResults
