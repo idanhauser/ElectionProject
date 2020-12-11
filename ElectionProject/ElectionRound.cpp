@@ -9,8 +9,7 @@
 #include "PartyList.h"
 using namespace std;
 
-namespace elec
-{
+namespace elec {
 	ElectionRound::ElectionRound(int date[8]) :_districts(DistrictList()), _parties(PartyList()), _results(resultsArr())
 	{
 
@@ -184,8 +183,7 @@ namespace elec
 		/*******************************************************************************************/
 		resultsArr countReps;
 		char* pmWithTheMostRepsName=nullptr;
-		const Citizen* partyLeader=nullptr;
-		int totalDistrictVotes = 0;
+		Citizen* partyLeader=nullptr;
 		int partyLeaderReps;
 		int maxRepsForPm = 0;
 		int totalPartyVotesPrecentage;
@@ -194,122 +192,93 @@ namespace elec
 		int partiesAmount = countReps.getpartiesAmount();
 
 		for (int j = 0; j <= districtAmount; j++) {
-			District& tempDis = _districts.getDistcritByIndex(j);//changed to by idx
+			District& tempDis = _districts.getDistcritByIndex(j);
 			cout << "----------------------------------------------------";
+			//לכל מחוז יש לההציג את שם המחוז
 			cout << "District Name: " << tempDis.getName() << endl;
+			//מספר הנציגים שהמחוז מעניק
 			cout << "\nAmount Of Reps: " << tempDis.getNumOfReps() << endl;
-			
 			for (int k = 0; k < partiesAmount; k++) {
 				partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(j + 100, k);
-				totalPartyVotesPrecentage = partyVotesInDistrict / tempDis.getNumberOfCitizens() * 100;//from all citizens - not only voting ones
-				cout << "\nThe party " << _parties.getPartyByIndex(k) << " got " << partyVotesInDistrict << " votes" << //delete after fix of the next comment
-					"\nwhich are " << totalPartyVotesPrecentage << "precentage of votes from all citizens" <<endl;
-
-		
+				//מספר ואחוז הקולות שקיבלה כל מפלגה
 				totalPartyVotesPrecentage = partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100;
-
-				cout << "The party " << _parties.getPartyByIndex(k) << " got " << partyVotesInDistrict << " votes" <<endl<<
+				//roee: checked
+				cout << "The party " << _parties.getPartyByIndex(k) << " got " << partyVotesInDistrict << " votes" << endl <<
 					"Which are " << partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100 <<
 					"precentages of voting citizens in the district";
-
-
-
 				partyLeaderReps = partyVotesInDistrict / tempDis.getNumberOfCitizens() * (tempDis.getNumOfReps());
-
-				//todo: allow these lines after adding "printPartyRepsFromDistrictByAmount()" func:
-				
-				//roee answer:
-				//TODO:roee check please
-				_parties.getPartyByIndex(k).printPartyRepsFromDistrictByAmount(partyLeaderReps, tempDis.getSerialNum());
-
-				 partyLeader = &(_parties.getPartyByIndex(k).getPartyLeader());
+				//roee answer: checked. 
+				countReps.AddToPMRepsCount(j + 100, k, partyLeaderReps);
+				//להציג לכל מחוז את רשימת הנציגים שנבחרה מכל מפלגה
+				_parties.getPartyByIndex(k).printPartyRepsFromDistrictByAmount(partyLeaderReps, j + 100);
+				partyLeader = &(_parties.getPartyByIndex(k).getPartyLeader());
 				cout << "\nThe Party leader " << partyLeader->getCitizenName() << " got " <<
 					partyLeaderReps << "Reps";
-
-
-
 				if (partyLeaderReps > maxRepsForPm) {
 					maxRepsForPm = partyLeaderReps;
+					pmWithTheMostRepsName = new char[strlen(partyLeader->getCitizenName() + 1)];
 					strcpy(pmWithTheMostRepsName, partyLeader->getCitizenName());
 				}
 			}
+			cout << "The precentage of voting citizens in the District is: " <<
+				tempDis.getVotingCitizensAmountInDistrict() / (tempDis.getNumberOfCitizens() * 100);
+			//todo idan need to ask roee what he means here? its an array not an int//tempDis.getEligibleCitizens()
+			//roee answer: you r right. fixed it
 
-
-			//todo: allow these lines after adding "getVotingCitizensAmountInDistrict()" func:
-			//TODO:roee check please
-		/*		cout << "The precentage of voting citizens in the District is: " <<
-					tempDis.getVotingCitizensAmountInDistrict()/(tempDis.getEligibleCitizens() * 100);*/
-					//todo idan need to ask roee what he means here? its an array not an int//tempDis.getEligibleCitizens()
-		
-
-						//district winner check:
-
-					cout << "the Pm party with the most reps is: " << partyLeader->getCitizenName() << " who get all " <<
-					tempDis.getNumOfReps() << " reps ";////TODO:roee check please if its fine my change
-
-				//	countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID());
+			//district winner check:
+			//מועמד המפלגה אליה המחוז משויך
+			cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
+				tempDis.getNumOfReps() << " reps ";
+			////TODO:roee check please if its fine my change
+			//roee answer: checked
+			countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID());
 			maxRepsForPm = 0;
-			//todo: allow this line after adding "setLeader(Citizen)" func:
-			
-		//tempDis.setLeaderInDist(partyLeader);
-			
+
+			tempDis.setLeaderInDist(partyLeader);
+
 		}
-		char* winnerName=nullptr;
-		int winnerPartdId=0;
-		// elections winner check:
-		
-		/* todo: allow these lines after =>
-		  _parties.findPartyByID(i).PartyLeader() //to get in some other working way the citizen partyLeader
-		  //todo : idan asks roee : what is i? findPartyByID(i).
-		  */
-			for (int i = 0; i < partiesAmount; i++)//idan added bracketsts.{} to the for
-			{
-				if (maxRepsForPm < countReps.getPmsRepsByPartyID(i)) {
-					const Citizen& winner = _parties.getPartyByIndex(i).getPartyLeader();//changed to by index
-					maxRepsForPm = countReps.getPmsRepsByPartyID(i);
-					int winnerPartdId = winner.getParty()->getPartyID();
-					strcpy(winnerName, winner.getCitizenName());
-				}
-			}
-		cout << "the ELECTIONS WINNER is: " << winnerName << "with" <<
-			countReps.getPmsRepsByPartyID(winnerPartdId) << "electors";
+
+		/********* ADDED creating arr with pairs and sorting the repsAmount with selectionSort *******************/
+		struct pair {
+			int index;
+			int repsAmount;
+		};
+		pair* pmCandidatesRepsArrSorted = new pair[partiesAmount];
+
+		for (int m = 0; m < partiesAmount; m++) {
+			pmCandidatesRepsArrSorted[m].index = m;
+			pmCandidatesRepsArrSorted[m].repsAmount = countReps.getPmsRepsByPartyID(m);
+		}
+		int n = sizeof(pmCandidatesRepsArrSorted) / sizeof(int);
+		int min;
+		pair temp;
+		for (int i = 0; i < n - 1; i++) {
+			min = i;
+			for (int j = i + 1; j < n; j++)
+				if (pmCandidatesRepsArrSorted[j].repsAmount < pmCandidatesRepsArrSorted[min].repsAmount)
+					min = j;
+			temp = pmCandidatesRepsArrSorted[i];
+			pmCandidatesRepsArrSorted[i] = pmCandidatesRepsArrSorted[min];
+			pmCandidatesRepsArrSorted[min] = temp;
+		}
+		/***************************************************************************************/
 
 
-		
+		int totalPartyVotes = 0;
+
+		for (int i = 0; i < partiesAmount; i++) {
+			//להציג עבור כל מפלגה את המועמד שלה לראשות המדינה, סכום הנציגים שזכה בהם וסכום הקולות שקיבלה המפלגה בכל המחוזות
+			for (int l = 0; l < partiesAmount; l++)
+				totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l + 100, i);
+			cout << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[i].index).getPartyLeader().getCitizenName() <<
+				" got total amount of " << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[i].index) << " reps " <<
+				"\nhis party got total amount of" << totalPartyVotes << " votes";
+		}
+		cout << "the ELECTIONS WINNER is: " << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[0].index).getPartyLeader().getCitizenName()
+			<< " with" << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[0].repsAmount) << "electors";
+
+		delete[] pmCandidatesRepsArrSorted;
+
+
 	}
-
-	//TODO: roee choose if you want to delete the following functions or not 
-	/*
-
-		///ROEE MOVED FROM HEADER
-		int checkWinningPMInDistrict(int districtID, resultsArr results) {
-			int max = 0;
-			int cur;
-			int winnerPartyPmID = 0;
-			for (int j = 0; j < _parties.getLogicSize(); j++) {
-				cur = results.getPMNumberOfRepsInDistrict(j, districtID);
-				if (max < cur) {
-					max = cur;
-					winnerPartyPmID = j;
-				}
-			}
-			return winnerPartyPmID;
-		}
-		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId) {// todelete
-			int count = 0;
-			for (int i = 0; i < _parties.getLogicSize(); i++) {
-				count = count + repsCountArr.getPMNumberOfRepsInDistrict(i, districtId);
-			}
-			return count;
-		}
-		int checkTotalPartyVotesAmount(resultsArr results, int partyID) {
-			int count = 0;
-			for (int i = 0; i < _parties.getLogicSize(); i++) {
-				count = count + results.getDistrictNumberOfVotesInParty(i + 100, partyID);
-			}
-			return count;
-
-
-
-		}*/
 }

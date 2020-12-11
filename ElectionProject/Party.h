@@ -16,13 +16,13 @@ namespace elec
 		int _PMCandidateID;
 		CitizenList *_partyMembers;
 		CitizenList* _representativesByDist;
-		const Citizen& _partyLeader;
+		Citizen& _partyLeader;
 		Party(const Party& other);
 		const Party& operator=(const Party&);
 		int _numOfDist;
 	public:
 		Party() = delete;
-		Party(const char* partyName, int PMCandidateID, int numOfDist,const Citizen& partyLeader);
+		Party(const char* partyName, int PMCandidateID, int numOfDist,Citizen& partyLeader);
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
@@ -44,7 +44,7 @@ namespace elec
 		bool AddAnotherColumn();
 		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex);
-		const Citizen& getPartyLeader() const;
+		Citizen& getPartyLeader() const;
 
 
 		///ROEEE TODO = what are those functions?

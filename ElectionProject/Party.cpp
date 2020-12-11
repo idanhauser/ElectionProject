@@ -10,7 +10,7 @@ namespace elec {
 	int Party::pdGenerator = PARTY_ID_INIT;
 
 
-	Party::Party(const char* partyName, int PMCandidateID, int numOfDist, const Citizen& partyLeader) : _partyID(pdGenerator++),
+	Party::Party(const char* partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
 		_partyName(new char[strlen(partyName) + 1]),
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
 		_partyLeader(partyLeader), _numOfDist(numOfDist)
@@ -82,7 +82,7 @@ namespace elec {
 		return  _representativesByDist[distIndex].addToList(citizen);
 	}
 
-	const Citizen& Party::getPartyLeader() const
+	Citizen& Party::getPartyLeader() const
 	{
 		return _partyLeader;
 	}
