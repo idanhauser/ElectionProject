@@ -108,15 +108,10 @@ namespace elec {
 	}
 	
 	//roee
-	CitizenList Party::getPartyMembers()const
+	/*CitizenList Party::getPartyMembers()const
 	{
 		return _partyMembers;
-	}
-
-	void Party::printSpecificPartyMembersAmount(int amount) {
-		for (static int lastMember = 0; lastMember < amount; lastMember++)
-			cout << "\n" << _partyMembers.getCitizenByIndex(lastMember)->getCitizenName() ;
-	}
+	}*/
 
 
 	ostream& operator<<(ostream& os, const Party& party)

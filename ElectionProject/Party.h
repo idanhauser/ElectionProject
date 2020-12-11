@@ -48,9 +48,9 @@ namespace elec
 
 
 		///ROEEE TODO = what are those functions?
-		int getPartySize() const;
-		CitizenList getPartyMembers()const;
-		void printSpecificPartyMembersAmount(int amount);
+	
+	//CitizenList getPartyMembers()const; todo roee
+		
 		
 	};
 }

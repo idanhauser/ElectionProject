@@ -9,14 +9,6 @@ using namespace std;
 namespace elec {
 	int District::snGenerator = DISTRICT_ID_INIT;
 
-	/*roee
-	 * 	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]), _numOfReps(numOfReps),
-	                                       _Citizens( CitizenList()), _votersPercentage(0), _electedMembersArr(CitizenList())
-	{
-		strcpy(this->_name, name);
-	}
-	what is elected members?
-	 */
 	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
 		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps),_partyLeaderInDist(nullptr)
 	{
@@ -42,11 +34,6 @@ namespace elec {
 	double District::getVotersPercentage() const
 	{
 		return _votersPercentage;
-	}
-
-	CitizenList District::getElectionResults() const
-	{
-		return _electedMembersArr;
 	}
 
 	int District::getSerialNum() const
@@ -151,17 +138,6 @@ namespace elec {
 		return os;
 	}
 
-	/** roee wwhat to do? TODO:dsa
-	bool District::addToElectedMembersArr(Citizen* partyMember) { //not sure if 'Citizen*'. otherwise creates bug
-		static int i = 0;
-		if (_electedMembersArr.addToList(partyMember))
-			return true;
-		else
-			return false;
-		
-	}
-
-	*/
 
 
 }

@@ -25,6 +25,7 @@ void results();//todo:roee
 
 
 
+
 int main()
 {
 
@@ -121,7 +122,7 @@ void showMainMenu()
 			cout << "-------------" << endl;
 			cout << "Voting" << endl;
 			cout << "-------------" << endl;
-
+			voting();
 			cout << endl;
 			break;
 		case Menu_Choices::results:
@@ -213,7 +214,7 @@ void addPartyRepresentative()
 
 
 	cout << "Insert a representative citizen's id ,district's id, party's id:" << endl;
-	cin >> representId >> districtId >> partyId ;
+	cin >> representId >> districtId >> partyId;
 	election.addNewPartyRepresentative(representId, partyId, districtId);
 }
 
@@ -231,6 +232,23 @@ void viewParties()
 {
 	election.viewAllParties();
 }
+
+void voting()
+{
+	int partyId, citizenId;
+	cout << "Insert a citizen's id and the party's id he wants to vote to:" << endl;
+	cin >> citizenId >> partyId;
+	if (!election.votingAction(citizenId, partyId))
+	{
+		cout << "Error:Citizen already voted or citizen doesn't exist" << endl;
+	}
+	else
+	{
+		cout << "Vote was successful inserted." << endl;
+	}
+
+}
+
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 

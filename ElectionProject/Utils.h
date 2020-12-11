@@ -29,7 +29,6 @@ namespace elec
 		exit_menu
 	};
 
-	enum class ListSearch { not_found = -1, found };
 
 
 
