@@ -80,11 +80,50 @@ namespace elec
 		return true;
 	}
 
-	bool resultsArr::addToTotalPMsReps(int PartyPmID, int reps) {
+	bool resultsArr::addToTotalPMsReps(int PartyPmID, int reps)
+	{
 		TotalPMsReps[PartyPmID] = TotalPMsReps[PartyPmID] + reps;
 		return true;
 	}
 
+	bool resultsArr::addParty()
+	{  //check if delete pntrs is needed
+		static bool firstParty = true;
+		if (firstParty) {
+			firstParty = false;
+		}
+		else
+			_partiesAmount++;
+		int** newPartiesByID = new int* [_partiesAmount];
+		for (int i = 0; i < _partiesAmount - 1; i++) {
+			newPartiesByID[i] = _partiesByID[i];
+		}
+		int* districts = new int[_districtsAmount];
+		newPartiesByID[_partiesAmount - 1] = districts;
+		for (int j = 0; j < _districtsAmount; j++) {
+			newPartiesByID[_partiesAmount - 1][j] = 0;
+		}
+		this->_partiesByID = newPartiesByID;
+		return true;
+	}
+	
+	bool resultsArr::addDistrict() 
+	{ //check if delete pntrs is needed
+		static bool firsDistrict = true;
+		if (firsDistrict) {
+			firsDistrict = false;
+		}
+		else
+			_districtsAmount++;
+		for (int i = 0; i < _partiesAmount; i++) {
+			int* districts = new int[_districtsAmount];
+			for (int j = 0; j < _districtsAmount - 1; j++)
+				districts[j] = _partiesByID[i][j];
+			districts[_districtsAmount - 1] = 0;
+			_partiesByID[i] = districts;
+		}
+		return true;
+	}
 	/*bool resultsArr::addToAmountOfVotesForParty(int PartyPmID, int votes) {
 		AmountOfVotesForParty[PartyPmID] = AmountOfVotesForParty[PartyPmID] + votes;
 		return true;

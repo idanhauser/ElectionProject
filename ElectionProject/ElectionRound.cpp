@@ -181,9 +181,6 @@ namespace elec {
 	///TODO:idan
 	void ElectionRound::theResults() 
 	{
-
-
-		/*******************************************************************************************/
 		resultsArr countReps;
 		char* pmWithTheMostRepsName=nullptr;
 		const Citizen* partyLeader=nullptr;
@@ -194,29 +191,29 @@ namespace elec {
 		int districtAmount = countReps.getdistrictsAmount();
 		int partiesAmount = countReps.getpartiesAmount();
 
-		for (int j = 0; j <= districtAmount; j++) {
+		for (int j = 0; j < districtAmount; j++) {
 			District& tempDis = _districts.getDistcritByIndex(j);
 			cout << "----------------------------------------------------" << endl;
 			//לכל מחוז יש לההציג את שם המחוז
 			cout << "District Name: " << tempDis.getName() << endl;
 			//מספר הנציגים שהמחוז מעניק
-			cout <<" Amount Of Reps: " << tempDis.getNumOfReps() << endl;
+			cout <<"Amount Of Reps: " << tempDis.getNumOfReps() << endl;
 			for (int k = 0; k < partiesAmount; k++) {
-				partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(j, k+100);
+				partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(k, j+100);
 				//מספר ואחוז הקולות שקיבלה כל מפלגה
 				totalPartyVotesPrecentage = partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100;
 				//roee: checked
-				cout << "The party " << _parties.getPartyByIndex(k) << " got " << partyVotesInDistrict << " votes" << endl <<
+				cout << "The party: " << _parties.getPartyByIndex(k) << " Got " << partyVotesInDistrict << " votes." << endl <<
 					"Which are " << partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100 <<
-					"precentages of voting citizens in the district";
+					"% of voting citizens in the district"<<endl;
 				partyLeaderReps = partyVotesInDistrict / tempDis.getNumberOfCitizens() * (tempDis.getNumOfReps());
 			
 				countReps.AddToPMRepsCount(j + 100, k, partyLeaderReps);
 				//להציג לכל מחוז את רשימת הנציגים שנבחרה מכל מפלגה
 				_parties.getPartyByIndex(k).printPartyRepsFromDistrictByAmount(partyLeaderReps, j + 100);
 				partyLeader = &(_parties.getPartyByIndex(k).getPartyLeader());
-				cout << endl <<"The Party leader " << partyLeader->getCitizenName() << " got " <<
-					partyLeaderReps << "Reps";
+				cout <<"The Party leader " << partyLeader->getCitizenName() << " got " <<
+					partyLeaderReps << " Reps"<< endl;
 				if (partyLeaderReps > maxRepsForPm) {
 					maxRepsForPm = partyLeaderReps;
 					pmWithTheMostRepsName = new char[strlen(partyLeader->getCitizenName() + 1)];
@@ -224,12 +221,12 @@ namespace elec {
 				}
 			}
 			cout << "The precentage of voting citizens in the District is: " <<
-				tempDis.getVotingCitizensAmountInDistrict() / (tempDis.getNumberOfCitizens() * 100);
+				tempDis.getVotingCitizensAmountInDistrict() / tempDis.getNumberOfCitizens() * 100 << endl;
 
 			//district winner check:
 			//מועמד המפלגה אליה המחוז משויך
 			cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
-				tempDis.getNumOfReps() << " reps ";
+				tempDis.getNumOfReps() << " reps " << endl;
 		
 			countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID());
 			maxRepsForPm = 0;
