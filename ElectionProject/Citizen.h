@@ -17,8 +17,9 @@ namespace elec
 		bool _hasVoted;
 		const Party* _party;
 		//reference to an existing district 
-		const District& _district; 
-
+		const District& _district; //idan:copied from moshe, what de we want
+		bool setDistrict(District& dist);
+		
 		Citizen(const Citizen& other);
 		const Citizen& operator=(const Citizen&);
 
@@ -32,17 +33,16 @@ namespace elec
 		
 		bool setParty(const Party* party);
 		bool setHasVoted(bool voted);
+		
 		const char* getCitizenName() const;
 		const int getCitizenID() const;
 		int getCitizenBirthYear() const;
-		const int getCitizenDistrictNum() const;
+		const int getDistrictNum() const;
+	//	const char* getDistrictName() const;//Idan: why i dont succeed?
 		bool hasVoted()const;
-		const Party* getParty() const
-		{
-			return _party;
-		}
+		const Party* getParty() const;
+		const District& getDistrict() const;
 
-	
 	};
 
 

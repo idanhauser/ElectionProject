@@ -13,95 +13,70 @@ using namespace std;
 
 
 namespace elec {
-	//idan todo: need to add an operator to print the election round.
 	class DistrictList;
-	class CitizenList;
 	class PartyList;
-
-	class Citizen;
-	class Party;
-
-
+	
 	class ElectionRound
 	{
 	private:
 		int _date[8];
-		int _citizenID;
-		int _PartyID;
-		resultsArr results;
+		resultsArr _results;
 		DistrictList _districts;
 		PartyList _parties;
-		CitizenList _citizens; //_citizens should be deleted
-		
+
 		const ElectionRound& operator=(const ElectionRound&);
 
 	public:
-
-
-		ElectionRound() = delete;
+		ElectionRound() = delete;//todo:idan delete or defult?
 		ElectionRound(int date[8]);
 		~ElectionRound() = default;
 
-
-
-
-
 		void printElectionDate() const;
+		bool addNewDistrict(char str[MAX_SIZE], int number_representatives,int& districtId);
 
-		enum class Menu_Choices
+		
+		constexpr int getYear() const
 		{
-			addDistrict = 1,
-			addCitizen,
-			addParty,
-			addPartyRepresentative,
-			viewDistricts,
-			viewCitizens,
-			viewParties,
-			voting,
-			results,
-			exit_menu
-		};
+			int year = _date[7];
+			year += _date[6] * 10;
+			year += _date[5] * 100;
+			year += _date[4] * 1000;
+			return year;
 
-		//void showMainMenu();
-		void addNewDistrict();
-		void addNewCitizen();
-		void addNewParty();
-		void addNewPartyRepresentative();
-		void viewAllDistricts();
-		void viewAllCitizens();
-		void viewAllParties();
-		void votingAction(CitizenList& _citizens, resultsArr& results);//todo:roee // check if results refrence is fine
+		}
+
+
+		bool addNewCitizen(char* name,int id,int birtyear,int districtId);
+		bool addNewParty(char* name, int pdId,int& partyId);
+		bool addNewPartyRepresentative(int representId,int partyId,int districtId);
+		void viewAllDistricts() const;
+		void viewAllCitizens() const;
+		void viewAllParties() const;
+		void votingAction();//todo:roee
+		void theResults();//todo:roee
+
+
+		////void showMainMenu();
+		//void addNewDistrict();
+		//void addNewCitizen();
+		//void addNewParty();
+		//void addNewPartyRepresentative();
+		//void viewAllDistricts();
+		//void viewAllCitizens();
+		//void viewAllParties();
+
+		
+		//--------roee
+		bool votingAction(int citizenId, int partyId);
 		void theResults(resultsArr& results);//todo:roee
 		int checkWinningPMInDistrict(int districtID, resultsArr results);//inside theResults
 		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//inside theResults
 		int checkTotalPartyVotesAmount(resultsArr results, int partyID);//inside theResults
-		int checkWinningPMInDistrict(int districtID, resultsArr results) {
-			int max = 0;
-			int cur;
-			int winnerPartyPmID = 0;
-			for (int j = 0; j < _parties.getLogicSize(); j++) {
-				cur = results.getPMNumberOfRepsInDistrict(j, districtID);
-				if (max < cur) {
-					max = cur;
-					winnerPartyPmID = j;
-				}
-			}
-			return winnerPartyPmID;
-		}
-		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId) {// todelete
-			int count = 0;
-			for (int i = 0; i < _parties.getLogicSize(); i++) {
-				count = count + repsCountArr.getPMNumberOfRepsInDistrict(i, districtId);
-			}
-			return count;
-		}
-		int checkTotalPartyVotesAmount(resultsArr results, int partyID) {
-			int count = 0;
-			for (int i = 0; i < _parties.getLogicSize(); i++) {
-				count = count + results.getDistrictNumberOfVotesInParty(i + 100, partyID);
-			}
-			return count;
-		}
 
+		//TODO: ROEE need to check if to delete or not
+		//int checkWinningPMInDistrict(int districtID, resultsArr results);	
+		//int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//to delete
+		//int checkTotalPartyVotesAmount(resultsArr results, int partyID);
+	
 	};
 }

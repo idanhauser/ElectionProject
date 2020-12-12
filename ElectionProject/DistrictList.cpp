@@ -1,4 +1,5 @@
 ﻿//code verison 1.0
+#include "Utils.h"
 using namespace std;
 #include "District.h"
 #include "DistrictList.h"
@@ -10,21 +11,23 @@ namespace elec {
 
 	DistrictList::~DistrictList()
 	{
-		for (int i = 0; i < _phySize; i++)
+		for (int i = 0; i < _logicSize; i++)
 		{
 			delete _districts[i];
 		}
 		delete[] _districts;
 	}
 
-	DistrictList::DistrictList(const DistrictList& other) :_logicSize(other._logicSize),_phySize(other._phySize), _districts(new District*[other._phySize])
-	{
-		int len = other.getLogicSize();
-		for (int i = 0; i < len; ++i)
-		{
-			_districts[i] = other._districts[i];
-		}
-	}
+
+
+	//DistrictList::DistrictList(const DistrictList& other) :_logicSize(other._logicSize),_phySize(other._phySize), _districts(new District*[other._phySize])
+	//{
+	//	int len = other.getLogicSize();
+	//	for (int i = 0; i < len; ++i)
+	//	{
+	//		_districts[i] = other._districts[i];
+	//	}
+	//}
 
 
 	void DistrictList::realloc(int new_size)
@@ -45,53 +48,84 @@ namespace elec {
 	}
 
 
-	bool DistrictList::addToList(District* District)
+	bool DistrictList::addToList(District& district)
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_districts[_logicSize++] = District;
+		_districts[_logicSize++] = &district;
 		return true;
 	}
 
+	District& DistrictList::getDistcritById(int id)
+	{
+		return *_districts[abs(id - DISTRICT_ID_INIT)];
+	}
+
+	const District& DistrictList::getDistcritById(int id) const
+	{
+		return *_districts[abs(id - DISTRICT_ID_INIT)];
+	}
+
+
+
+	/*const Citizen& DistrictList::getCitizenById(int id) const
+	{
+	 Citizen* citizen;
+		for (int i = 0; i < _logicSize; ++i)
+		{
+			citizen = &_districts[i]->getCitizenById(id);
+		}
+		return  citizen;
+	}*/
+
+	bool DistrictList::isCitizenExist(int id,int & distIndex) const
+	{
+		distIndex = -1;
+		
+		bool found = false;
+		for (int i = 0; i < _logicSize && !found; ++i)
+		{
+			if (_districts[i]->isCitizenExist(id))
+			{
+				distIndex = i;
+				found = true;
+			}
+		}
+		return found;
+	}
 
 	int DistrictList::getLogicSize() const
 	{
 		return _logicSize;
 	}
 
-/*	ostream& operator<<(ostream& os, const DistrictList& district) 
+	bool DistrictList::isDistcritExist(int id) const
 	{
-
-		int len = district.getLogicSize();
-		for (int i = 0; i < len; i++)
+		bool found = false;
+		for (int i = 0; i < _logicSize && !found; ++i)
 		{
-			os << district._districts[i] << endl;
+			if (i == abs(id - DISTRICT_ID_INIT))
+			{
+				found = true;
+			}
 		}
-		return os;
+		return found;
 	}
-	*/
 
-
-	/**************************************/
-		//roee:
-	class DistrictList;
-
-	District* DistrictList::findDistrictByID( int id) { //return 0 for ignoring not finding error even its not possible
-		for (int i = 0; i < getLogicSize(); i++)
-			if (_districts[i]->getSerialNum() == id)
-				return _districts[i];
-		return 0;
+	const District& DistrictList::getDistcritByIndex(int index) const
+	{
+		if (index < _logicSize)
+			return *_districts[index];
 	}
-	/**************************************/
 
-
-
-
-
-
+	District& DistrictList::getDistcritByIndex(int index)
+	{
+		if (index < _logicSize)
+			return *_districts[index];
+	}
 
 
 }

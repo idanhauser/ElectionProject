@@ -15,21 +15,30 @@ namespace elec {
 		Citizen** _citizens;
 
 
-		const CitizenList& operator=(const CitizenList&);
 
 	public:
 		CitizenList();
-	//	CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
-		//	friend class Citizen;
-		
+		//	CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
+		const CitizenList& operator=(const CitizenList&);
+
 		~CitizenList();
 		void realloc(int new_size);
-		bool addToList(Citizen* citizen);
+		bool addToList(Citizen& citizen);
 		int getLogicSize() const;
-		friend ostream& operator<<(ostream& os, const CitizenList& citizen);
-		Citizen* findCitizenByID(int citizenID);
-		Citizen* getCitizenByIndex(int indx);
-		void printList();
+		const Citizen& getCitizenByIndex(int index) const;
+		Citizen& getCitizenByIndex(int index);
+		Citizen** getCitizens();
+
+
+
+	
+		
+		//int isCitizenExist(int id) const;
+		////const Citizen& getCitizenById(int id) const;
+		////Citizen& getCitizenById(int id);
+
+	
+
 		//CitizenList(Citizen* pmCandidate);
 	};
 }
