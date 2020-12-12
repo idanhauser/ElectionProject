@@ -3,13 +3,13 @@ namespace elec {
 	class resultsArr
 	{
 	private:
+		bool firsDistrict = true;
+		bool firstParty = true;
 		static int _districtsAmount;
 		static int _partiesAmount;
 		int** _partiesByID; //arr of parties holding in each cell all districts votes
 		int** _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
-		int* _PMsRepsByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
-		int* TotalPMsReps=nullptr;
-	//	int* AmountOfVotesForParty;
+		int* _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
 		resultsArr();
 
@@ -22,29 +22,21 @@ namespace elec {
 
 		int getdistrictsAmount();
 		int getpartiesAmount();
-		int* getTotalPMsRepsArr() {
-			return TotalPMsReps;
-		}
-		int getRepsForPMinArrByInxdex(int index) {
-			return TotalPMsReps[index];
-		}
-		int getDistrictNumberOfVotesInParty(int districtSN, int partyID);
-		int getPMNumberOfRepsInDistrict(int partyID, int districtSN);
-		int setPmsRepsByPartyID(int index, int reps) {
-			return _PMsRepsByPartyID[index] = reps;
-		}
-		int getPmsRepsByPartyID(int index) {
-			return _PMsRepsByPartyID[index];
-		}
-		bool setPMsArrByIndex(int partyId, int votes);
-		bool addToTotalPMsReps(int PartyPmID, int reps);
-		bool AddToPMRepsCount(int DistrictID, int RepPartyID , int amountOfReps) {
-			_repsPartiesByID[RepPartyID][DistrictID-100] = _repsPartiesByID[RepPartyID][DistrictID-100] + amountOfReps;
-			return true;
-		}
 		bool addParty();
 		bool addDistrict();
-	//	bool addToAmountOfVotesForParty(int PartyPmID, int reps); //maybe delete
+
+
+		int getDistrictNumberOfVotesInParty( int partyID, int districtSN);
+		
+		int getPMNumberOfRepsInDistrict(int partyID, int districtSN);
+		bool AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
+	
+		
+		int getPmsRepsTotalByPartyID(int index);
+		bool setPmsRepsTotalByPartyID(int partyID, int reps);
+
+		bool isResultsAllowed();
+
 	};
 
 }

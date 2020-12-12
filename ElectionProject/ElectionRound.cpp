@@ -179,99 +179,133 @@ namespace elec {
 	}
 
 	///TODO:idan
-	void ElectionRound::theResults() 
+	void ElectionRound::theResults()
 	{
 		resultsArr countReps;
-		char* pmWithTheMostRepsName=nullptr;
-		const Citizen* partyLeader=nullptr;
+		char* pmWithTheMostRepsName = nullptr;
+		const Citizen* partyLeader = nullptr;
 		int partyLeaderReps;
 		int maxRepsForPm = 0;
 		int totalPartyVotesPrecentage;
 		int partyVotesInDistrict;
 		int districtAmount = countReps.getdistrictsAmount();
 		int partiesAmount = countReps.getpartiesAmount();
+		int votingCitizensAmount;
+		if (!_results.isResultsAllowed()){
+			cout << "Sorry...Not enough details to get results" << endl;
+		}
+		else {
+			for (int j = 0; j < districtAmount; j++) {
+				District& tempDis = _districts.getDistcritByIndex(j);
+				cout << "----------------------------------------------------" << endl;
+				//לכל מחוז יש לההציג את שם המחוז
+				cout << "District Name: " << tempDis.getName() << endl;
+				//מספר הנציגים שהמחוז מעניק
+				cout << "Amount Of Reps: " << tempDis.getNumOfReps() << endl;
+				for (int k = 0; k < partiesAmount; k++) {
+					partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(k, j + 100);
+					//מספר ואחוז הקולות שקיבלה כל מפלגה
+					votingCitizensAmount = tempDis.getVotingCitizensAmountInDistrict();
+					if (votingCitizensAmount == 0)
+						totalPartyVotesPrecentage = 0;
+					else
+						totalPartyVotesPrecentage = partyVotesInDistrict / votingCitizensAmount * 100;
+					//roee: checked
+					cout << "The party: " << _parties.getPartyByIndex(k) << " Got " << partyVotesInDistrict << " votes." << endl <<
+						"Which are " << totalPartyVotesPrecentage <<"% of voting citizens in the district" << endl;
+					partyLeaderReps = partyVotesInDistrict / tempDis.getNumberOfCitizens() * (tempDis.getNumOfReps());
 
-		for (int j = 0; j < districtAmount; j++) {
-			District& tempDis = _districts.getDistcritByIndex(j);
-			cout << "----------------------------------------------------" << endl;
-			//לכל מחוז יש לההציג את שם המחוז
-			cout << "District Name: " << tempDis.getName() << endl;
-			//מספר הנציגים שהמחוז מעניק
-			cout <<"Amount Of Reps: " << tempDis.getNumOfReps() << endl;
-			for (int k = 0; k < partiesAmount; k++) {
-				partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(k, j+100);
-				//מספר ואחוז הקולות שקיבלה כל מפלגה
-				totalPartyVotesPrecentage = partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100;
-				//roee: checked
-				cout << "The party: " << _parties.getPartyByIndex(k) << " Got " << partyVotesInDistrict << " votes." << endl <<
-					"Which are " << partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100 <<
-					"% of voting citizens in the district"<<endl;
-				partyLeaderReps = partyVotesInDistrict / tempDis.getNumberOfCitizens() * (tempDis.getNumOfReps());
-			
-				countReps.AddToPMRepsCount(j + 100, k, partyLeaderReps);
-				//להציג לכל מחוז את רשימת הנציגים שנבחרה מכל מפלגה
-				_parties.getPartyByIndex(k).printPartyRepsFromDistrictByAmount(partyLeaderReps, j + 100);
-				partyLeader = &(_parties.getPartyByIndex(k).getPartyLeader());
-				cout <<"The Party leader " << partyLeader->getCitizenName() << " got " <<
-					partyLeaderReps << " Reps"<< endl;
-				if (partyLeaderReps > maxRepsForPm) {
-					maxRepsForPm = partyLeaderReps;
-					pmWithTheMostRepsName = new char[strlen(partyLeader->getCitizenName() + 1)];
-					strcpy(pmWithTheMostRepsName, partyLeader->getCitizenName());
+					countReps.AddToPMRepsCount(j + 100, k, partyLeaderReps);
+					//להציג לכל מחוז את רשימת הנציגים שנבחרה מכל מפלגה
+					_parties.getPartyByIndex(k).printPartyRepsFromDistrictByAmount(partyLeaderReps, j + 100);
+					partyLeader = &(_parties.getPartyByIndex(k).getPartyLeader());
+					cout << "The Party leader " << partyLeader->getCitizenName() << " got " <<
+						partyLeaderReps << " Reps" << endl;
+					if (partyLeaderReps > maxRepsForPm) {
+						maxRepsForPm = partyLeaderReps;
+						pmWithTheMostRepsName = new char[strlen(partyLeader->getCitizenName() + 1)];
+						strcpy(pmWithTheMostRepsName, partyLeader->getCitizenName());
+					}
 				}
+				cout << "The precentage of voting citizens in the District is: " <<
+					tempDis.getVotingCitizensAmountInDistrict() / tempDis.getNumberOfCitizens() * 100 << endl;
+
+				//district winner check:
+				//מועמד המפלגה אליה המחוז משויך
+				cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
+					tempDis.getNumOfReps() << " reps " << endl;
+
+				countReps.setPmsRepsTotalByPartyID(partyLeader->getParty()->getPartyID(), tempDis.getNumOfReps());
+				maxRepsForPm = 0;
+
+				tempDis.setLeaderInDist(partyLeader);
+
 			}
-			cout << "The precentage of voting citizens in the District is: " <<
-				tempDis.getVotingCitizensAmountInDistrict() / tempDis.getNumberOfCitizens() * 100 << endl;
 
-			//district winner check:
-			//מועמד המפלגה אליה המחוז משויך
-			cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
-				tempDis.getNumOfReps() << " reps " << endl;
-		
-			countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID(), tempDis.getNumOfReps());
-			maxRepsForPm = 0;
+			/********* ADDED creating arr with pairs and sorting the repsAmount with selectionSort *******************/
+	/*		pair* pmCandidatesRepsArrSorted = new pair[partiesAmount];
 
-			tempDis.setLeaderInDist(partyLeader);
+			for (int m = 0; m < partiesAmount; m++) {
+				pmCandidatesRepsArrSorted[m].index = m;
+				pmCandidatesRepsArrSorted[m].repsAmount = countReps.getPmsRepsTotalByPartyID(m);
+			}
+			int n = sizeof(pmCandidatesRepsArrSorted) / sizeof(int);
+			int min;
+			pair temp;
+			for (int i = 0; i < n - 1; i++) {
+				min = i;
+				for (int j = i + 1; j < n; j++)
+					if (pmCandidatesRepsArrSorted[j].repsAmount < pmCandidatesRepsArrSorted[min].repsAmount)
+						min = j;
+				temp = pmCandidatesRepsArrSorted[i];
+				pmCandidatesRepsArrSorted[i] = pmCandidatesRepsArrSorted[min];
+				pmCandidatesRepsArrSorted[min] = temp;
+			}
+		*/	/***************************************************************************************/
+			pair* pmCandidatesRepsArrSorted = new pair[partiesAmount];
+			for (int m = 0; m < partiesAmount; m++) {
+				pmCandidatesRepsArrSorted[m].index = m;
+				pmCandidatesRepsArrSorted[m].repsAmount = countReps.getPmsRepsTotalByPartyID(m);
+			}
+			int n = sizeof(pmCandidatesRepsArrSorted) / sizeof(int);
+			void bubbleSort(pair pmCandidatesRepsArrSorted[], int n);
+			/*************************/
+
+			int totalPartyVotes = 0;
+
+			for (int i = 0; i < partiesAmount; i++) {
+				//להציג עבור כל מפלגה את המועמד שלה לראשות המדינה, סכום הנציגים שזכה בהם וסכום הקולות שקיבלה המפלגה בכל המחוזות
+				for (int l = 0; l < partiesAmount; l++)
+					totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l, i + 100);
+				cout << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[i].index).getPartyLeader().getCitizenName() <<
+					" got total amount of " << countReps.getPmsRepsTotalByPartyID(pmCandidatesRepsArrSorted[i].index) << " reps " <<
+					endl << "His party got total amount of " << totalPartyVotes << " votes" << endl;
+			}
+			cout << "the ELECTIONS WINNER is: " << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[0].index).getPartyLeader().getCitizenName()
+				<< " with" << countReps.getPmsRepsTotalByPartyID(pmCandidatesRepsArrSorted[0].index) << "electors" << endl;
+
+			delete[] pmCandidatesRepsArrSorted;
 
 		}
-
-		/********* ADDED creating arr with pairs and sorting the repsAmount with selectionSort *******************/
-		pair* pmCandidatesRepsArrSorted = new pair[partiesAmount];
-
-		for (int m = 0; m < partiesAmount; m++) {
-			pmCandidatesRepsArrSorted[m].index = m;
-			pmCandidatesRepsArrSorted[m].repsAmount = countReps.getPmsRepsByPartyID(m);
-		}
-		int n = sizeof(pmCandidatesRepsArrSorted) / sizeof(int);
-		int min;
-		pair temp;
-		for (int i = 0; i < n - 1; i++) {
-			min = i;
-			for (int j = i + 1; j < n; j++)
-				if (pmCandidatesRepsArrSorted[j].repsAmount < pmCandidatesRepsArrSorted[min].repsAmount)
-					min = j;
-			temp = pmCandidatesRepsArrSorted[i];
-			pmCandidatesRepsArrSorted[i] = pmCandidatesRepsArrSorted[min];
-			pmCandidatesRepsArrSorted[min] = temp;
-		}
-		/***************************************************************************************/
-
-
-		int totalPartyVotes = 0;
-
-		for (int i = 0; i < partiesAmount; i++) {
-			//להציג עבור כל מפלגה את המועמד שלה לראשות המדינה, סכום הנציגים שזכה בהם וסכום הקולות שקיבלה המפלגה בכל המחוזות
-			for (int l = 0; l < partiesAmount; l++)
-				totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l, i + 100);
-			cout << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[i].index).getPartyLeader().getCitizenName() <<
-				" got total amount of " << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[i].index) << " reps " <<
-				endl<< "His party got total amount of " << totalPartyVotes << " votes" << endl;
-		}
-		cout << "the ELECTIONS WINNER is: " << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[0].index).getPartyLeader().getCitizenName()
-			<< " with" << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[0].index) << "electors" << endl;
-
-		delete[] pmCandidatesRepsArrSorted;
-
-
 	}
+	
+	void ElectionRound::swap(pair* xp, pair* yp)
+	{
+		pair temp = *xp;
+		*xp = *yp;
+		*yp = temp;
+	}
+
+	void ElectionRound::bubbleSort(pair arr[], int n)
+	{
+		int i, j;
+		for (i = 0; i < n - 1; i++)
+
+			// Last i elements are already in place  
+			for (j = 0; j < n - i - 1; j++)
+				if (arr[j].repsAmount > arr[j + 1].repsAmount)
+					swap(&arr[j], &arr[j + 1]);
+	}
+
+
 }

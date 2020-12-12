@@ -73,6 +73,7 @@ namespace elec {
 		//int checkWinningPMInDistrict(int districtID, resultsArr results);	
 		//int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//to delete
 		//int checkTotalPartyVotesAmount(resultsArr results, int partyID);
-	
+		void swap(pair* xp, pair* yp);
+		void bubbleSort(pair arr[], int n);
 	};
 }

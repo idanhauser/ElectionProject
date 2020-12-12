@@ -4,8 +4,9 @@ namespace elec
 	
 	int resultsArr::_partiesAmount = 1;
 	int resultsArr::_districtsAmount = 1;
+	
 	resultsArr::resultsArr(): 
-		_partiesByID(new int* [_partiesAmount]), _repsPartiesByID(new int* [_partiesAmount]), _PMsRepsByPartyID(new int[_partiesAmount]), TotalPMsReps(new int [_partiesAmount])
+		_partiesByID(new int* [_partiesAmount]), _repsPartiesByID(new int* [_partiesAmount]), _PMsRepsTotalByPartyID(new int[_partiesAmount])
 	{
 		for (int i = 0; i < _partiesAmount; i++) {
 			_partiesByID[i] = new int[_districtsAmount];
@@ -18,7 +19,7 @@ namespace elec
 				_partiesByID[i][j] = 0;
 		}
 		for (int k = 0; k < _partiesAmount; k++)
-			_PMsRepsByPartyID[k] = 0;
+			_PMsRepsTotalByPartyID[k] = 0;
 	}
 
 
@@ -31,6 +32,7 @@ namespace elec
 			delete[] _repsPartiesByID[i];
 		}
 		delete _repsPartiesByID;
+		delete[] _PMsRepsTotalByPartyID;
 	}
 
 
@@ -39,13 +41,12 @@ namespace elec
 	}
 
 	void resultsArr::AddSingleVoteToArr(int party_id, int district_id) {
-		reallocResultsArr(); //roee:realloc every vote cause u i dont know if districts/parties amount was change since last time. should I keep it in static variable maybe?
+		reallocResultsArr(); //roee:realloc every vote cause u i dont know if districts/parties amount was change since last time.
 		_partiesByID[party_id][district_id - 100]++;
 	}
 
 	void resultsArr::reallocResultsArr()
 	{
-		//todo: try to add copy constructor for resultsArr
 		int** newPartiesByID = new int* [_partiesAmount];
 
 		for (int i = 0; i < _partiesAmount; i++){
@@ -76,21 +77,28 @@ namespace elec
 	int resultsArr::getPMNumberOfRepsInDistrict(int districtID, int partyID) {
 		return _repsPartiesByID[partyID][districtID - 100];
 	}
-
-	bool resultsArr::setPMsArrByIndex(int partyId, int votes) {
-		_PMsRepsByPartyID[partyId] = votes;
-		return true;
-	}
-
-	bool resultsArr::addToTotalPMsReps(int PartyPmID, int reps)
+	
+	int resultsArr::getPmsRepsTotalByPartyID(int index) 
 	{
-		TotalPMsReps[PartyPmID] = TotalPMsReps[PartyPmID] + reps;
+		return _PMsRepsTotalByPartyID[index];
+	}
+
+	bool resultsArr::setPmsRepsTotalByPartyID(int partyID, int reps)
+	{
+		_PMsRepsTotalByPartyID[partyID] = reps;
 		return true;
 	}
 
+
+	bool resultsArr::AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps)
+	{
+		_repsPartiesByID[RepPartyID][DistrictID - 100] = _repsPartiesByID[RepPartyID][DistrictID - 100] + amountOfReps;
+		return true;
+	}
+	
 	bool resultsArr::addParty()
 	{  //check if delete pntrs is needed
-		static bool firstParty = true;
+	
 		if (firstParty) {
 			firstParty = false;
 		}
@@ -111,7 +119,6 @@ namespace elec
 	
 	bool resultsArr::addDistrict() 
 	{ //check if delete pntrs is needed
-		static bool firsDistrict = true;
 		if (firsDistrict) {
 			firsDistrict = false;
 		}
@@ -126,8 +133,12 @@ namespace elec
 		}
 		return true;
 	}
-	/*bool resultsArr::addToAmountOfVotesForParty(int PartyPmID, int votes) {
-		AmountOfVotesForParty[PartyPmID] = AmountOfVotesForParty[PartyPmID] + votes;
-		return true;
-	}*/
+	
+	bool resultsArr::isResultsAllowed()
+	{
+		if (!firsDistrict && !firstParty)
+			return true;
+		else
+			return false;
+	}
 }
