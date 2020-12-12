@@ -11,16 +11,16 @@ using namespace elec;
 int dateArr[] = { 2,7,0,1,2,0,2,0 };
 ElectionRound election(dateArr);
 
-void showMainMenu(/*ElectionRound election*/);
-void addDistrict(/*ElectionRound election*/);
+void showMainMenu();
+void addDistrict();
 void addCitizen();
 void addParty();
 void addPartyRepresentative();
 void viewDistricts();
 void viewCitizens();
 void viewParties();
-void voting();//todo:roee
-void results();//todo:roee
+void voting();
+void results();
 
 
 
@@ -49,15 +49,15 @@ void showMainMenu()
 	while (choice != Menu_Choices::exit_menu)
 	{
 		cout << "Election Menu:" << endl;
-		cout << "Press 1 to add a district\n";
-		cout << "Press 2 to add a citizen\n";
-		cout << "Press 3 to add a party\n";
-		cout << "Press 4 to add a citizen as a party representative\n";
-		cout << "Press 5 to view all districts\n";
-		cout << "Press 6 to view all citizens\n";
-		cout << "Press 7 to view all parties\n";
-		cout << "Press 8 to voting\n";
-		cout << "Press 9 to Presenting the election result\n";
+		cout << "Press 1 to add a district" << endl;
+		cout << "Press 2 to add a citizen" << endl;
+		cout << "Press 3 to add a party" << endl;
+		cout << "Press 4 to add a citizen as a party representative" << endl;
+		cout << "Press 5 to view all district" << endl;
+		cout << "Press 6 to view all citizens" << endl;
+		cout << "Press 7 to view all parties" << endl;
+		cout << "Press 8 to voting" << endl;
+		cout << "Press 9 to Presenting the election result" << endl;
 		cout << "Press 10 to exit" << endl;
 
 		cin >> userChoise;
@@ -129,11 +129,11 @@ void showMainMenu()
 			cout << "-------------" << endl;
 			cout << "Results" << endl;
 			cout << "-------------" << endl;
-
+			results();
 			cout << endl;
 			break;
 		case Menu_Choices::exit_menu:
-			cout << "Bye-bye.\n";
+			cout << "Bye-bye." << endl;
 			break;
 		default:
 			cout << "Not a Valid Choice. \n Try again";
@@ -177,7 +177,7 @@ void addCitizen()
 		{
 
 
-			cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
+			cout << "Error:Citizen with that id is already exist or/and cistrict doesn't exist." << endl;
 
 		}
 		else
@@ -247,6 +247,11 @@ void voting()
 		cout << "Vote was successful inserted." << endl;
 	}
 
+}
+
+void results()
+{
+	election.theResults();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

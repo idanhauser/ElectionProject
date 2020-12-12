@@ -85,7 +85,7 @@ namespace elec {
 		return _numOfReps;
 	}
 
-	bool District::setLeaderInDist(Citizen* leader)
+	bool District::setLeaderInDist(const Citizen* leader) 
 	{
 		if(leader!=nullptr)
 		{
@@ -134,7 +134,7 @@ namespace elec {
 			"has " << district.getNumberOfCitizens() << " citizens." << endl;
 		os << "Number of representatives is : " << (double)district._numOfReps << "and the election's result is " <<
 			(int)district._electionResult << "." << endl;
-		//os << "The people that live in this district are:" << endl <</* district._Citizens<<*/ endl;
+		
 		return os;
 	}
 
