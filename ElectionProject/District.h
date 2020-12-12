@@ -25,7 +25,7 @@ namespace elec
 		const District& operator=(const District&);
 
 	public:
-		//friend class Citizen;//TODO:idan do we need it? 
+	
 		District() = delete;///we delete default constructor
 		District(const char* name, int numOfReps);
 		~District();
@@ -43,7 +43,7 @@ namespace elec
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
 		int getNumOfReps() const;
-		bool setLeaderInDist( Citizen* leader);
+		bool setLeaderInDist(const Citizen* leader);
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
 	
