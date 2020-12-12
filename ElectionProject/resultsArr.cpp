@@ -23,7 +23,8 @@ namespace elec
 	}
 
 
-	resultsArr::~resultsArr() {
+	resultsArr::~resultsArr()
+	{
 		for (int i = 0; i < _partiesAmount; i++) {
 			delete[] _partiesByID[i];
 		}
@@ -35,12 +36,8 @@ namespace elec
 		delete[] _PMsRepsTotalByPartyID;
 	}
 
-
-	int* resultsArr::findPartysDistrictsPntrByPartyID(int partyID) {
-		return _partiesByID[partyID - 100];
-	}
-
-	void resultsArr::AddSingleVoteToArr(int party_id, int district_id) {
+	void resultsArr::AddSingleVoteToArr(int party_id, int district_id)
+	{
 		reallocResultsArr(); //roee:realloc every vote cause u i dont know if districts/parties amount was change since last time.
 		_partiesByID[party_id][district_id - 100]++;
 	}
@@ -63,18 +60,22 @@ namespace elec
 	}
 
 
-	int resultsArr::getpartiesAmount() {
+	int resultsArr::getpartiesAmount()
+	{
 		return _partiesAmount;
 	}
 
-	int resultsArr::getdistrictsAmount() {
+	int resultsArr::getdistrictsAmount()
+	{
 		return _districtsAmount;
 	}
 
-	int resultsArr::getDistrictNumberOfVotesInParty(int partyID, int districtSN ) {
+	int resultsArr::getDistrictNumberOfVotesInParty(int partyID, int districtSN )
+	{
 		return _partiesByID[partyID][districtSN-100];
 	}
-	int resultsArr::getPMNumberOfRepsInDistrict(int districtID, int partyID) {
+	int resultsArr::getPMNumberOfRepsInDistrict(int districtID, int partyID) 
+	{
 		return _repsPartiesByID[partyID][districtID - 100];
 	}
 	

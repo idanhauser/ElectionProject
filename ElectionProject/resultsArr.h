@@ -15,8 +15,8 @@ namespace elec {
 
 		~resultsArr(); //todo
 
-		int* findPartysDistrictsPntrByPartyID(int partyID);
 		void AddSingleVoteToArr(int party_id, int district_id);
+		int getDistrictNumberOfVotesInParty( int partyID, int districtSN);
 
 		void reallocResultsArr();
 
@@ -25,9 +25,7 @@ namespace elec {
 		bool addParty();
 		bool addDistrict();
 
-
-		int getDistrictNumberOfVotesInParty( int partyID, int districtSN);
-		
+	
 		int getPMNumberOfRepsInDistrict(int partyID, int districtSN);
 		bool AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
 	

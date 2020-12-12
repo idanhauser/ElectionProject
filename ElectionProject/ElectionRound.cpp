@@ -300,8 +300,6 @@ namespace elec {
 	{
 		int i, j;
 		for (i = 0; i < n - 1; i++)
-
-			// Last i elements are already in place  
 			for (j = 0; j < n - i - 1; j++)
 				if (arr[j].repsAmount > arr[j + 1].repsAmount)
 					swap(&arr[j], &arr[j + 1]);

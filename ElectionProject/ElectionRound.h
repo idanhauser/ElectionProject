@@ -56,23 +56,13 @@ namespace elec {
 		void viewAllDistricts() const;
 		void viewAllCitizens() const;
 		void viewAllParties() const;
-		void votingAction();
+		bool votingAction(int citizenId, int partyId);
 		void theResults();
 
 
 
 		
-		//--------roee
-		bool votingAction(int citizenId, int partyId);
-		void theResults(resultsArr& results);
-		int checkWinningPMInDistrict(int districtID, resultsArr results);//inside theResults
-		int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//inside theResults
-		int checkTotalPartyVotesAmount(resultsArr results, int partyID);//inside theResults
 
-		//TODO: ROEE need to check if to delete or not
-		//int checkWinningPMInDistrict(int districtID, resultsArr results);	
-		//int checkWinnigPMRepsAmountInDistrict(resultsArr repsCountArr, int districtId);//to delete
-		//int checkTotalPartyVotesAmount(resultsArr results, int partyID);
 		void swap(pair* xp, pair* yp);
 		void bubbleSort(pair arr[], int n);
 	};
