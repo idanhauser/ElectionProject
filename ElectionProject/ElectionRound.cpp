@@ -196,13 +196,13 @@ namespace elec {
 
 		for (int j = 0; j <= districtAmount; j++) {
 			District& tempDis = _districts.getDistcritByIndex(j);
-			cout << "----------------------------------------------------";
+			cout << "----------------------------------------------------" << endl;
 			//לכל מחוז יש לההציג את שם המחוז
 			cout << "District Name: " << tempDis.getName() << endl;
 			//מספר הנציגים שהמחוז מעניק
-			cout << endl<<" Amount Of Reps: " << tempDis.getNumOfReps() << endl;
+			cout <<" Amount Of Reps: " << tempDis.getNumOfReps() << endl;
 			for (int k = 0; k < partiesAmount; k++) {
-				partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(j + 100, k);
+				partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(j, k+100);
 				//מספר ואחוז הקולות שקיבלה כל מפלגה
 				totalPartyVotesPrecentage = partyVotesInDistrict / tempDis.getVotingCitizensAmountInDistrict() * 100;
 				//roee: checked

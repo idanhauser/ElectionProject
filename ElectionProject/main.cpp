@@ -53,7 +53,7 @@ void showMainMenu()
 		cout << "Press 2 to add a citizen" << endl;
 		cout << "Press 3 to add a party" << endl;
 		cout << "Press 4 to add a citizen as a party representative" << endl;
-		cout << "Press 5 to view all district" << endl;
+		cout << "Press 5 to view all districts" << endl;
 		cout << "Press 6 to view all citizens" << endl;
 		cout << "Press 7 to view all parties" << endl;
 		cout << "Press 8 to voting" << endl;
