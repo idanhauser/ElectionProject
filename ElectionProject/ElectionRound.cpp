@@ -228,7 +228,7 @@ namespace elec {
 			cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
 				tempDis.getNumOfReps() << " reps " << endl;
 		
-			countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID());
+			countReps.setPmsRepsByPartyID(partyLeader->getParty()->getPartyID(), tempDis.getNumOfReps());
 			maxRepsForPm = 0;
 
 			tempDis.setLeaderInDist(partyLeader);
@@ -262,13 +262,13 @@ namespace elec {
 		for (int i = 0; i < partiesAmount; i++) {
 			//להציג עבור כל מפלגה את המועמד שלה לראשות המדינה, סכום הנציגים שזכה בהם וסכום הקולות שקיבלה המפלגה בכל המחוזות
 			for (int l = 0; l < partiesAmount; l++)
-				totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l + 100, i);
+				totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l, i + 100);
 			cout << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[i].index).getPartyLeader().getCitizenName() <<
 				" got total amount of " << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[i].index) << " reps " <<
-				endl<< "His party got total amount of" << totalPartyVotes << " votes";
+				endl<< "His party got total amount of " << totalPartyVotes << " votes" << endl;
 		}
 		cout << "the ELECTIONS WINNER is: " << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[0].index).getPartyLeader().getCitizenName()
-			<< " with" << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[0].repsAmount) << "electors";
+			<< " with" << countReps.getPmsRepsByPartyID(pmCandidatesRepsArrSorted[0].index) << "electors" << endl;
 
 		delete[] pmCandidatesRepsArrSorted;
 

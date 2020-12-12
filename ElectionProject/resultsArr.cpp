@@ -17,6 +17,8 @@ namespace elec
 			for (int j = 0; j < _partiesAmount; j++)
 				_partiesByID[i][j] = 0;
 		}
+		for (int k = 0; k < _partiesAmount; k++)
+			_PMsRepsByPartyID[k] = 0;
 	}
 
 
