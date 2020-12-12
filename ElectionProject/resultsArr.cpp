@@ -1,7 +1,10 @@
 #include "resultsArr.h"
 namespace elec
 {
-	resultsArr::resultsArr():
+	
+	int resultsArr::_partiesAmount = 1;
+	int resultsArr::_districtsAmount = 1;
+	resultsArr::resultsArr(): 
 		_partiesByID(new int* [_partiesAmount]), _repsPartiesByID(new int* [_partiesAmount]), _PMsRepsByPartyID(new int[_partiesAmount]), TotalPMsReps(new int [_partiesAmount])
 	{
 		for (int i = 0; i < _partiesAmount; i++) {
@@ -40,13 +43,15 @@ namespace elec
 
 	void resultsArr::reallocResultsArr()
 	{
+		//todo: try to add copy constructor for resultsArr
 		int** newPartiesByID = new int* [_partiesAmount];
 
-		for (int i = 0; i < _partiesAmount; i++)
-		{
+		for (int i = 0; i < _partiesAmount; i++){
 			newPartiesByID[i] = _partiesByID[i];
+			for (int j = 0; j < _districtsAmount; j++)
+				newPartiesByID[i][j] = _partiesByID[i][j];
 		}
-		if (_partiesAmount >= 1) //roee: not sure if correct
+		if (_partiesAmount >= 1) 
 		{
 			delete[] _partiesByID;
 		}

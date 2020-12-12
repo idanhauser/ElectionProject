@@ -41,6 +41,7 @@ namespace elec {
 		{
 			_parties.getPartyByIndex(i).AddAnotherColumn();
 		}
+		_results.addDistrict();
 		return districtAdded;
 	}
 
@@ -73,6 +74,8 @@ namespace elec {
 			partyid = par->getPartyID();
 			leader->setParty(par);
 			partyAdded = _parties.addToList(*par);
+			_results.addParty();
+			
 		}
 		return partyAdded;
 	}

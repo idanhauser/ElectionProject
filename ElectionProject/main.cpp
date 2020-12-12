@@ -53,7 +53,7 @@ void showMainMenu()
 		cout << "Press 2 to add a citizen\n";
 		cout << "Press 3 to add a party\n";
 		cout << "Press 4 to add a citizen as a party representative\n";
-		cout << "Press 5 to view all counties\n";
+		cout << "Press 5 to view all districts\n";
 		cout << "Press 6 to view all citizens\n";
 		cout << "Press 7 to view all parties\n";
 		cout << "Press 8 to voting\n";
@@ -177,7 +177,7 @@ void addCitizen()
 		{
 
 
-			cout << "Error:Citizen with that id is already exist or/and cistrict doesn't exist." << endl;
+			cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
 
 		}
 		else
