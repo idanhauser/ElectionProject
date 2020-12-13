@@ -13,7 +13,7 @@ namespace elec {
 	public:
 		resultsArr();
 
-		~resultsArr(); //todo
+		~resultsArr(); 
 
 		void AddSingleVoteToArr(int party_id, int district_id);
 		int getDistrictNumberOfVotesInParty( int partyID, int districtSN)const;

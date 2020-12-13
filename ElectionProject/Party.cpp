@@ -64,7 +64,7 @@ namespace elec {
 		return true;
 	}
 
-	//todo:idan have to check
+
 	void Party::printPartyRepsFromDistrictByAmount(int num, int districtID) const
 	{
 		CitizenList& represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];

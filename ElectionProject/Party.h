@@ -47,10 +47,7 @@ namespace elec
 		Citizen& getPartyLeader() const;
 
 
-		///ROEEE TODO = what are those functions?
-	
-	//CitizenList getPartyMembers()const; todo roee
-		
+
 		
 	};
 }

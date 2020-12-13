@@ -31,7 +31,7 @@ namespace elec {
 			int index;
 			int repsAmount;
 		};
-		ElectionRound() = delete;//todo:idan delete or defult?
+		ElectionRound() = delete;
 		ElectionRound(int date[8]);
 		~ElectionRound() = default;
 

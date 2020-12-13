@@ -178,7 +178,7 @@ namespace elec {
 		return isVotedCheck;
 	}
 
-	///TODO:idan
+
 	void ElectionRound::theResults()
 	{
 		resultsArr countReps;
@@ -216,7 +216,7 @@ namespace elec {
 					else
 						totalPartyVotesPrecentage = partyVotesInDistrict / votingCitizensAmount * 100;
 
-					cout << "The party: " << _parties.getPartyByIndex(k) << " Got " << partyVotesInDistrict << " votes." << endl <<
+					cout << "The party: " << _parties.getPartyByIndex(k).getPartyName() << " Got " << partyVotesInDistrict << " votes." << endl <<
 						"Which are " << totalPartyVotesPrecentage << "% of voting citizens in the district" << endl;
 				}
 				cout << "--The precentage of voting citizens in the District is: " <<
@@ -333,7 +333,7 @@ namespace elec {
 			}
 		}
 	}
-
+	//func deletes the max cell in arr and returns the index
 	int  ElectionRound::deleteMax(double* parr, int size) {
 		int i;
 		double max = parr[0];
@@ -346,5 +346,5 @@ namespace elec {
 
 	
 	
-	}//func deletes the max cell in arr and returns the index
+	}
 }

@@ -1,6 +1,6 @@
 ﻿//code verison 1.0
 #include "Citizen.h"
-//#include "District.h"
+
 #include "Party.h"
 
 namespace elec
@@ -19,16 +19,7 @@ namespace elec
 	}
 
 
-	/* citizen can or can not change a district
-	bool Citizen::setDistrictNum(int DistrictNum)
-	{
-		//	_district = new District(district);
-		_districtNum = DistrictNum;
-	//todo idan	District* district = findDistrictByNum(DistrictNum); //roee: The idea is to add the citizen to his district's eligible list after the user entered the number
-	//todo idan	district.addEligibleCitizens(DistrictNum); //roee: we should implement. not sure in which class to implement both funcs.
-		return true;                                     //for now I added  one func at district.h bottom
-	}
-	*/
+	
 
 	bool Citizen::setParty(const Party* party)
 	{

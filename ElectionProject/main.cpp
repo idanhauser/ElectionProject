@@ -1,5 +1,4 @@
-// main.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+
 //code verison 1.0
 
 #include <iostream>
@@ -35,7 +34,7 @@ int main()
 	cout << endl << "-------------" << endl;
 	showMainMenu();
 
-	cout << "goodbye" << endl;
+
 
 
 
@@ -154,7 +153,7 @@ void addDistrict()
 	cin >> name >> numberRepresentatives;
 	if (!election.addNewDistrict(name, numberRepresentatives, districtId))
 	{
-		cout << "Error:District " << name << " was't added." << endl;
+		cout << "Error:District " << name << " wasn't added." << endl;
 	}
 	else
 	{
@@ -177,7 +176,7 @@ void addCitizen()
 		{
 
 
-			cout << "Error:Citizen with that id is already exist or/and cistrict doesn't exist." << endl;
+			cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
 
 		}
 		else
@@ -215,13 +214,22 @@ void addPartyRepresentative()
 
 	cout << "Insert a representative citizen's id ,district's id, party's id:" << endl;
 	cin >> representId >> districtId >> partyId;
-	election.addNewPartyRepresentative(representId, partyId, districtId);
-}
+	if (!election.addNewPartyRepresentative(representId, partyId, districtId))
+	{
+		cout << "Error:Citizen and/or district and/or party doesn't exist." << endl;
+	}
+	else
+	{
+		cout << "Party's representative added." << endl;
+	}
 
+
+}
 void viewDistricts()
 {
 	election.viewAllDistricts();
 }
+
 
 void viewCitizens()
 {
@@ -254,13 +262,3 @@ void results()
 	election.theResults();
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
