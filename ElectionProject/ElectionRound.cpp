@@ -203,19 +203,19 @@ namespace elec {
 			for (int j = 0; j < districtAmount; j++) {
 				District& tempDis = _districts.getDistcritByIndex(j);
 				cout << "----------------------------------------------------" << endl;
-				//לכל מחוז יש לההציג את שם המחוז
+				//present each district name
 				cout << "From District Name: " << tempDis.getName() << endl;
-				//מספר הנציגים שהמחוז מעניק
+				//num of representatives each district gives
 				cout << "with Amount Of Reps: " << tempDis.getNumOfReps() << ", each party got:" << endl;
 				for (int k = 0; k < partiesAmount; k++)  {
 					partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(k, j + DISTRICT_ID_INIT);
-					//מספר ואחוז הקולות שקיבלה כל מפלגה
 					votingCitizensAmount = tempDis.getVotingCitizensAmountInDistrict();
 					if (votingCitizensAmount == 0)
 						totalPartyVotesPrecentage = 0;
 					else
 						totalPartyVotesPrecentage = partyVotesInDistrict / votingCitizensAmount * 100;
-
+					
+					//number of votes and precentages for each party
 					cout << "The party: " << _parties.getPartyByIndex(k).getPartyName() << " Got " << partyVotesInDistrict << " votes." << endl <<
 						"Which are " << totalPartyVotesPrecentage << "% of voting citizens in the district" << endl;
 				}
@@ -260,7 +260,7 @@ namespace elec {
 
 		
 	
-			//להציג לכל מחוז את רשימת הנציגים שנבחרה מכל מפלגה
+			//present for each district the representatives list elected
 			int partyLeaderReps;
 			int maxRepsForPm = 0;
 			for (int k = 0; k < districtAmount; k++) {
@@ -281,7 +281,7 @@ namespace elec {
 
 				}
 				//district winner check:
-					//מועמד המפלגה אליה המחוז משויך
+					//the party representativethe district belongs to
 				cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
 					_districts.getDistcritById(k+DISTRICT_ID_INIT).getNumOfReps() << " reps " << endl;
 				countReps.setPmsRepsTotalByPartyID(partyLeader->getParty()->getPartyID(), _districts.getDistcritById(k+DISTRICT_ID_INIT).getNumOfReps());
@@ -301,7 +301,8 @@ namespace elec {
 			int totalPartyVotes = 0;
 
 			for (int i = 0; i < partiesAmount; i++) {
-				//להציג עבור כל מפלגה את המועמד שלה לראשות המדינה, סכום הנציגים שזכה בהם וסכום הקולות שקיבלה המפלגה בכל המחוזות
+				
+				//present for each party its candidate for PM, his amount of electors he got and amount of votes each party gor in all districts
 				for (int l = 0; l < partiesAmount; l++)
 					totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l, i + 100);
 				cout << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[i].index).getPartyLeader().getCitizenName() <<
