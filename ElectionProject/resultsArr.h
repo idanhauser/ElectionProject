@@ -16,24 +16,25 @@ namespace elec {
 		~resultsArr(); //todo
 
 		void AddSingleVoteToArr(int party_id, int district_id);
-		int getDistrictNumberOfVotesInParty( int partyID, int districtSN);
+		int getDistrictNumberOfVotesInParty( int partyID, int districtSN)const;
 
 		void reallocResultsArr();
 
-		int getdistrictsAmount();
-		int getpartiesAmount();
+		int getdistrictsAmount() const;
+		int getpartiesAmount()const;
 		bool addParty();
 		bool addDistrict();
 
-	
-		int getPMNumberOfRepsInDistrict(int partyID, int districtSN);
+		int getPmsRepsTotalByDistrictID(int index) const;
+		int getTotalPartyNumberOfVotes(int partyID) const;
+		int getPMNumberOfRepsInDistrict(int districtSN, int partyID);
 		bool AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
 	
 		
-		int getPmsRepsTotalByPartyID(int index);
+		int getPmsRepsTotalByPartyID(int index) const;
 		bool setPmsRepsTotalByPartyID(int partyID, int reps);
 
-		bool isResultsAllowed();
+		bool isResultsAllowed()const;
 
 	};
 

@@ -65,5 +65,6 @@ namespace elec {
 
 		void swap(pair* xp, pair* yp);
 		void bubbleSort(pair arr[], int n);
+		int  deleteMax(double* parr, int size);
 	};
 }
