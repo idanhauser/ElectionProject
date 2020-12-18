@@ -10,7 +10,8 @@
 using namespace std;
 
 namespace elec {
-	ElectionRound::ElectionRound(int date[8]) :_districts(DistrictList()), _parties(PartyList()), _results(resultsArr())
+	ElectionRound::ElectionRound(int date[8]) :_districts(DistrictList()), _parties(PartyList()),
+		_results(resultsArr(_parties.getLogicSize(), _districts.getLogicSize()))
 	{
 
 		for (int i = 0; i < 8; ++i)
@@ -42,6 +43,7 @@ namespace elec {
 			_parties.getPartyByIndex(i).AddAnotherColumn();
 		}
 		_results.addDistrict();
+		_results.setdistrictsAmount();
 		return districtAdded;
 	}
 
@@ -75,7 +77,6 @@ namespace elec {
 			leader->setParty(par);
 			partyAdded = _parties.addToList(*par);
 			_results.addParty();
-			
 		}
 		return partyAdded;
 	}
@@ -164,7 +165,8 @@ namespace elec {
 			Citizen& tempCitizen = _districts.getDistcritByIndex(distIndex).getCitizenById(citizenId);
 			if (tempCitizen.hasVoted() == false) {
 				tempCitizen.setHasVoted(true);
-				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum());
+				
+				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum(), _parties.getLogicSize(), _districts.getLogicSize() );
 			}
 			else
 			{
@@ -181,16 +183,16 @@ namespace elec {
 
 	void ElectionRound::theResults()
 	{
-		resultsArr countReps;
+		resultsArr countReps(_parties.getLogicSize(), _districts.getLogicSize());
 		char* pmWithTheMostRepsName = nullptr;
 		const Citizen* partyLeader = nullptr;
 		int totalPartyVotesPrecentage;
 		int partyVotesInDistrict;
-		int districtAmount = countReps.getdistrictsAmount();
-		int partiesAmount = countReps.getpartiesAmount();
+		int districtAmount = _districts.getLogicSize();
+		int partiesAmount = _parties.getLogicSize();
 		int votingCitizensAmount;
 		int allVotes = 0;
-		if (!_results.isResultsAllowed()){
+		if (!_results.isResultsAllowed()){ //todo: need to fix
 			cout << "Sorry...Not enough details to get results" << endl;
 		}
 		else {
