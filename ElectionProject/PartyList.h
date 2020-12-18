@@ -1,5 +1,6 @@
 ﻿//code verison 1.0
 #pragma once
+#include "Party.h"
 using namespace std;
 namespace elec {
 	class Party;
@@ -18,12 +19,13 @@ namespace elec {
 	public:
 		PartyList();
 		~PartyList();
-		PartyList(const PartyList& other);//idan:should be in private and with friend class, but cant make it work
+		//PartyList(const PartyList& other);//idan:should be in private and with friend class, but cant make it work
 		//friend class Citizen;
 		void realloc(int new_size);
-		bool addToList(Party* Party);
+		bool addToList(Party& Party);
 		int getLogicSize() const;
-		friend ostream& operator<<(ostream& os, const PartyList& district);
-
+		const Party& getPartyByIndex(int index) const;
+		Party& getPartyByIndex(int index);
+		bool IsPartyExist(int partyId) const;
 	};
 }

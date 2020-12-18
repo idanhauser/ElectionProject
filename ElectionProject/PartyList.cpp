@@ -9,14 +9,14 @@ namespace elec {
 
 	PartyList::~PartyList()
 	{
-		for (int i = 0; i < _phySize; i++)
+		for (int i = 0; i < _logicSize; i++)
 		{
 			delete _parties[i];
 		}
 		delete[] _parties;
 	}
 
-	PartyList::PartyList(const PartyList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _parties(new Party*[other._phySize])
+/*	PartyList::PartyList(const PartyList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _parties(new Party*[other._phySize])
 	{
 		int len = other.getLogicSize();
 		for (int i = 0; i < len; ++i)
@@ -24,7 +24,7 @@ namespace elec {
 			_parties[i] = other._parties[i];
 		}
 	}
-
+	*/
 
 
 
@@ -46,14 +46,14 @@ namespace elec {
 	}
 
 
-	bool PartyList::addToList(Party* Party)
+	bool PartyList::addToList(Party& party)
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_parties[_logicSize++] = Party;
+		_parties[_logicSize++] = &party;
 		return true;
 	}
 
@@ -64,13 +64,28 @@ namespace elec {
 		return _logicSize;
 	}
 
-	ostream& operator<<(ostream& os, const PartyList& party)
+	const Party& PartyList::getPartyByIndex(int index) const
 	{
-		int len = party.getLogicSize();
-		for (int i = 0; i < len; i++)
+		if (index < _logicSize)
+			return *_parties[index];
+	}
+
+	 Party& PartyList::getPartyByIndex(int index) 
+	{
+		if (index < _logicSize)
+			return *_parties[index];
+	}
+
+	bool PartyList::IsPartyExist(int partyId) const
+	{
+		bool found = false;
+		for (int i = 0; i < _logicSize && !found; ++i)
 		{
-			os << party._parties[i] << endl;
+			if (i == abs(partyId - PARTY_ID_INIT))
+			{
+				found = true;
+			}
 		}
-		return os;
+		return found;
 	}
 }

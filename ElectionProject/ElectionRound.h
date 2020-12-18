@@ -1,63 +1,70 @@
 ﻿//code verison 1.0
 #pragma once
+#include "resultsArr.h"
 
+
+#include "DistrictList.h"
+#include "PartyList.h"
+#include "Citizen.h"
+#include "District.h"
 
 using namespace std;
 
 
 
 namespace elec {
-	//idan todo: need to add an operator to print the election round.
 	class DistrictList;
-	class CitizenList;
 	class PartyList;
 	
 	class ElectionRound
 	{
 	private:
 		int _date[8];
+		resultsArr _results;
+		DistrictList _districts;
+		PartyList _parties;
 
-	/*	DistrictList &_districts;
-		CitizenList &_citizens;
-		PartyList &_parties;
-		*/
-
-	const ElectionRound& operator=(const ElectionRound&);
+		const ElectionRound& operator=(const ElectionRound&);
 
 	public:
+		struct pair {
+			int index;
+			int repsAmount;
+		};
 		ElectionRound() = delete;
 		ElectionRound(int date[8]);
 		~ElectionRound() = default;
 
 		void printElectionDate() const;
+		bool addNewDistrict(char str[MAX_SIZE], int number_representatives,int& districtId);
 
-		enum class Menu_Choices
+		
+		constexpr int getYear() const
 		{
-			addDistrict = 1,
-			addCitizen,
-			addParty,
-			addPartyRepresentative,
-			viewDistricts,
-			viewCitizens,
-			viewParties,
-			voting,
-			results,
-			exit_menu
-		};
+			int year = _date[7];
+			year += _date[6] * 10;
+			year += _date[5] * 100;
+			year += _date[4] * 1000;
+			return year;
 
-		//void showMainMenu();
-		void addNewDistrict();
-		void addNewCitizen();
-		void addNewParty();
-		void addNewPartyRepresentative();
-		void viewAllDistricts();
-		void viewAllCitizens();
-		void viewAllParties();
-		void votingAction();//todo:roee
-		void theResults();//todo:roee
+		}
+
+
+		bool addNewCitizen(char* name,int id,int birtyear,int districtId);
+		bool addNewParty(char* name, int pdId,int& partyId);
+		bool addNewPartyRepresentative(int representId,int partyId,int districtId);
+		void viewAllDistricts() const;
+		void viewAllCitizens() const;
+		void viewAllParties() const;
+		bool votingAction(int citizenId, int partyId);
+		void theResults();
 
 
 
+		
+
+		void swap(pair* xp, pair* yp);
+		void bubbleSort(pair arr[], int n);
+		int  deleteMax(double* parr, int size);
 	};
-
 }

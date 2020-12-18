@@ -1,60 +1,39 @@
 ﻿//code verison 1.0
-#include <string>
-#include <iostream>
 #include "District.h"
+#include "Citizen.h"
+#include <iostream>
 #include "CitizenList.h"
+
 using namespace std;
 
 namespace elec {
-	int District::snGenerator = 100;
+	int District::snGenerator = DISTRICT_ID_INIT;
 
-
-	/**
-	 * \brief constructor for district
-	 * \param name the name of the district
-	 */
-	District::District(const char* name) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-	                                       _Citizens( CitizenList()), _votersPercentage(0), _electionResult(0)
+	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
+		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps),_partyLeaderInDist(nullptr)
 	{
 		strcpy(this->_name, name);
 	}
-/*
-	District::District(const District& other)
-	{
-		this->_serialNum = other._serialNum;
-		this->_electionResult = other._electionResult;
-		setName(const_cast<const char*>(other._name));
-
-		setEligibleCitizens(other._eligibleCitizens, other.logicSizeEligciti);
-	}
-	*/
-
-
 
 	District::~District()
 	{
 		delete[] _name;
 		//delete[] _Citizens;//idan : im not sure
 	}
-	
+
 	const char* District::getName() const
 	{
 		return _name;
 	}
 
 	const CitizenList& District::getEligibleCitizens() const
-		{
-			return _Citizens;
-		}
-		
+	{
+		return _Citizens;
+	}
+
 	double District::getVotersPercentage() const
 	{
 		return _votersPercentage;
-	}
-
-	int District::getElectionResults() const
-	{
-		return _electionResult;
 	}
 
 	int District::getSerialNum() const
@@ -67,14 +46,98 @@ namespace elec {
 		return _Citizens.getLogicSize();
 	}
 
+	bool District::addCitizen(Citizen* citz)
+	{
+		_Citizens.addToList(*citz);
+		return true;
+	}
+	//use only if you know that citizen exist
+	const Citizen& District::getCitizenById(int id) const
+	{
+		int savePlace = -1;
+		for (int j = 0; j < _Citizens.getLogicSize(); ++j)
+		{
+			if (_Citizens.getCitizenByIndex(j).getCitizenID() == id)
+			{
+				savePlace = j;
+			
+			}
+		}
+		return _Citizens.getCitizenByIndex(savePlace);
+	}
+
+	Citizen& District::getCitizenById(int id)
+	{
+		int savePlace = -1;
+		int len = _Citizens.getLogicSize();
+		for (int j = 0; j < len && savePlace == -1; ++j)
+		{
+			if (_Citizens.getCitizenByIndex(j).getCitizenID() == id)
+			{
+				savePlace = j;
+			}
+		}
+		return _Citizens.getCitizenByIndex(savePlace);
+	}
+
+	int District::getNumOfReps() const
+	{
+		return _numOfReps;
+	}
+
+	bool District::setLeaderInDist(const Citizen* leader) 
+	{
+		if(leader!=nullptr)
+		{
+			_partyLeaderInDist = leader;
+			return true;
+		}
+		return false;
+	}
+
+
+	bool District::isCitizenExist(int id) const
+	{
+		bool found = false;
+		int len = _Citizens.getLogicSize();
+		for (int i = 0; i < len && !found; ++i)
+		{
+			if (_Citizens.getCitizenByIndex(i).getCitizenID() == id)
+			{
+				found = true;
+			}
+		}
+		return found;
+	}
+
+	/// <summary>
+	/// the function counts how many citizen voted in this distcrit.
+	/// </summary>
+	/// <returns>the amount people who voted</returns>
+	int District::getVotingCitizensAmountInDistrict() const
+	{
+		int counter = 0;
+		for (int i = 0; i < _Citizens.getLogicSize(); ++i)
+		{
+			if(_Citizens.getCitizenByIndex(i).hasVoted())
+			{
+				counter++;
+			}
+		}
+		return counter;
+	}
+
 
 	ostream& operator<<(ostream& os, const District& district)
 	{
-		os << "District " << district._name << ", id: " << (int)district._serialNum <<
+		os << "District " << district._name << ",its id is: " << (int)district._serialNum <<
 			"has " << district.getNumberOfCitizens() << " citizens." << endl;
-		os << "The voters percentage is: " << (double)district._votersPercentage << "and the election's result is " << 
+		os << "Number of representatives is : " << (double)district._numOfReps << "and the election's result is " <<
 			(int)district._electionResult << "." << endl;
-		os << "The people that live in this district are:" <<endl << district._Citizens << endl;
+		
 		return os;
 	}
+
+
+
 }

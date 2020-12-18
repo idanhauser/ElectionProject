@@ -1,30 +1,29 @@
 //code verison 1.0
+#include "Utils.h"
 using namespace std;
 #include "Citizen.h"
 #include "CitizenList.h"
 namespace elec {
-
-
 
 	CitizenList::CitizenList() : _logicSize(0), _phySize(MAX_SIZE), _citizens(new Citizen* [MAX_SIZE]) //roee: not sure about these values for the sizes...//idan : these are the values.
 	{
 	}
 
 
-	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
-	{
-		int len = other.getLogicSize();
-		for (int i = 0; i < len; ++i)
+	/*	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
 		{
-			_citizens[i] = other._citizens[i];
-		}
-	}
+			int len = other.getLogicSize();
+			for (int i = 0; i < len; ++i)
+			{
+				_citizens[i] = other._citizens[i];
+			}
+		}*/
 
 
 
 	CitizenList::~CitizenList()
 	{
-		for (int i = 0; i < _phySize; i++)
+		for (int i = 0; i < _logicSize; i++)
 		{
 			delete _citizens[i];
 		}
@@ -49,15 +48,15 @@ namespace elec {
 	}
 
 
-	bool CitizenList::addToList(Citizen* citizen) 
-													 
+	bool CitizenList::addToList(Citizen& citizen)
+
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_citizens[_logicSize++] = citizen;
+		_citizens[_logicSize++] = &citizen;
 		return true;
 	}
 
@@ -68,14 +67,76 @@ namespace elec {
 		return _logicSize;
 	}
 
-	ostream& operator<<(ostream& os, const CitizenList& citizen)
+	const Citizen& CitizenList::getCitizenByIndex(int index) const
 	{
-		int len = citizen.getLogicSize();
-		for (int i = 0; i < len; i++)
-		{
-			os << citizen._citizens[i] << endl;
-		}
-		return os;
+		if (index < _logicSize)
+			return *_citizens[index];
 	}
+
+	Citizen& CitizenList::getCitizenByIndex(int index)
+	{
+		if (index < _logicSize)
+			return *_citizens[index];
+	}
+
+	Citizen** CitizenList::getCitizens()
+	{
+		return _citizens;
+	}
+
+
+
+	//int CitizenList::isCitizenExist(int id) const
+	//{
+	//	int savePlace = -1;
+	//	for (int i = 0; i < _logicSize && savePlace == -1; ++i)
+	//	{
+	//		if (_citizens[i]->getCitizenID() == id)
+	//		{
+	//			savePlace = i;
+	//		}
+	//	}
+	//	return savePlace;
+
+	//}
+
+
+	const CitizenList& CitizenList::operator=(const CitizenList& other)
+	{
+		this->_citizens = other._citizens;
+		this->_logicSize = other._logicSize;
+		this->_phySize = other._phySize;
+		return *this;
+	}
+	//roee
+	/*
+
+	Citizen* CitizenList::findCitizenByID(int citizenID) { //return 0 for ignoring not finding error even its not possible
+		for (int i = 0; i < getLogicSize(); i++) {
+			if (_citizens[i]->getCitizenID() == citizenID)
+				return _citizens[i];
+		}
+		return 0;
+	}
+
+	Citizen* CitizenList::getCitizenByIndex(int indx) {
+		return _citizens[indx];
+	}*/
+//*roee
+/*
+	void CitizenList::printList() {
+		for (int i = 0; i < getLogicSize(); i++)
+			cout << getCitizenByIndex(i)->getCitizenName();
+	}
+	*/
+
+
+
+
+
+
+
 }
+
+
 
