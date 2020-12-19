@@ -36,7 +36,6 @@ namespace elec
 		for (int i = 0; i < partiesLogicSize; i++) {
 			delete[] _repsPartiesByID[i];
 		}
-		delete _votesByIDs;
 		delete _repsPartiesByID;
 		delete[] _PMsRepsTotalByPartyID;
 	}
@@ -152,7 +151,7 @@ namespace elec
 
 	bool resultsArr::setPmsRepsTotalByPartyID(int partyID, int reps)
 	{
-		_PMsRepsTotalByPartyID[partyID] = reps;
+		_PMsRepsTotalByPartyID[partyID] = _PMsRepsTotalByPartyID[partyID] + reps;
 		return true;
 	}
 
@@ -242,7 +241,7 @@ namespace elec
 
 	bool resultsArr::isResultsAllowed()const
 	{
-		if (!firsDistrict && !firstParty)
+		if ((partiesLogicSize!=0) && (districtslogicSize!=0))
 			return true;
 		else
 			return false;

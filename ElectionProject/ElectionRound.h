@@ -29,7 +29,7 @@ namespace elec {
 	public:
 		struct pair {
 			int index;
-			int repsAmount;
+			double repsAmount;
 		};
 		ElectionRound() = delete;
 		ElectionRound(int date[8]);
@@ -57,7 +57,7 @@ namespace elec {
 		void viewAllCitizens() const;
 		void viewAllParties() const;
 		bool votingAction(int citizenId, int partyId);
-		void theResults();
+		bool theResults();
 
 
 

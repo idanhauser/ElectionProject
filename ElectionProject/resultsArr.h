@@ -3,8 +3,6 @@ namespace elec {
 	class resultsArr
 	{
 	private:
-		bool firsDistrict = true;
-		bool firstParty = true;
 		int partiesLogicSize;
 		int parPhysSize;
 		int districtslogicSize;
