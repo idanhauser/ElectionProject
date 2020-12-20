@@ -165,8 +165,8 @@ namespace elec {
 			Citizen& tempCitizen = _districts.getDistcritByIndex(distIndex).getCitizenById(citizenId);
 			if (tempCitizen.hasVoted() == false) {
 				tempCitizen.setHasVoted(true);
-				
-				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum(), _parties.getLogicSize(), _districts.getLogicSize() );
+
+				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum(), _parties.getLogicSize(), _districts.getLogicSize());
 			}
 			else
 			{
@@ -192,15 +192,20 @@ namespace elec {
 		pair* leftForPartyForElector = new pair[partiesAmount];
 		int leftReps;
 		pair* totalRepsForPmByID = new pair[partiesAmount];
-		if (!_results.isResultsAllowed()) { //todo: need to fix
+		if (!_results.isResultsAllowed())
+		{ //todo: need to fix
 			cout << "Sorry...Not enough details to get results" << endl;
 			return false;
 		}
-		else {
+		else
+		{
 
-			for (int j = 0; j < districtAmount; j++) {
+			for (int j = 0; j < districtAmount; j++)
+			{
 				for (int n = 0; n < partiesAmount; n++)
+				{
 					allVotesInDis = allVotesInDis + _results.getDistrictNumberOfVotesInParty(n, j + DISTRICT_ID_INIT);
+				}
 				District& tempDis = _districts.getDistcritByIndex(j);
 				cout << "----------------------------------------------------" << endl;
 				//present each district name
@@ -210,7 +215,8 @@ namespace elec {
 				//CALCULATING NUMBER OF REPS FROM EACH PARTY
 
 				minVotesForRep = double(allVotesInDis) / double(tempDis.getNumOfReps());
-				for (int i = 0; i < partiesAmount; i++) {
+				for (int i = 0; i < partiesAmount; i++)
+				{
 					amountOfElectedFromDistrict = _results.getDistrictNumberOfVotesInParty(i, j + DISTRICT_ID_INIT)
 						/ (minVotesForRep);
 					_results.AddToPMRepsCount(j + DISTRICT_ID_INIT, i, amountOfElectedFromDistrict);
@@ -220,11 +226,14 @@ namespace elec {
 				}
 				leftReps = tempDis.getNumOfReps();
 				for (int k = 0; k < partiesAmount; k++)
+				{
 					leftReps = leftReps - _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, k);
-				//todo: func sorting leftForPartyForElector by max
+				}
 				bubbleSort(leftForPartyForElector, partiesAmount);
-				for (int l = 0; l < min(partiesAmount,leftReps); l++)
+				for (int l = 0; l < min(partiesAmount, leftReps); l++)
+				{
 					_results.AddToPMRepsCount(j + DISTRICT_ID_INIT, leftForPartyForElector[l].index, 1);
+				}
 				for (int m = 0; m < partiesAmount; m++) {
 					cout << _parties.getPartyByIndex(m).getPartyName() << ":" << endl;
 					cout << _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
@@ -235,20 +244,25 @@ namespace elec {
 					cout << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
 						double(_results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT)) / double(tempDis.getVotingCitizensAmountInDistrict()) * 100 << "%" << endl;
 
-				} //todo: update voters precentage in district
+				} 
+				//todo: update voters precentage in district
 				cout << "Voting Citizens Precentage In The District: " << tempDis.getVotersPercentage() << "%" << endl;
 				cout << "The district belongs to: " <<
 					_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader().getCitizenName() << endl;
+				//todo: find max reps num in parties array in district
+
 				_results.setPmsRepsTotalByPartyID(leftForPartyForElector[0].index, tempDis.getNumOfReps());
 				tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader()));
 			}
-			for (int n = 0; n < partiesAmount; n++) {
+			for (int n = 0; n < partiesAmount; n++)
+			{
 				totalRepsForPmByID[n].index = n;
 				totalRepsForPmByID[n].repsAmount = _results.getPmsRepsTotalByPartyID(n);
 			}
 			bubbleSort(totalRepsForPmByID, partiesAmount);
 
-			for (int p = 0; p < partiesAmount; p++) {
+			for (int p = 0; p < partiesAmount; p++) 
+			{
 
 				cout << _parties.getPartyByIndex(totalRepsForPmByID[p].index).getPartyLeader().getCitizenName()
 					<< " got " << totalRepsForPmByID[p].repsAmount << " reps ";
@@ -261,7 +275,7 @@ namespace elec {
 		}
 
 	}
-	
+
 	void ElectionRound::swap(pair* xp, pair* yp)
 	{
 		pair temp = *xp;
@@ -283,14 +297,14 @@ namespace elec {
 	int  ElectionRound::deleteMax(double* parr, int size) {
 		int i;
 		double max = parr[0];
-		int res=0;
+		int res = 0;
 		for (i = 1; i < size; i++)
 			if (parr[i] > max)
-				res=i;
+				res = i;
 		parr[i] = 0;
 		return res;
 
-	
-	
+
+
 	}
 }

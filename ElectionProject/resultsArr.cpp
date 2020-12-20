@@ -32,11 +32,11 @@ namespace elec
 		for (int i = 0; i < partiesLogicSize; i++) {
 			delete[] _votesByIDs[i];
 		}
-		delete _votesByIDs;
+		delete[] _votesByIDs;
 		for (int i = 0; i < partiesLogicSize; i++) {
 			delete[] _repsPartiesByID[i];
 		}
-		delete _repsPartiesByID;
+		delete[] _repsPartiesByID;
 		delete[] _PMsRepsTotalByPartyID;
 	}
 
@@ -48,7 +48,7 @@ namespace elec
 
 		}
 
-		_votesByIDs[party_id][district_id - 100]++;
+		_votesByIDs[party_id][district_id - DISTRICT_ID_INIT]++;
 
 
 	}

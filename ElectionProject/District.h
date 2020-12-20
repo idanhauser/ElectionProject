@@ -20,7 +20,7 @@ namespace elec
 		double _votersPercentage;
 		int _electionResult;
 		int _numOfReps;
-		const Citizen*  _partyLeaderInDist;
+		const Citizen*  _partyLeaderInDist; //todo: check if needed
 		District(const District& other);
 		const District& operator=(const District&);
 
