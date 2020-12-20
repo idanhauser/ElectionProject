@@ -10,7 +10,8 @@
 using namespace std;
 
 namespace elec {
-	ElectionRound::ElectionRound(int date[8]) :_districts(DistrictList()), _parties(PartyList()), _results(resultsArr())
+	ElectionRound::ElectionRound(int date[8]) :_districts(DistrictList()), _parties(PartyList()),
+		_results(resultsArr(_parties.getLogicSize(), _districts.getLogicSize()))
 	{
 
 		for (int i = 0; i < 8; ++i)
@@ -42,6 +43,7 @@ namespace elec {
 			_parties.getPartyByIndex(i).AddAnotherColumn();
 		}
 		_results.addDistrict();
+		_results.setdistrictsAmount();
 		return districtAdded;
 	}
 
@@ -75,7 +77,6 @@ namespace elec {
 			leader->setParty(par);
 			partyAdded = _parties.addToList(*par);
 			_results.addParty();
-			
 		}
 		return partyAdded;
 	}
@@ -164,7 +165,8 @@ namespace elec {
 			Citizen& tempCitizen = _districts.getDistcritByIndex(distIndex).getCitizenById(citizenId);
 			if (tempCitizen.hasVoted() == false) {
 				tempCitizen.setHasVoted(true);
-				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum());
+
+				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum(), _parties.getLogicSize(), _districts.getLogicSize());
 			}
 			else
 			{
@@ -179,144 +181,101 @@ namespace elec {
 	}
 
 
-	void ElectionRound::theResults()
+	bool ElectionRound::theResults()
 	{
-		resultsArr countReps;
-		char* pmWithTheMostRepsName = nullptr;
-		const Citizen* partyLeader = nullptr;
-		int totalPartyVotesPrecentage;
-		int partyVotesInDistrict;
-		int districtAmount = countReps.getdistrictsAmount();
-		int partiesAmount = countReps.getpartiesAmount();
-		int votingCitizensAmount;
-		int allVotes = 0;
-		if (!_results.isResultsAllowed()){
+		resultsArr countReps(_parties.getLogicSize(), _districts.getLogicSize());
+		int districtAmount = _districts.getLogicSize();
+		int partiesAmount = _parties.getLogicSize();
+		int allVotesInDis = 0;
+		double minVotesForRep;
+		int amountOfElectedFromDistrict;
+		pair* leftForPartyForElector = new pair[partiesAmount];
+		int leftReps;
+		pair* totalRepsForPmByID = new pair[partiesAmount];
+		if (!_results.isResultsAllowed())
+		{ //todo: need to fix
 			cout << "Sorry...Not enough details to get results" << endl;
+			return false;
 		}
-		else {
-			for (int i = 0; i < partiesAmount; i++)
-				for (int n = 0; n < districtAmount; n++)
-					allVotes = allVotes + _results.getDistrictNumberOfVotesInParty(i, n + DISTRICT_ID_INIT);
+		else
+		{
 
-
-
-			for (int j = 0; j < districtAmount; j++) {
+			for (int j = 0; j < districtAmount; j++)
+			{
+				for (int n = 0; n < partiesAmount; n++)
+				{
+					allVotesInDis = allVotesInDis + _results.getDistrictNumberOfVotesInParty(n, j + DISTRICT_ID_INIT);
+				}
 				District& tempDis = _districts.getDistcritByIndex(j);
 				cout << "----------------------------------------------------" << endl;
 				//present each district name
 				cout << "From District Name: " << tempDis.getName() << endl;
 				//num of representatives each district gives
 				cout << "with Amount Of Reps: " << tempDis.getNumOfReps() << ", each party got:" << endl;
-				for (int k = 0; k < partiesAmount; k++)  {
-					partyVotesInDistrict = _results.getDistrictNumberOfVotesInParty(k, j + DISTRICT_ID_INIT);
-					votingCitizensAmount = tempDis.getVotingCitizensAmountInDistrict();
-					if (votingCitizensAmount == 0)
-						totalPartyVotesPrecentage = 0;
-					else
-						totalPartyVotesPrecentage = partyVotesInDistrict / votingCitizensAmount * 100;
-					
-					//number of votes and precentages for each party
-					cout << "The party: " << _parties.getPartyByIndex(k).getPartyName() << " Got " << partyVotesInDistrict << " votes." << endl <<
-						"Which are " << totalPartyVotesPrecentage << "% of voting citizens in the district" << endl;
+				//CALCULATING NUMBER OF REPS FROM EACH PARTY
+
+				minVotesForRep = double(allVotesInDis) / double(tempDis.getNumOfReps());
+				for (int i = 0; i < partiesAmount; i++)
+				{
+					amountOfElectedFromDistrict = _results.getDistrictNumberOfVotesInParty(i, j + DISTRICT_ID_INIT)
+						/ (minVotesForRep);
+					_results.AddToPMRepsCount(j + DISTRICT_ID_INIT, i, amountOfElectedFromDistrict);
+					leftForPartyForElector[i].repsAmount = _results.getDistrictNumberOfVotesInParty(i, j + DISTRICT_ID_INIT) -
+						double(amountOfElectedFromDistrict * (allVotesInDis / tempDis.getNumOfReps()));
+					leftForPartyForElector[i].index = i;
 				}
-				cout << "--The precentage of voting citizens in the District is: " <<
-					double(tempDis.getVotingCitizensAmountInDistrict() * 100 / tempDis.getNumberOfCitizens()) << " --" << endl;
-			}
-
-
-
-			//how many from each party to each district
-			double partyLeaderRepsFromDist;
-			double votesForSingleRep;
-			double* leftRepsDivision = new double[partiesAmount];
-			for (int j = 0; j < partiesAmount; j++)
-				leftRepsDivision[j] = 0;
-			double partyLeaderRepsLeftOver = 0;
-			for (int k = 0; k < districtAmount; k++) {
-				for (int l = 0; l < partiesAmount; l++) {
-					votesForSingleRep = double(allVotes) / double(_districts.getDistcritByIndex(l).getNumOfReps());
-					partyLeaderRepsFromDist = double(_results.getTotalPartyNumberOfVotes(l)) / double(votesForSingleRep);
-					countReps.AddToPMRepsCount(k + DISTRICT_ID_INIT, l, abs(partyLeaderRepsFromDist));
-					countReps.setPmsRepsTotalByPartyID(l, abs(countReps.getPmsRepsTotalByPartyID(l) + (partyLeaderRepsFromDist)));
-					partyLeaderRepsLeftOver = _results.getTotalPartyNumberOfVotes(l) - double(votesForSingleRep * int(partyLeaderRepsFromDist));
-					leftRepsDivision[l] = leftRepsDivision[l] + partyLeaderRepsLeftOver;
+				leftReps = tempDis.getNumOfReps();
+				for (int k = 0; k < partiesAmount; k++)
+				{
+					leftReps = leftReps - _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, k);
 				}
-
-			}
-			int leftReps = 0;
-			for (int l = 0; l < districtAmount; l++) {
-				int leftReps = _districts.getDistcritById(l + DISTRICT_ID_INIT).getNumOfReps() - countReps.getPmsRepsTotalByDistrictID(l + DISTRICT_ID_INIT);
-				for (int p = 0; p < leftReps; p++) {
-					int partyId;
-					/*bug with deletting the max from leftRepsDivision*/
-					partyId = deleteMax(leftRepsDivision, partiesAmount); //func deletes the max cell in arr and returns the index
-					if (leftRepsDivision[partyId] != 0) {
-						countReps.AddToPMRepsCount(l + DISTRICT_ID_INIT, partyId, 1);
-						leftReps--;
-						leftRepsDivision[partyId] = 0;
-					}
+				bubbleSort(leftForPartyForElector, partiesAmount);
+				for (int l = 0; l < min(partiesAmount, leftReps); l++)
+				{
+					_results.AddToPMRepsCount(j + DISTRICT_ID_INIT, leftForPartyForElector[l].index, 1);
 				}
+				for (int m = 0; m < partiesAmount; m++) {
+					cout << _parties.getPartyByIndex(m).getPartyName() << ":" << endl;
+					cout << _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
+					cout << "The Reps are: " << endl;
+					//todo: fix - logicSize of representives is zero for some reason
+					_parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(_results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
+					cout << "Amount of Votes For The Party from Voting Citizens In The District: " << _results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT) << endl;
+					cout << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
+						double(_results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT)) / double(tempDis.getVotingCitizensAmountInDistrict()) * 100 << "%" << endl;
+
+				} 
+				//todo: update voters precentage in district
+				cout << "Voting Citizens Precentage In The District: " << tempDis.getVotersPercentage() << "%" << endl;
+				cout << "The district belongs to: " <<
+					_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader().getCitizenName() << endl;
+				//todo: find max reps num in parties array in district
+
+				_results.setPmsRepsTotalByPartyID(leftForPartyForElector[0].index, tempDis.getNumOfReps());
+				tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader()));
 			}
-
-		
-	
-			//present for each district the representatives list elected
-			int partyLeaderReps;
-			int maxRepsForPm = 0;
-			for (int k = 0; k < districtAmount; k++) {
-				cout << "The district " << _districts.getDistcritById(k+DISTRICT_ID_INIT).getName() << " Reps are: " << endl;
-				for (int l = 0; l < partiesAmount; l++) {
-					int num = countReps.getPMNumberOfRepsInDistrict(k + DISTRICT_ID_INIT, l);
-					_parties.getPartyByIndex(l).printPartyRepsFromDistrictByAmount(num, k + DISTRICT_ID_INIT);
-					// cout << "---namesOfReps---" << endl; //bug of not printing the reps... logicSize of partyrepsList is zero
-					partyLeader = &(_parties.getPartyByIndex(l).getPartyLeader());
-					partyLeaderReps = countReps.getPMNumberOfRepsInDistrict(k + DISTRICT_ID_INIT, l);
-					cout << "The Party leader " << partyLeader->getCitizenName() << " got " <<
-						partyLeaderReps << " Reps" << endl;
-					if (partyLeaderReps > maxRepsForPm) {
-						maxRepsForPm = partyLeaderReps;
-						pmWithTheMostRepsName = new char[strlen(partyLeader->getCitizenName() + 1)];
-						strcpy(pmWithTheMostRepsName, partyLeader->getCitizenName());
-					}
-
-				}
-				//district winner check:
-					//the party representativethe district belongs to
-				cout << "the Pm party with the most reps is: " << pmWithTheMostRepsName << " who gets all " <<
-					_districts.getDistcritById(k+DISTRICT_ID_INIT).getNumOfReps() << " reps " << endl;
-				countReps.setPmsRepsTotalByPartyID(partyLeader->getParty()->getPartyID(), _districts.getDistcritById(k+DISTRICT_ID_INIT).getNumOfReps());
-				_districts.getDistcritById(k + DISTRICT_ID_INIT).setLeaderInDist(partyLeader);
-				maxRepsForPm = 0;
+			for (int n = 0; n < partiesAmount; n++)
+			{
+				totalRepsForPmByID[n].index = n;
+				totalRepsForPmByID[n].repsAmount = _results.getPmsRepsTotalByPartyID(n);
 			}
+			bubbleSort(totalRepsForPmByID, partiesAmount);
 
-			/***************************************************************************************/
-			pair* pmCandidatesRepsArrSorted = new pair[partiesAmount];
-			for (int m = 0; m < partiesAmount; m++) {
-				pmCandidatesRepsArrSorted[m].index = m;
-				pmCandidatesRepsArrSorted[m].repsAmount = countReps.getPmsRepsTotalByPartyID(m);
+			for (int p = 0; p < partiesAmount; p++) 
+			{
+
+				cout << _parties.getPartyByIndex(totalRepsForPmByID[p].index).getPartyLeader().getCitizenName()
+					<< " got " << totalRepsForPmByID[p].repsAmount << " reps ";
+				cout << "his party got total amount of " << _results.getTotalPartyNumberOfVotes(p) << " votes" << endl;
+
 			}
-			bubbleSort(pmCandidatesRepsArrSorted, partiesAmount);
-			/*************************/
-
-			int totalPartyVotes = 0;
-
-			for (int i = 0; i < partiesAmount; i++) {
-				
-				//present for each party its candidate for PM, his amount of electors he got and amount of votes each party gor in all districts
-				for (int l = 0; l < partiesAmount; l++)
-					totalPartyVotes = totalPartyVotes + _results.getDistrictNumberOfVotesInParty(l, i + 100);
-				cout << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[i].index).getPartyLeader().getCitizenName() <<
-					" got total amount of " << countReps.getPmsRepsTotalByPartyID(pmCandidatesRepsArrSorted[i].index) << " reps " <<
-					endl << "His party got total amount of " << totalPartyVotes << " votes" << endl;
-			}
-			cout << "the ELECTIONS WINNER is: " << _parties.getPartyByIndex(pmCandidatesRepsArrSorted[partiesAmount-1].index).getPartyLeader().getCitizenName()
-				<< " with " << countReps.getPmsRepsTotalByPartyID(pmCandidatesRepsArrSorted[partiesAmount - 1].index) << " electors" << endl;
-
-			delete[] pmCandidatesRepsArrSorted;
-
+			delete[] leftForPartyForElector;
+			delete[] totalRepsForPmByID;
+			return true;
 		}
+
 	}
-	
+
 	void ElectionRound::swap(pair* xp, pair* yp)
 	{
 		pair temp = *xp;
@@ -338,14 +297,14 @@ namespace elec {
 	int  ElectionRound::deleteMax(double* parr, int size) {
 		int i;
 		double max = parr[0];
-		int res=0;
+		int res = 0;
 		for (i = 1; i < size; i++)
 			if (parr[i] > max)
-				res=i;
+				res = i;
 		parr[i] = 0;
 		return res;
 
-	
-	
+
+
 	}
 }
