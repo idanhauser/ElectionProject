@@ -8,8 +8,7 @@ namespace elec {
 		int parPhysSize;
 		int districtslogicSize;
 		int disPhysSize;
-//		static int _districtsAmount;
-//		static int _partiesAmount;
+
 		int** _votesByIDs; //arr of parties holding in each cell all districts votes
 		int** _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
 		int* _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING

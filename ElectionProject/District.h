@@ -18,9 +18,10 @@ namespace elec
 		char* _name;
 		CitizenList _Citizens;
 		double _votersPercentage;
-		int _electionResult;
+		int _electionResult;//roee what is that?
 		int _numOfReps;
 
+		int _numberOfVotesinDist;
 		District(const District& other);
 		const District& operator=(const District&);
 
@@ -46,6 +47,6 @@ namespace elec
 		bool setLeaderInDist(const Citizen* leader);
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
-	
+		void operator++(int);
 	};
 }

@@ -19,7 +19,7 @@ namespace elec {
 	public:
 		DistrictList();
 		~DistrictList();
-		//DistrictList(const DistrictList& other);//idan:should be in private and with friend class, but cant make it work
+
 		
 		void realloc(int new_size);
 		bool addToList(District& district);

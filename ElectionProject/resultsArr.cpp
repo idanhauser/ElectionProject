@@ -2,6 +2,8 @@
 #include "resultsArr.h"
 #include "Utils.h"
 #include "Party.h"
+#include <algorithm>
+
 namespace elec
 {
 	
@@ -38,7 +40,7 @@ namespace elec
 			delete[] _repsPartiesByID[i];
 		}
 		delete[] _repsPartiesByID;
-		delete[] _PMsRepsTotalByPartyID;
+	delete[] _PMsRepsTotalByPartyID;
 	}
 
 	void resultsArr::AddSingleVoteToArr(int party_id, int district_id, int partiesAmount, int districtsAmount)
@@ -159,7 +161,7 @@ namespace elec
 
 	bool resultsArr::AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps)
 	{
-		_repsPartiesByID[RepPartyID-PARTY_ID_INIT][DistrictID - DISTRICT_ID_INIT] = _repsPartiesByID[RepPartyID- PARTY_ID_INIT][DistrictID - DISTRICT_ID_INIT] + amountOfReps;
+		_repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] = _repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] + amountOfReps;
 		return true;
 	}
 	bool resultsArr::setpartiesAmount()
@@ -213,7 +215,7 @@ namespace elec
 
 
 	bool resultsArr::addDistrict() 
-	{ //check if delete pntrs is needed
+	{ 
 
 		for (int i = 0; i < partiesLogicSize; i++) {
 			int* districts = new int[districtslogicSize];

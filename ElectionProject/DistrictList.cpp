@@ -20,16 +20,6 @@ namespace elec {
 
 
 
-	//DistrictList::DistrictList(const DistrictList& other) :_logicSize(other._logicSize),_phySize(other._phySize), _districts(new District*[other._phySize])
-	//{
-	//	int len = other.getLogicSize();
-	//	for (int i = 0; i < len; ++i)
-	//	{
-	//		_districts[i] = other._districts[i];
-	//	}
-	//}
-
-
 	void DistrictList::realloc(int new_size)
 	{
 		District** new_memory = new District * [new_size];
@@ -71,15 +61,6 @@ namespace elec {
 
 
 
-	/*const Citizen& DistrictList::getCitizenById(int id) const
-	{
-	 Citizen* citizen;
-		for (int i = 0; i < _logicSize; ++i)
-		{
-			citizen = &_districts[i]->getCitizenById(id);
-		}
-		return  citizen;
-	}*/
 
 	bool DistrictList::isCitizenExist(int id,int & distIndex) const
 	{

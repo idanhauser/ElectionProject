@@ -36,7 +36,7 @@ int main()
 
 
 
-
+	cout << "bye" << endl;
 
 
 }
@@ -151,15 +151,21 @@ void addDistrict()
 	int numberRepresentatives;
 	cout << "Insert a district's name and a number of representatives:" << endl;
 	cin >> name >> numberRepresentatives;
-	if (!election.addNewDistrict(name, numberRepresentatives, districtId))
+	if (numberRepresentatives >= 0)
 	{
-		cout << "Error:District " << name << " wasn't added." << endl;
+		if (!election.addNewDistrict(name, numberRepresentatives, districtId))
+		{
+			cout << "Error:District " << name << " wasn't added." << endl;
+		}
+		else
+		{
+			cout << "District " << name << " added. \n And its id is " << districtId << endl;
+		}
 	}
 	else
 	{
-		cout << "District " << name << " added. \n And its id is " << districtId << endl;
+		cout << "Negative number of representatives is not allowd." << endl;
 	}
-
 }
 
 void addCitizen()

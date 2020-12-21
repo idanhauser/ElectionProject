@@ -36,7 +36,7 @@ namespace elec {
 		~ElectionRound() = default;
 
 		void printElectionDate() const;
-		bool addNewDistrict(char str[MAX_SIZE], int number_representatives,int& districtId);
+		bool addNewDistrict(const char str[MAX_SIZE], int number_representatives,int& districtId);
 
 		
 		constexpr int getYear() const
@@ -50,8 +50,8 @@ namespace elec {
 		}
 
 
-		bool addNewCitizen(char* name,int id,int birtyear,int districtId);
-		bool addNewParty(char* name, int pdId,int& partyId);
+		bool addNewCitizen(const char* name,int id,int birtyear,int districtId);
+		bool addNewParty(const char* name, int pdId,int& partyId);
 		bool addNewPartyRepresentative(int representId,int partyId,int districtId);
 		void viewAllDistricts() const;
 		void viewAllCitizens() const;
