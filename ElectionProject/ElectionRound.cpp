@@ -183,7 +183,7 @@ namespace elec {
 
 	bool ElectionRound::theResults()
 	{
-		resultsArr countReps(_parties.getLogicSize(), _districts.getLogicSize());
+//		resultsArr countReps(_parties.getLogicSize(), _districts.getLogicSize());
 		int districtAmount = _districts.getLogicSize();
 		int partiesAmount = _parties.getLogicSize();
 		int allVotesInDis = 0;

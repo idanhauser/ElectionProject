@@ -30,11 +30,11 @@ namespace elec
 	resultsArr::~resultsArr()
 	{
 		for (int i = 0; i < partiesLogicSize; i++) {
-			delete[] _votesByIDs[i];
+			delete _votesByIDs[i];
 		}
 		delete[] _votesByIDs;
-		for (int i = 0; i < partiesLogicSize; i++) {
-			delete[] _repsPartiesByID[i];
+		for (int j = 0; j < partiesLogicSize; j++) {
+			delete _repsPartiesByID[j];
 		}
 		delete[] _repsPartiesByID;
 		delete[] _PMsRepsTotalByPartyID;
@@ -93,18 +93,18 @@ namespace elec
 	void resultsArr::reallocRepsArr(int newSize)
 	{
 
-		int** newVotesByPartiesIDs = new int* [newSize];
+		int** newRepsArr = new int* [newSize];
 		for (int i = 0; i < min(newSize, parPhysSize); i++) {
-			newVotesByPartiesIDs[i] = _votesByIDs[i];
+			newRepsArr[i] = _repsPartiesByID[i];
 
 		}
 
 		if (partiesLogicSize >= 1)
 		{
-			delete[] _votesByIDs;
+			delete[] _repsPartiesByID;
 		}
 		parPhysSize = newSize;
-		_votesByIDs = newVotesByPartiesIDs;
+		_repsPartiesByID = newRepsArr;
 	}
 
 
