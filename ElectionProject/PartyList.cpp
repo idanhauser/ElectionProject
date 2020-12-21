@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 using namespace std;
 #include "Party.h"
 #include "PartyList.h"

@@ -1,3 +1,4 @@
+//code verison 2.0
 #pragma once
 namespace elec {
 	class resultsArr

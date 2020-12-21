@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #include "District.h"
 #include "Citizen.h"
 #include <iostream>
@@ -10,7 +10,7 @@ namespace elec {
 	int District::snGenerator = DISTRICT_ID_INIT;
 
 	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps),_partyLeaderInDist(nullptr)
+		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps)
 	{
 		strcpy(this->_name, name);
 	}
@@ -85,15 +85,15 @@ namespace elec {
 		return _numOfReps;
 	}
 
-	bool District::setLeaderInDist(const Citizen* leader) 
-	{
-		if(leader!=nullptr)
-		{
-			_partyLeaderInDist = leader;
-			return true;
-		}
-		return false;
-	}
+	//bool District::setLeaderInDist(const Citizen* leader) 
+	//{
+	//	if(leader!=nullptr)
+	//	{
+	//		_partyLeaderInDist = leader;
+	//		return true;
+	//	}
+	//	return false;
+	//}
 
 
 	bool District::isCitizenExist(int id) const

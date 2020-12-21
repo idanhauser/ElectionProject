@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #pragma once
 #include "resultsArr.h"
 
@@ -18,7 +18,7 @@ namespace elec {
 	
 	class ElectionRound
 	{
-	private:
+	protected:
 		int _date[8];
 		resultsArr _results;
 		DistrictList _districts;
@@ -67,4 +67,6 @@ namespace elec {
 		void bubbleSort(pair arr[], int n);
 		int  deleteMax(double* parr, int size);
 	};
+
+
 }

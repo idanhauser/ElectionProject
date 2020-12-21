@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #include "ElectionRound.h"
 #include <iostream>
 
@@ -252,7 +252,7 @@ namespace elec {
 				//todo: find max reps num in parties array in district
 
 				_results.setPmsRepsTotalByPartyID(leftForPartyForElector[0].index, tempDis.getNumOfReps());
-				tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader()));
+		//		tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader())); idan commeneted
 			}
 			for (int n = 0; n < partiesAmount; n++)
 			{

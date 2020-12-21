@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #pragma once
 #include "CitizenList.h"
 using namespace std;
@@ -20,7 +20,7 @@ namespace elec
 		double _votersPercentage;
 		int _electionResult;
 		int _numOfReps;
-		const Citizen*  _partyLeaderInDist; //todo: check if needed
+
 		District(const District& other);
 		const District& operator=(const District&);
 
