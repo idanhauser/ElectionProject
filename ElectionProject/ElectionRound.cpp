@@ -245,11 +245,22 @@ namespace elec {
 						double(_results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT)) / double(tempDis.getVotingCitizensAmountInDistrict()) * 100 << "%" << endl;
 
 				} 
-				//todo: update voters precentage in district
+				//todo: update in District the func "getVotersPercentage()"
 				cout << "Voting Citizens Precentage In The District: " << tempDis.getVotersPercentage() << "%" << endl;
+				int max = 0;
+				int leaderWithMostRepsPartyID = 0;
+				for (int p = 0; p < districtAmount; p++)
+				{
+					int curRepsAmount = _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, p + PARTY_ID_INIT);
+					if (max < curRepsAmount)
+					{
+						max = curRepsAmount;
+						leaderWithMostRepsPartyID = p + PARTY_ID_INIT;
+
+					}
+				}
 				cout << "The district belongs to: " <<
-					_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader().getCitizenName() << endl;
-				//todo: find max reps num in parties array in district
+					_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader().getCitizenName() << endl;
 
 				_results.setPmsRepsTotalByPartyID(leftForPartyForElector[0].index, tempDis.getNumOfReps());
 				tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader()));
