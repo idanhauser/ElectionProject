@@ -1,4 +1,4 @@
-//code verison 1.0
+//code verison 2.0
 #include "Utils.h"
 using namespace std;
 #include "Citizen.h"
@@ -9,15 +9,6 @@ namespace elec {
 	{
 	}
 
-
-	/*	CitizenList::CitizenList(const CitizenList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _citizens(new Citizen* [other._phySize])
-		{
-			int len = other.getLogicSize();
-			for (int i = 0; i < len; ++i)
-			{
-				_citizens[i] = other._citizens[i];
-			}
-		}*/
 
 
 
@@ -86,20 +77,6 @@ namespace elec {
 
 
 
-	//int CitizenList::isCitizenExist(int id) const
-	//{
-	//	int savePlace = -1;
-	//	for (int i = 0; i < _logicSize && savePlace == -1; ++i)
-	//	{
-	//		if (_citizens[i]->getCitizenID() == id)
-	//		{
-	//			savePlace = i;
-	//		}
-	//	}
-	//	return savePlace;
-
-	//}
-
 
 	const CitizenList& CitizenList::operator=(const CitizenList& other)
 	{
@@ -108,27 +85,6 @@ namespace elec {
 		this->_phySize = other._phySize;
 		return *this;
 	}
-	//roee
-	/*
-
-	Citizen* CitizenList::findCitizenByID(int citizenID) { //return 0 for ignoring not finding error even its not possible
-		for (int i = 0; i < getLogicSize(); i++) {
-			if (_citizens[i]->getCitizenID() == citizenID)
-				return _citizens[i];
-		}
-		return 0;
-	}
-
-	Citizen* CitizenList::getCitizenByIndex(int indx) {
-		return _citizens[indx];
-	}*/
-//*roee
-/*
-	void CitizenList::printList() {
-		for (int i = 0; i < getLogicSize(); i++)
-			cout << getCitizenByIndex(i)->getCitizenName();
-	}
-	*/
 
 
 

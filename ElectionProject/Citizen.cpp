@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #include "Citizen.h"
 
 #include "Party.h"
@@ -73,14 +73,14 @@ namespace elec
 	}
 	ostream& operator<<(ostream& os, const Citizen& citizen)
 	{
-		os << citizen._citizen_name << ", his id :" << (int)citizen._id_num << " and his year birth : " << (int)citizen._birthYear << endl;
+		os << citizen._citizen_name << ", " << (int)citizen._id_num << ", born in " << (int)citizen._birthYear << endl;
 		if (citizen._hasVoted)
 		{
-			os << " and he voted this election round." << endl;
+			os << "and he voted this election round." << endl;
 		}
 		else
 		{
-			os << " and he didn't vote this election round." << endl;
+			os << "and he didn't vote this election round." << endl;
 		}
 		return os;
 	}

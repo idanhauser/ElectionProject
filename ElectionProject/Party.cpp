@@ -1,6 +1,6 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #include "Party.h"
-
+#include <algorithm>
 #include "Citizen.h"
 #include "CitizenList.h"
 #include "Citizen.h"
@@ -23,7 +23,6 @@ namespace elec {
 	Party::~Party()
 	{
 		delete[] _partyName;
-
 	}
 
 
@@ -47,7 +46,13 @@ namespace elec {
 		return _PMCandidateID;
 	}
 
-	bool Party::addToMembers(Citizen& citizen)
+	const CitizenList& Party::getPartyMembers() const
+	{
+
+		return *_partyMembers;
+	}
+
+	bool Party::addToMembers(Citizen& citizen) 
 	{
 		return _partyMembers->addToList(citizen);
 	}
@@ -72,12 +77,12 @@ namespace elec {
 		for (int i = 0; i < amountToPrint; ++i)
 		{
 			cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
-		
+
 		}
 	}
 
 
-	bool Party::addToRepresentativesByDis(Citizen& citizen, int distIndex)
+	bool Party::addToRepresentativesByDis(Citizen& citizen, int distIndex) 
 	{
 		return  _representativesByDist[distIndex].addToList(citizen);
 	}
@@ -87,7 +92,7 @@ namespace elec {
 		return _partyLeader;
 	}
 
-	CitizenList* Party::getRepresentativesByDis()
+	CitizenList* Party::getRepresentativesByDis() const
 	{
 		return _representativesByDist;
 	}
@@ -99,25 +104,24 @@ namespace elec {
 	/// <param name="citizen">the citizen we want to add to the lists</param>
 	/// <param name="distIndex">the distcrit he represnt</param>
 	/// <returns>true if everything is ok else false </returns>
-	bool Party::addPartyMember(Citizen& citizen, int distIndex)
+	bool Party::addPartyMember( Citizen& citizen, int distIndex)
 	{
 		bool addtodis = false, addtomembers = false;
 		addtodis = addToRepresentativesByDis(citizen, distIndex);
 		addtomembers = addToMembers(citizen);
 		return addtomembers && addtodis;
 	}
-	
-	//roee
-	/*CitizenList Party::getPartyMembers()const
-	{
-		return _partyMembers;
-	}*/
+
 
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{
-		os << party._partyName << ", it's is id :" << (int)party._partyID << "  the PM Candidate ID is " << (int)party.
-			_PMCandidateID << endl;
+		os << party._partyName << ","<< (int)party._partyID << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
+			(int)party.getPartyPMCandidateID() << "." << endl << "Party members are:" << endl;
+		for (int i = 0; i < party.getPartyMembers().getLogicSize(); ++i)
+		{
+			os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
+		}
 		return os;
 	}
 }

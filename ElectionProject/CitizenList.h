@@ -1,4 +1,4 @@
-//code verison 1.0
+//code verison 2.0
 #pragma once
 #pragma  warning(disable:4996)
 
@@ -18,7 +18,7 @@ namespace elec {
 
 	public:
 		CitizenList();
-		//	CitizenList(const CitizenList& other);//idan:should be in private and with friend class, but cant make it work
+
 		const CitizenList& operator=(const CitizenList&);
 
 		~CitizenList();
@@ -30,16 +30,6 @@ namespace elec {
 		Citizen** getCitizens();
 
 
-
-	
-		
-		//int isCitizenExist(int id) const;
-		////const Citizen& getCitizenById(int id) const;
-		////Citizen& getCitizenById(int id);
-
-	
-
-		//CitizenList(Citizen* pmCandidate);
 	};
 }
 

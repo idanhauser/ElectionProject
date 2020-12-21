@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #include "District.h"
 #include "Citizen.h"
 #include <iostream>
@@ -10,7 +10,7 @@ namespace elec {
 	int District::snGenerator = DISTRICT_ID_INIT;
 
 	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps),_partyLeaderInDist(nullptr)
+		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps),_numberOfVotesinDist(0)
 	{
 		strcpy(this->_name, name);
 	}
@@ -18,7 +18,6 @@ namespace elec {
 	District::~District()
 	{
 		delete[] _name;
-		//delete[] _Citizens;//idan : im not sure
 	}
 
 	const char* District::getName() const
@@ -85,16 +84,6 @@ namespace elec {
 		return _numOfReps;
 	}
 
-	bool District::setLeaderInDist(const Citizen* leader) 
-	{
-		if(leader!=nullptr)
-		{
-			_partyLeaderInDist = leader;
-			return true;
-		}
-		return false;
-	}
-
 
 	bool District::isCitizenExist(int id) const
 	{
@@ -127,13 +116,19 @@ namespace elec {
 		return counter;
 	}
 
+	void District::operator++(int)
+	{
+		_numberOfVotesinDist++;
+		_votersPercentage = (_numberOfVotesinDist / getNumberOfCitizens()) * 100;
+	}
+
 
 	ostream& operator<<(ostream& os, const District& district)
 	{
-		os << "District " << district._name << ",its id is: " << (int)district._serialNum <<
-			"has " << district.getNumberOfCitizens() << " citizens." << endl;
-		os << "Number of representatives is : " << (double)district._numOfReps << "and the election's result is " <<
-			(int)district._electionResult << "." << endl;
+		os << "District " << district._name << ", its ID is: " << (int)district._serialNum <<" has "<< district.getNumberOfCitizens() << " citizens." << endl;
+		os << "Number of representatives is : " << (double)district._numOfReps << endl;
+		//TODO to check if the next commented line is needed
+		/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
 		
 		return os;
 	}
