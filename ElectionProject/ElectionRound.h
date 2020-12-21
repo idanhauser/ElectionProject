@@ -20,10 +20,11 @@ namespace elec {
 	{
 	protected:
 		int _date[8];
-		resultsArr _results;
+
 		DistrictList _districts;
 		PartyList _parties;
-
+		resultsArr _results;
+		
 		const ElectionRound& operator=(const ElectionRound&);
 
 	public:

@@ -12,8 +12,6 @@ namespace elec {
 		int _logicSize;
 		int _phySize;
 		District** _districts;
-
-	
 		const DistrictList& operator=(const DistrictList&);
 
 	public:

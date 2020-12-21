@@ -10,7 +10,7 @@
 using namespace std;
 
 namespace elec {
-	ElectionRound::ElectionRound(int date[8]) :_districts(DistrictList()), _parties(PartyList()),
+	ElectionRound::ElectionRound(int date[8]) :_districts(), _parties(),
 		_results(resultsArr(_parties.getLogicSize(), _districts.getLogicSize()))
 	{
 
