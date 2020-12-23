@@ -17,6 +17,9 @@ namespace elec {
 
 		~resultsArr(); 
 
+	//	friend ostream& operator<<(ostream& os, const resultsArr& results);
+
+
 		void AddSingleVoteToArr(int party_id, int district_id, int partiesAmount, int districtsAmount);
 		int getDistrictNumberOfVotesInParty( int partyID, int districtSN)const;
 
@@ -45,6 +48,8 @@ namespace elec {
 
 
 		bool isResultsAllowed()const;
+
+
 
 	};
 

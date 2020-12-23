@@ -194,8 +194,8 @@ namespace elec {
 		int leftReps;
 		pair* totalRepsForPmByID = new pair[partiesAmount];
 		if (!_results.isResultsAllowed())
-		{ //todo: need to fix
-			cout << "Sorry...Not enough details to get results" << endl;
+		{ 
+			cout << "Sorry...Not enough details to get results" << endl; //todo: ask idan what to do about it
 			return false;
 		}
 		else
@@ -208,11 +208,11 @@ namespace elec {
 					allVotesInDis = allVotesInDis + _results.getDistrictNumberOfVotesInParty(n, j + DISTRICT_ID_INIT);
 				}
 				District& tempDis = _districts.getDistcritByIndex(j);
-				cout << "----------------------------------------------------" << endl;
-				//present each district name
-				cout << "From District Name: " << tempDis.getName() << endl;
-				//num of representatives each district gives
-				cout << "with Amount Of Reps: " << tempDis.getNumOfReps() << ", each party got:" << endl;
+				//present each district 
+				//and num of representatives each district gives
+				cout << tempDis << endl;
+				//todo: move or delete
+				cout << "each party got:" << endl;
 				//CALCULATING NUMBER OF REPS FROM EACH PARTY
 
 				minVotesForRep = double(allVotesInDis) / double(tempDis.getNumOfReps());
@@ -236,17 +236,19 @@ namespace elec {
 					_results.AddToPMRepsCount(j + DISTRICT_ID_INIT, leftForPartyForElector[l].index, 1);
 				}
 				for (int m = 0; m < partiesAmount; m++) {
-					cout << _parties.getPartyByIndex(m).getPartyName() << ":" << endl;
+					cout << _parties.getPartyByIndex(m) << endl;
+					//todo: use ostream instead
 					cout << _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
 					cout << "The Reps are: " << endl;
 					//todo: fix - logicSize of representives is zero for some reason
 					_parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(_results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
 					cout << "Amount of Votes For The Party from Voting Citizens In The District: " << _results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT) << endl;
+					//todo: add to party class precentage of votes in each district and add it to operator
 					cout << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
 						double(_results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT)) / double(tempDis.getVotingCitizensAmountInDistrict()) * 100 << "%" << endl;
 
 				} 
-				//todo: update in District the func "getVotersPercentage()"
+				//todo: update operator and remove after
 				cout << "Voting Citizens Precentage In The District: " << tempDis.getVotersPercentage() << "%" << endl;
 				int max = 0;
 				int leaderWithMostRepsPartyID = 0;
@@ -260,12 +262,15 @@ namespace elec {
 
 					}
 				}
+				//todo: remove "cout" after district leader added to operator in District.h
 				cout << "The district belongs to: " <<
 					_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader().getCitizenName() << endl;
 
 				_results.setPmsRepsTotalByPartyID(leftForPartyForElector[0].index, tempDis.getNumOfReps());
-				tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leftForPartyForElector[0].index).getPartyLeader()));
+			//todo: add district leader member and than apply line
+			//	tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader()));
 			}
+			//check elections winner
 			for (int n = 0; n < partiesAmount; n++)
 			{
 				totalRepsForPmByID[n].index = n;
@@ -275,7 +280,7 @@ namespace elec {
 
 			for (int p = 0; p < partiesAmount; p++)
 			{
-
+				//todo: print winnig citizen leader using ostream
 				cout << _parties.getPartyByIndex(totalRepsForPmByID[p].index).getPartyLeader().getCitizenName()
 					<< " got " << totalRepsForPmByID[p].repsAmount << " reps ";
 				cout << "his party got total amount of " << _results.getTotalPartyNumberOfVotes(p) << " votes" << endl;
@@ -287,6 +292,13 @@ namespace elec {
 		}
 
 	}
+	//todo: fix
+	ostream& operator<<(ostream& os, const ElectionRound& electionRound) {
+	
+
+		return os;
+	}
+
 
 	void ElectionRound::swap(pair* xp, pair* yp)
 	{
@@ -319,4 +331,8 @@ namespace elec {
 
 
 	}
+
+
+
+
 }

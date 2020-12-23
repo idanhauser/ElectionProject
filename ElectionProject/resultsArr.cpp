@@ -249,4 +249,22 @@ namespace elec
 		else
 			return false;
 	}
+
+
+	//todo: fix
+	/*ostream& operator<<(ostream& os, const resultsArr& resultsArr) {
+		for (int i = 0; i < resultsArr.getdistrictsAmount(); i++)
+		{
+			os << "The District with ID: " << i + DISTRICT_ID_INIT << " got " << endl;
+			for (int j = 0; j < resultsArr.getpartiesAmount(); j++)
+			{
+				os << "from Party with ID: " << j + PARTY_ID_INIT << " - " <<
+				resultsArr.getDistrictNumberOfVotesInParty(i + PARTY_ID_INIT, j + DISTRICT_ID_INIT)<< " votes" << endl;
+
+			}
+		}
+
+		return os;
+
+	}*/
 }
