@@ -1,7 +1,7 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #include "ElectionRound.h"
 #include <iostream>
-
+#include <algorithm>
 #include "Party.h"
 
 #include "DistrictList.h"
@@ -10,7 +10,7 @@
 using namespace std;
 
 namespace elec {
-	ElectionRound::ElectionRound(int date[8]) :_districts(DistrictList()), _parties(PartyList()),
+	ElectionRound::ElectionRound(int date[8]) :_districts(), _parties(),
 		_results(resultsArr(_parties.getLogicSize(), _districts.getLogicSize()))
 	{
 
@@ -32,7 +32,7 @@ namespace elec {
 		}
 	}
 
-	bool ElectionRound::addNewDistrict(char name[MAX_SIZE], int numberResentatives, int& districtId)
+	bool ElectionRound::addNewDistrict(const char name[MAX_SIZE], int numberResentatives, int& districtId)
 	{
 		bool districtAdded = false;
 		District* dist = new District(name, numberResentatives);
@@ -48,7 +48,7 @@ namespace elec {
 	}
 
 
-	bool ElectionRound::addNewCitizen(char* name, int id, int birthyear, int districtId)
+	bool ElectionRound::addNewCitizen(const char* name, int id, int birthyear, int districtId)
 	{
 		int saveDis;
 		bool citizenAdded = false;
@@ -63,7 +63,7 @@ namespace elec {
 		return citizenAdded;
 	}
 
-	bool ElectionRound::addNewParty(char* name, int pdId, int& partyid)
+	bool ElectionRound::addNewParty(const char* name,int pdId, int& partyid)
 	{
 		int distIndex;
 
@@ -90,7 +90,7 @@ namespace elec {
 			Citizen& citizenReprenst = _districts.getDistcritByIndex(distIndex).getCitizenById(representId);
 			if (_districts.isDistcritExist(districtId) && _parties.IsPartyExist(partyId))
 			{
-				Party& currParty = _parties.getPartyByIndex(abs(partyId - PARTY_ID_INIT));
+				Party& currParty = _parties.getPartyByIndex(partyId );
 				represntAdded = currParty.addPartyMember(citizenReprenst, abs(DISTRICT_ID_INIT - districtId));
 				citizenReprenst.setParty(&currParty);
 			}
@@ -122,11 +122,11 @@ namespace elec {
 		{
 			for (int i = 0; i < len; ++i)
 			{
-				int lenofcitizen = _districts.getDistcritByIndex(i).getNumberOfCitizens();
-				if (lenofcitizen > 0)
-					cout << "The citizens who live in " << _districts.getDistcritByIndex(i).getName() << "are: " << endl;
+				int lenOfCitizen = _districts.getDistcritByIndex(i).getNumberOfCitizens();
+				if (lenOfCitizen > 0)
+					cout << "The citizens who live in " << _districts.getDistcritByIndex(i).getName() << " are: " << endl;
 
-				for (int j = 0; j < lenofcitizen; ++j)
+				for (int j = 0; j < lenOfCitizen; ++j)
 				{
 					cout << _districts.getDistcritByIndex(i).getEligibleCitizens().getCitizenByIndex(j) << endl;
 				}
@@ -160,9 +160,10 @@ namespace elec {
 	{
 		int distIndex;
 		bool isVotedCheck = true;
-		if (_districts.isCitizenExist(citizenId, distIndex))
+		if (_districts.isCitizenExist(citizenId, distIndex) && (_parties.IsPartyExist(partyId)))
 		{
-			Citizen& tempCitizen = _districts.getDistcritByIndex(distIndex).getCitizenById(citizenId);
+			District& tempDistrict = _districts.getDistcritByIndex(distIndex);
+			Citizen& tempCitizen = tempDistrict.getCitizenById(citizenId);
 			if (tempCitizen.hasVoted() == false) {
 				tempCitizen.setHasVoted(true);
 
@@ -272,7 +273,7 @@ namespace elec {
 			}
 			bubbleSort(totalRepsForPmByID, partiesAmount);
 
-			for (int p = 0; p < partiesAmount; p++) 
+			for (int p = 0; p < partiesAmount; p++)
 			{
 
 				cout << _parties.getPartyByIndex(totalRepsForPmByID[p].index).getPartyLeader().getCitizenName()

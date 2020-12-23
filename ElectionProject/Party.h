@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 #pragma once
 #include "Utils.h"
 #include "CitizenList.h"
@@ -37,13 +37,13 @@ namespace elec
 		const char* getPartyName() const;
 		const int getPartyID() const;
 		int getPartyPMCandidateID() const;
-		CitizenList getPartyMembers() const;
-		CitizenList* getRepresentativesByDis();
-		bool addPartyMember(Citizen& citizen,int distIndex);
+		const CitizenList& getPartyMembers() const;
+		CitizenList* getRepresentativesByDis() const;
+		bool addPartyMember( Citizen& citizen,int distIndex);
 		bool addToMembers( Citizen& citizen) ;
 		bool AddAnotherColumn();
 		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
-		bool addToRepresentativesByDis(Citizen& citizen, int distIndex);
+		bool addToRepresentativesByDis(Citizen& citizen, int distIndex) ;
 		Citizen& getPartyLeader() const;
 
 

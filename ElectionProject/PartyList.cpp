@@ -1,4 +1,4 @@
-﻿//code verison 1.0
+﻿//code verison 2.0
 using namespace std;
 #include "Party.h"
 #include "PartyList.h"
@@ -15,18 +15,6 @@ namespace elec {
 		}
 		delete[] _parties;
 	}
-
-/*	PartyList::PartyList(const PartyList& other) :_logicSize(other._logicSize), _phySize(other._phySize), _parties(new Party*[other._phySize])
-	{
-		int len = other.getLogicSize();
-		for (int i = 0; i < len; ++i)
-		{
-			_parties[i] = other._parties[i];
-		}
-	}
-	*/
-
-
 
 	void PartyList::realloc(int new_size)
 	{
