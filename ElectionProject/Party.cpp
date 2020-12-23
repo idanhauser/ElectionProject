@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "Citizen.h"
 #include "CitizenList.h"
-#include "Citizen.h"
+
 
 namespace elec {
 
@@ -13,7 +13,7 @@ namespace elec {
 	Party::Party(const char* partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
 		_partyName(new char[strlen(partyName) + 1]),
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
-		_partyLeader(partyLeader), _numOfDist(numOfDist)
+		_partyLeader(partyLeader), _numOfDist(numOfDist),_VotingPercentagesDistrict(new double[MAX_SIZE]),_logicSize(0),_phySize(MAX_SIZE)
 	{
 
 		strcpy(this->_partyName, partyName);
@@ -59,14 +59,31 @@ namespace elec {
 
 	bool Party::AddAnotherColumn()
 	{
-		CitizenList* new_memory = new CitizenList[_numOfDist + 1];
-		for (int i = 0; i < min(_numOfDist + 1, _numOfDist); ++i)
+		CitizenList* new_memory = new CitizenList[_numOfDist ];
+		for (int i = 0; i < min(_numOfDist , _numOfDist); ++i)
 		{
 			new_memory[i] = (_representativesByDist[i]);
 		}
 		_representativesByDist = new_memory;
-		_numOfDist++;
+
 		return true;
+	}
+
+	bool Party::addDistToArr()
+	{
+		if (_logicSize == _phySize)
+		{
+			realloc(_phySize * 2);
+
+		}
+		_VotingPercentagesDistrict[_numOfDist] = 0;
+		return true;
+	}
+
+	bool Party::updateParties()
+	{
+		_numOfDist++;
+		return AddAnotherColumn() && addDistToArr();
 	}
 
 
@@ -92,6 +109,16 @@ namespace elec {
 		return _partyLeader;
 	}
 
+	double Party::getVotingPercentagesByDistcritIdx(int index) const
+	{
+		return _VotingPercentagesDistrict[index];
+	}
+
+	void Party::addVotingToPartyFromDistIdx(int index)
+	{
+		_VotingPercentagesDistrict[index]++;
+	}
+
 	CitizenList* Party::getRepresentativesByDis() const
 	{
 		return _representativesByDist;
@@ -112,7 +139,24 @@ namespace elec {
 		return addtomembers && addtodis;
 	}
 
+	void Party::realloc(int new_size)
+	{
+		double* new_memory = new double[new_size];
 
+		for (int i = 0; i < min(new_size, _phySize); ++i)
+		{
+			new_memory[i] = _VotingPercentagesDistrict[i];
+		}
+		if (_logicSize >= 1)
+		{
+			delete[] _VotingPercentagesDistrict;
+		}
+
+		_phySize = new_size;
+		_VotingPercentagesDistrict = new_memory;
+	}
+
+	
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{

@@ -40,7 +40,7 @@ namespace elec {
 		districtAdded = _districts.addToList(*dist);
 		for (int i = 0; i < _parties.getLogicSize(); ++i)
 		{
-			_parties.getPartyByIndex(i).AddAnotherColumn();
+			_parties.getPartyByIndex(i).updateParties();
 		}
 		_results.addDistrict();
 		_results.setdistrictsAmount();

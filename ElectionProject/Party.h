@@ -17,9 +17,19 @@ namespace elec
 		CitizenList *_partyMembers;
 		CitizenList* _representativesByDist;
 		Citizen& _partyLeader;
+		int _numOfDist;
+		double* _VotingPercentagesDistrict;
+		int _logicSize;
+		int _phySize;
+
+		void realloc(int new_size);
 		Party(const Party& other);
 		const Party& operator=(const Party&);
-		int _numOfDist;
+
+		bool AddAnotherColumn();
+		bool addDistToArr();
+		
+		
 	public:
 		Party() = delete;
 		Party(const char* partyName, int PMCandidateID, int numOfDist,Citizen& partyLeader);
@@ -41,12 +51,13 @@ namespace elec
 		CitizenList* getRepresentativesByDis() const;
 		bool addPartyMember( Citizen& citizen,int distIndex);
 		bool addToMembers( Citizen& citizen) ;
-		bool AddAnotherColumn();
+
+		bool updateParties();
 		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex) ;
 		Citizen& getPartyLeader() const;
-
-
+		double getVotingPercentagesByDistcritIdx(int index) const;
+		void addVotingToPartyFromDistIdx(int index);
 
 		
 	};

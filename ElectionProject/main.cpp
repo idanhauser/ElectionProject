@@ -22,9 +22,9 @@ void voting();
 void results();
 
 
+void StartMenu();
 
-
-
+bool leavsssse = false;
 int main()
 {
 
@@ -32,7 +32,8 @@ int main()
 	cout << "Election ";
 	election.printElectionDate();
 	cout << endl << "-------------" << endl;
-	showMainMenu();
+	StartMenu();
+
 
 
 
@@ -40,6 +41,52 @@ int main()
 
 
 }
+
+void StartMenu()
+{
+	short userChoise;
+	Start_MenuChoices choice = Start_MenuChoices::startNewElectionRound;
+	while (choice != Start_MenuChoices::exit_menu && !leavsssse)
+	{
+		cout << "Main Election Menu:" << endl;
+		cout << "Press 1 to start election round" << endl;
+		cout << "Press 2 to load election round" << endl;
+		cout << "Press 3 to exit" << endl;
+
+
+		cin >> userChoise;
+		choice = static_cast<Start_MenuChoices>(userChoise);
+		switch (choice)
+		{
+		case Start_MenuChoices::startNewElectionRound:
+			cout << endl;
+			cout << "-------------" << endl;
+			cout << "start New Election Round" << endl;
+			cout << "-------------" << endl;
+			showMainMenu();
+			cout << endl;
+			break;
+		case Start_MenuChoices::loadElection:
+			cout << endl;
+			cout << "-------------" << endl;
+			cout << "Load election round from file" << endl;
+			cout << "-------------" << endl;
+			//loadElectionFromFile();
+			cout << endl;
+			break;
+		case Start_MenuChoices::exit_menu:
+			cout << "Bye-bye." << endl;
+			break;
+		default:
+			cout << "Not a Valid Choice. \n Try again";
+
+			cout << endl;
+			break;
+		}
+	}
+}
+
+
 
 void showMainMenu()
 {
@@ -133,6 +180,7 @@ void showMainMenu()
 			break;
 		case Menu_Choices::exit_menu:
 			cout << "Bye-bye." << endl;
+			leavsssse = true;
 			break;
 		default:
 			cout << "Not a Valid Choice. \n Try again";
@@ -267,4 +315,6 @@ void results()
 {
 	election.theResults();
 }
+
+
 

@@ -15,6 +15,7 @@ namespace elec
 	const int PARTY_ID_INIT = 0;
 	const int MAX_SIZE = 1024;
 
+	
 	enum class Menu_Choices
 	{
 		addDistrict = 1,
@@ -30,6 +31,12 @@ namespace elec
 	};
 
 
+	enum class Start_MenuChoices
+	{
+		startNewElectionRound=1,
+		loadElection,
+		exit_menu
+	};
 
 
 }
