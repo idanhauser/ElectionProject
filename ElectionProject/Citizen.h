@@ -18,7 +18,6 @@ namespace elec
 		const Party* _party;
 		//reference to an existing district 
 		const District& _district;
-		bool setDistrict(District& dist);
 		
 		Citizen(const Citizen& other);
 		const Citizen& operator=(const Citizen&);
