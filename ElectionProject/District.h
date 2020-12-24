@@ -36,6 +36,7 @@ namespace elec
 
 		const CitizenList& getEligibleCitizens() const;
 		const char* getName() const;
+		const int getVotersPrecentage() const;
 		double getVotersPercentage() const;
 		CitizenList getElectionResults()const;
 		int getSerialNum() const;
@@ -44,9 +45,10 @@ namespace elec
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
 		int getNumOfReps() const;
-		bool setLeaderInDist(const Citizen* leader);
+		bool settVotersPrecentage(const int num);
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
 		void operator++(int);
+		
 	};
 }

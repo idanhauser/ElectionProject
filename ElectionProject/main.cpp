@@ -266,5 +266,8 @@ void voting()
 void results()
 {
 	election.theResults();
+	
+
+
 }
 

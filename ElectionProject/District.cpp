@@ -116,6 +116,15 @@ namespace elec {
 		return counter;
 	}
 
+	bool  District::settVotersPrecentage(const int num) {
+		_votersPercentage = num;
+		return true;
+	}
+
+	const int  District::getVotersPrecentage() const {
+		return _votersPercentage;
+	}
+
 	void District::operator++(int)
 	{
 		_numberOfVotesinDist++;
@@ -127,6 +136,7 @@ namespace elec {
 	{
 		os << "District " << district._name << ", its ID is: " << (int)district._serialNum <<" has "<< district.getNumberOfCitizens() << " citizens." << endl;
 		os << "Number of representatives is : " << (double)district._numOfReps << endl;
+		os << "Precentage of voters: " << district.getVotersPercentage() << "%" << endl;
 		//TODO to check if the next commented line is needed
 		/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
 		

@@ -24,7 +24,9 @@ namespace elec {
 		DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
-		
+
+
+
 		const ElectionRound& operator=(const ElectionRound&);
 
 	public:
@@ -67,6 +69,15 @@ namespace elec {
 		void swap(pair* xp, pair* yp);
 		void bubbleSort(pair arr[], int n);
 		int  deleteMax(double* parr, int size);
+	
+	
+		bool calcVotesInDistrictByDistrictID(int districtID);
+		bool setWinnerInUnifiedDistrictByDistrictID(int districtID);
+		bool checkElectionsWinner();
+	
+	
+	
+	
 	};
 
 
