@@ -14,7 +14,7 @@ namespace elec
 	const int DISTRICT_ID_INIT = 100;
 	const int PARTY_ID_INIT = 0;
 	const int MAX_SIZE = 1024;
-
+	const int DATE_SIZE = 8;
 	
 	enum class Menu_Choices
 	{

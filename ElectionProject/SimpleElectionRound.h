@@ -6,11 +6,15 @@ namespace elec
 {
 
 
-	class SimpleElctionRound :public ElectionRound
+	class SimpleElectionRound :public ElectionRound
 	{
-		int _numOfRep;
 	public:
 
-		explicit SimpleElctionRound(int date[8],int numOfReps);
+		int _numOfReps;
+	public:
+		explicit SimpleElectionRound(int date[DATE_SIZE],int num_of_rep);
+		int getNumOfReps() const;
+		virtual bool addNewDistrict(const char str[MAX_SIZE], int number_representatives, int& districtId) override;
+		virtual ~SimpleElectionRound() override;
 	};
 }

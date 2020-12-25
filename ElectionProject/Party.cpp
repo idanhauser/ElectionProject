@@ -26,8 +26,8 @@ namespace elec {
 	}
 
 
-	bool Party::setPMCandidateID(int idnum) {
-		_PMCandidateID = idnum;
+	bool Party::setPMCandidateID(int idNum) {
+		_PMCandidateID = idNum;
 		return true;
 	}
 

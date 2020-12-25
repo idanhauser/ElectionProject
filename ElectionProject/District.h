@@ -29,22 +29,21 @@ namespace elec
 	
 		District() = delete;///we delete default constructor
 		District(const char* name, int numOfReps);
-		~District();
+		virtual ~District();
 		friend ostream& operator<<(ostream& os, const District& district);
 		//friend class CitizenList;
 
 
-		const CitizenList& getEligibleCitizens() const;
-		const char* getName() const;
-		double getVotersPercentage() const;
+		 const CitizenList& getEligibleCitizens() const;
+		 const char* getName() const ;
+		 double getVotersPercentage() const;
 		CitizenList getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
 		bool addCitizen(Citizen* citz);
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
-		int getNumOfReps() const;
-		bool setLeaderInDist(const Citizen* leader);
+		virtual int getNumOfReps() const;
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
 		void operator++(int);

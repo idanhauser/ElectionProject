@@ -10,19 +10,20 @@
 using namespace std;
 
 namespace elec {
-	ElectionRound::ElectionRound(int date[8]) :_districts(), _parties(),
+	ElectionRound::ElectionRound(int date[DATE_SIZE]) :_districts(), _parties(),
 		_results(resultsArr(_parties.getLogicSize(), _districts.getLogicSize()))
 	{
 
-		for (int i = 0; i < 8; ++i)
+		for (int i = 0; i < DATE_SIZE; ++i)
 		{
 			this->_date[i] = date[i];
 		}
 	}
 
+
 	void ElectionRound::printElectionDate() const
 	{
-		for (int i = 0; i < 8; ++i)
+		for (int i = 0; i < DATE_SIZE; ++i)
 		{
 			cout << static_cast<char>(_date[i] + '0');
 			if (i == 1 || i == 3)
@@ -32,20 +33,10 @@ namespace elec {
 		}
 	}
 
-	bool ElectionRound::addNewDistrict(const char name[MAX_SIZE], int numberResentatives, int& districtId)
-	{
-		bool districtAdded = false;
-		District* dist = new District(name, numberResentatives);
-		districtId = dist->getSerialNum();
-		districtAdded = _districts.addToList(*dist);
-		for (int i = 0; i < _parties.getLogicSize(); ++i)
-		{
-			_parties.getPartyByIndex(i).updateParties();
-		}
-		_results.addDistrict();
-		_results.setdistrictsAmount();
-		return districtAdded;
-	}
+	//bool ElectionRound::addNewDistrict(const char name[MAX_SIZE], int numberResentatives, int& districtId)
+	//{
+
+	//}
 
 
 	bool ElectionRound::addNewCitizen(const char* name, int id, int birthyear, int districtId)
@@ -63,7 +54,7 @@ namespace elec {
 		return citizenAdded;
 	}
 
-	bool ElectionRound::addNewParty(const char* name,int pdId, int& partyid)
+	bool ElectionRound::addNewParty(const char* name,int pdId, int& partyId)
 	{
 		int distIndex;
 
@@ -73,7 +64,7 @@ namespace elec {
 		{
 			leader = &(_districts.getDistcritByIndex(distIndex).getCitizenById(pdId));
 			Party* par = new Party(name, pdId, _districts.getLogicSize(), *leader);
-			partyid = par->getPartyID();
+			partyId = par->getPartyID();
 			leader->setParty(par);
 			partyAdded = _parties.addToList(*par);
 			_results.addParty();

@@ -24,4 +24,8 @@ namespace elec
 		}
 		return false;
 	}
+
+	UnifiedDistrict::~UnifiedDistrict()
+	{
+	}
 }

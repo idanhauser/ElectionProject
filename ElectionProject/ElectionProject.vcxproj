@@ -143,6 +143,7 @@
     <ClCompile Include="District.cpp" />
     <ClCompile Include="DistrictList.cpp" />
     <ClCompile Include="DividedDistrict.cpp" />
+    <ClCompile Include="RegularElectionRound.cpp" />
     <ClCompile Include="SimpleElectionRound.cpp" />
     <ClCompile Include="UnifiedDistrict.cpp" />
     <ClCompile Include="resultsArr.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="District.h" />
     <ClInclude Include="DistrictList.h" />
     <ClInclude Include="DividedDistrict.h" />
+    <ClInclude Include="RegularElectionRound.h" />
     <ClInclude Include="SimpleElectionRound.h" />
     <ClInclude Include="UnifiedDistrict.h" />
     <ClInclude Include="resultsArr.h" />

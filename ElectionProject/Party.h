@@ -38,7 +38,7 @@ namespace elec
 		friend ostream& operator<<(ostream& os, const Party& party);
 		friend class PartyList;
 	
-		bool setPMCandidateID(int idnum);
+		bool setPMCandidateID(int idNum);
 
 		bool addPartyMembers(Citizen* citizen);
 

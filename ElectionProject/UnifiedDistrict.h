@@ -15,7 +15,8 @@ namespace elec
 
 		Citizen* getPartyLeader() const;
 		bool setLeader(const Citizen* leader);
-		
+
+		~UnifiedDistrict() override;
 	};
 
 }

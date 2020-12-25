@@ -15,7 +15,7 @@ using namespace std;
 namespace elec {
 	class DistrictList;
 	class PartyList;
-	
+
 	class ElectionRound
 	{
 	protected:
@@ -24,7 +24,7 @@ namespace elec {
 		DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
-		
+
 		const ElectionRound& operator=(const ElectionRound&);
 
 	public:
@@ -33,27 +33,27 @@ namespace elec {
 			double repsAmount;
 		};
 		ElectionRound() = delete;
-		ElectionRound(int date[8]);
-		~ElectionRound() = default;
+		ElectionRound(int date[DATE_SIZE]);
+		virtual ~ElectionRound() = default;
 
 		void printElectionDate() const;
-		bool addNewDistrict(const char str[MAX_SIZE], int number_representatives,int& districtId);
+		virtual	bool addNewDistrict(const char str[MAX_SIZE], int number_representatives, int& districtId) = 0;
 
-		
+
 		constexpr int getYear() const
 		{
-			int year = _date[7];
-			year += _date[6] * 10;
-			year += _date[5] * 100;
-			year += _date[4] * 1000;
+			int year = _date[DATE_SIZE - 1];
+			year += _date[DATE_SIZE - 2] * 10;
+			year += _date[DATE_SIZE - 3] * 100;
+			year += _date[DATE_SIZE - 4] * 1000;
 			return year;
 
 		}
 
 
-		bool addNewCitizen(const char* name,int id,int birtyear,int districtId);
-		bool addNewParty(const char* name, int pdId,int& partyId);
-		bool addNewPartyRepresentative(int representId,int partyId,int districtId);
+		bool addNewCitizen(const char* name, int id, int birthyear, int districtId);
+		bool addNewParty(const char* name, int pdId, int& partyId);
+		bool addNewPartyRepresentative(int representId, int partyId, int districtId);
 		void viewAllDistricts() const;
 		void viewAllCitizens() const;
 		void viewAllParties() const;
@@ -62,7 +62,7 @@ namespace elec {
 
 
 
-		
+
 
 		void swap(pair* xp, pair* yp);
 		void bubbleSort(pair arr[], int n);
