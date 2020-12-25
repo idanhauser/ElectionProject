@@ -39,6 +39,8 @@ namespace elec
 		friend class PartyList;
 	
 		bool setPMCandidateID(int idnum);
+		bool setVotingPercentagesDistrict(double num, int districtID);
+		bool getVotingPercentagesDistrict(int districtID);
 
 		bool addPartyMembers(Citizen* citizen);
 

@@ -156,7 +156,17 @@ namespace elec {
 		_VotingPercentagesDistrict = new_memory;
 	}
 
-	
+	bool  Party::setVotingPercentagesDistrict(double num, int districtID)
+	{
+		_VotingPercentagesDistrict[districtID - DISTRICT_ID_INIT] = num;
+		return true;
+	}
+
+	bool  Party::getVotingPercentagesDistrict(int districtID)
+	{
+		return _VotingPercentagesDistrict[districtID - DISTRICT_ID_INIT];
+	}
+
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{

@@ -24,7 +24,7 @@ namespace elec {
 		DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
-
+		int choice;
 
 
 		const ElectionRound& operator=(const ElectionRound&);
@@ -73,9 +73,11 @@ namespace elec {
 	
 		bool calcVotesInDistrictByDistrictID(int districtID);
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID);
-		bool checkElectionsWinner();
-	
-	
+		bool checkElectionsWinner(int* partiesIndexes);
+		bool checkDistrictWinner(int districtID, int* partiesIndexes);
+
+		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
+
 	
 	
 	};

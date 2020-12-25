@@ -138,6 +138,10 @@ namespace elec
 		return _repsPartiesByID[partyID][districtID - DISTRICT_ID_INIT];
 	}
 	
+	int* resultsArr::getPMNRepsArrInDistrict(int partyID)
+	{
+		return _repsPartiesByID[partyID];
+	}
 	int resultsArr::getPmsRepsTotalByDistrictID(int index) const
 	{
 		int res = 0;
@@ -153,6 +157,13 @@ namespace elec
 	}
 
 	bool resultsArr::setPmsRepsTotalByPartyID(int partyID, int reps)
+	{
+		_PMsRepsTotalByPartyID[partyID] = _PMsRepsTotalByPartyID[partyID] + reps;
+		return true;
+	}
+
+
+	bool resultsArr::addToPmsRepsTotalByPartyID(int partyID, int reps)
 	{
 		_PMsRepsTotalByPartyID[partyID] = _PMsRepsTotalByPartyID[partyID] + reps;
 		return true;

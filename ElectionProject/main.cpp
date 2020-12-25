@@ -4,6 +4,9 @@
 #include <iostream>
 #include "Utils.h"
 #include "ElectionRound.h"
+
+#include "SimpleElectionRound.h"
+#include "SimpleElectionRound.h"
 using namespace std;
 
 using namespace elec;
@@ -311,8 +314,15 @@ void voting()
 
 }
 
-void results()
+void results(Start_MenuChoices choice)
 {
+	//todo: if choice == 9 -> print, if choice == 11 -> use operator as below to save in file
+	// ofstream myfile;
+	//myfile.open("name.txt");
+	//myfile << election;
+	//myfile.close();
+	cout << election << endl;
+	//todo: fix - not sure we need this:
 	election.theResults();
 	
 
