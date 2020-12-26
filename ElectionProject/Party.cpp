@@ -1,6 +1,8 @@
 ﻿//code verison 2.0
 #include "Party.h"
 #include <algorithm>
+#include <fstream>
+
 #include "Citizen.h"
 #include "CitizenList.h"
 
@@ -11,18 +13,18 @@ namespace elec {
 
 
 	Party::Party(const char* partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
-		_partyName(new char[strlen(partyName) + 1]),
+		_name(new char[strlen(partyName) + 1]),
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
 		_partyLeader(partyLeader), _numOfDist(numOfDist),_VotingPercentagesDistrict(new double[MAX_SIZE]),_logicSize(0),_phySize(MAX_SIZE)
 	{
 
-		strcpy(this->_partyName, partyName);
+		strcpy(this->_name, partyName);
 
 	}
 
 	Party::~Party()
 	{
-		delete[] _partyName;
+		delete[] _name;
 	}
 
 
@@ -38,7 +40,7 @@ namespace elec {
 
 	const char* Party::getPartyName() const
 	{
-		return _partyName;
+		return _name;
 	}
 
 	int Party::getPartyPMCandidateID() const
@@ -109,7 +111,7 @@ namespace elec {
 		return _partyLeader;
 	}
 
-	double Party::getVotingPercentagesByDistcritIdx(int index) const
+	double Party::getVotingPercentagesByDistrictIdx(int index) const
 	{
 		return _VotingPercentagesDistrict[index];
 	}
@@ -119,17 +121,75 @@ namespace elec {
 		_VotingPercentagesDistrict[index]++;
 	}
 
+	void Party::save(ofstream& outFile) const
+	{
+		int numOfObj=0;
+		int nameLen = strlen(_name) + 1;
+		//save name of dist:
+			//saving name len
+		outFile.write(rcastcc(&nameLen), sizeof(int));
+		//saving name
+		outFile.write(rcastcc(_name), sizeof(char) * nameLen);
+		//saving _PMCandidateID
+		outFile.write(rcastcc(&_PMCandidateID), sizeof(int));
+		//saving _numOfDist
+		outFile.write(rcastcc(&_numOfDist), sizeof(int));
+		//saving _phySize
+		outFile.write(rcastcc(&_phySize), sizeof(int));
+		//saving _logicSize
+		outFile.write(rcastcc(&_logicSize), sizeof(int));
+		//saving double arr:
+		for (int i = 0; i < _logicSize; ++i)
+		{
+			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
+		}
+		//Save _partyMembers list:
+			//save number of objects:
+		numOfObj = _partyMembers->getLogicSize();
+			//saving to file num of party members:
+		outFile.write(rcastcc(&numOfObj), sizeof(int));
+			//saving party members ids
+		for (int i = 0; i < numOfObj; ++i)
+		{
+			int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
+			outFile.write(rcastcc(&represntId), sizeof(int));
+		}
+		//Save _representativesByDist list:
+			//save number of objects(=cols in arr):
+		numOfObj = _representativesByDist->getLogicSize();
+			//saving to file num of cols in arr:
+		outFile.write(rcastcc(&numOfObj), sizeof(int));
+			//saving to file num of cols in arr:
+		for (int i = 0; i < numOfObj; ++i)
+		{
+			int numOfRepsDist = _representativesByDist[i].getLogicSize();
+				//saving the number of repsInDist[i]:
+			outFile.write(rcastcc(&numOfRepsDist), sizeof(int));
+				//saving party members ids
+			for (int j = 0; j < numOfRepsDist; ++j)
+			{
+				int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
+				outFile.write(rcastcc(&represntId), sizeof(int));
+			}
+		}
+		
+
+
+		
+		
+	}
+
 	CitizenList* Party::getRepresentativesByDis() const
 	{
 		return _representativesByDist;
 	}
 
 	/// <summary>
-	/// adding a citizen as a party memebr, adds to the party memeber list and to the
-	/// Representatives list By the distcrit they represnt.
+	/// adding a citizen as a party member, adds to the party member list and to the
+	/// Representatives list By the district they represnt.
 	/// </summary>
 	/// <param name="citizen">the citizen we want to add to the lists</param>
-	/// <param name="distIndex">the distcrit he represnt</param>
+	/// <param name="distIndex">the district he represnt</param>
 	/// <returns>true if everything is ok else false </returns>
 	bool Party::addPartyMember( Citizen& citizen, int distIndex)
 	{
@@ -160,7 +220,7 @@ namespace elec {
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{
-		os << party._partyName << ","<< (int)party._partyID << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
+		os << party._name << ","<< (int)party._partyID << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
 			(int)party.getPartyPMCandidateID() << "." << endl << "Party members are:" << endl;
 		for (int i = 0; i < party.getPartyMembers().getLogicSize(); ++i)
 		{

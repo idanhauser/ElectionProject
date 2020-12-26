@@ -10,11 +10,12 @@ namespace elec
 	class Citizen
 	{
 	private:
-		char* _citizen_name;
-		int _id_num;
+		char* _name;
+		int _idNum;
 		int _birthYear;
 		int _districtNum;
 		bool _hasVoted;
+		//if citizen is also represnt
 		const Party* _party;
 		//reference to an existing district 
 		const District& _district;
@@ -41,7 +42,11 @@ namespace elec
 		bool hasVoted()const;
 		const Party* getParty() const;
 		const District& getDistrict() const;
-
+		/// <summary>
+		/// Save citizen into file
+		/// </summary>
+		/// <param name="outFile">the file we write to</param>
+		void save(ofstream& outFile) const;
 	};
 
 

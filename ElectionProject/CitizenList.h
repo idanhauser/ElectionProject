@@ -29,7 +29,6 @@ namespace elec {
 		Citizen& getCitizenByIndex(int index);
 		Citizen** getCitizens();
 
-
 	};
 }
 

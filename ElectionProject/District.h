@@ -26,7 +26,7 @@ namespace elec
 		const District& operator=(const District&);
 
 	public:
-	
+
 		District() = delete;///we delete default constructor
 		District(const char* name, int numOfReps);
 		virtual ~District();
@@ -34,9 +34,9 @@ namespace elec
 		//friend class CitizenList;
 
 
-		 const CitizenList& getEligibleCitizens() const;
-		 const char* getName() const ;
-		 double getVotersPercentage() const;
+		const CitizenList& getEligibleCitizens() const;
+		const char* getName() const;
+		double getVotersPercentage() const;
 		CitizenList getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
@@ -47,5 +47,10 @@ namespace elec
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
 		void operator++(int);
+		/// <summary>
+		/// saving the citizens in the list
+		/// </summary>
+		/// <param name="outFile">the file we want to write to</param>
+		void save(ofstream& outFile) const;
 	};
 }

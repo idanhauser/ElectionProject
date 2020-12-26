@@ -1,5 +1,8 @@
 ﻿//code verison 2.0
 #include "District.h"
+
+#include <fstream>
+
 #include "Citizen.h"
 #include <iostream>
 #include "CitizenList.h"
@@ -120,6 +123,35 @@ namespace elec {
 	{
 		_numberOfVotesinDist++;
 		_votersPercentage = (_numberOfVotesinDist / getNumberOfCitizens()) * 100;
+	}
+
+	void District::save(ofstream& outFile) const
+	{
+		int numOfElements=0;
+		int nameLen = strlen(_name) + 1;
+		//save name of dist:
+			//saving name len
+		outFile.write(rcastcc(&nameLen), sizeof(int));
+			//saving name
+		outFile.write(rcastcc(_name), sizeof(char) * nameLen);
+		//saving _votersPercentage
+		outFile.write(rcastcc(&_votersPercentage), sizeof(double));
+		//saving _electionResult
+		outFile.write(rcastcc(&_electionResult), sizeof(int));
+		//saving _numOfReps
+		outFile.write(rcastcc(&_numOfReps), sizeof(int));
+		//saving _numberOfVotesinDist
+		outFile.write(rcastcc(&_numberOfVotesinDist), sizeof(int));
+		//save citizens list:
+		numOfElements = _Citizens.getLogicSize();
+			//saving citizens list's len
+		outFile.write(rcastcc(&numOfElements), sizeof(int));
+			//saving citizens:
+		for (int i = 0; i < numOfElements; ++i)
+		{
+			_Citizens.getCitizenByIndex(i).save(outFile);
+		}
+			
 	}
 
 

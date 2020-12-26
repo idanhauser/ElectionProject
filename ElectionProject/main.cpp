@@ -22,7 +22,7 @@ void viewCitizens();
 void viewParties();
 void voting();
 void results();
-
+void saveElections();
 
 void StartMenu();
 
@@ -139,6 +139,8 @@ void initElection()
 }
 
 
+
+
 void showMainMenu()
 {
 	short userChoise;
@@ -232,6 +234,20 @@ void showMainMenu()
 		case Menu_Choices::exit_menu:
 			cout << "Bye-bye." << endl;
 			isExit = true;
+			break;
+		case Menu_Choices::saveElection:
+			cout << "-------------" << endl;
+			cout << "Save Election" << endl;
+			cout << "-------------" << endl;
+			saveElections();
+			cout << endl;
+			break;
+		case Menu_Choices::loadElection:
+			cout << "-------------" << endl;
+			cout << "Load Election" << endl;
+			cout << "-------------" << endl;
+			//results();TODO
+			cout << endl;
 			break;
 		default:
 			cout << "Not a Valid Choice. \n Try again";
@@ -400,6 +416,15 @@ void voting()
 void results()
 {
 	election->theResults();
+	cout << election;
+}
+
+void saveElections()
+{
+	char name[MAX_SIZE];
+	cout << "Enter name of file to save" << endl;
+	cin >> name;
+	election->save(name);
 }
 
 

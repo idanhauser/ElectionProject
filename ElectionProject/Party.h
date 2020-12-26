@@ -12,9 +12,9 @@ namespace elec
 		static int pdGenerator;
 
 		int _partyID;
-		char* _partyName;
+		char* _name;
 		int _PMCandidateID;
-		CitizenList *_partyMembers;
+		CitizenList*_partyMembers;
 		CitizenList* _representativesByDist;
 		Citizen& _partyLeader;
 		int _numOfDist;
@@ -36,6 +36,7 @@ namespace elec
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
+
 		friend class PartyList;
 	
 		bool setPMCandidateID(int idNum);
@@ -56,9 +57,9 @@ namespace elec
 		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex) ;
 		Citizen& getPartyLeader() const;
-		double getVotingPercentagesByDistcritIdx(int index) const;
+		double getVotingPercentagesByDistrictIdx(int index) const;
 		void addVotingToPartyFromDistIdx(int index);
-
+		void save( ofstream& outFile) const;
 		
 	};
 }

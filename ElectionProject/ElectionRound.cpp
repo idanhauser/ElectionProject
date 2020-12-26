@@ -2,6 +2,8 @@
 #include "ElectionRound.h"
 #include <iostream>
 #include <algorithm>
+#include <fstream>
+
 #include "Party.h"
 
 #include "DistrictList.h"
@@ -32,12 +34,6 @@ namespace elec {
 			}
 		}
 	}
-
-	//bool ElectionRound::addNewDistrict(const char name[MAX_SIZE], int numberResentatives, int& districtId)
-	//{
-
-	//}
-
 
 	bool ElectionRound::addNewCitizen(const char* name, int id, int birthyear, int districtId)
 	{
@@ -283,6 +279,35 @@ namespace elec {
 		}
 
 	}
+
+	void ElectionRound::save(const char fileName[MAX_SIZE]) const
+	{
+		int numofobjects;
+		ofstream outFile(fileName, ios::binary | ios::trunc);
+
+		//Saving Date:
+		outFile.write(rcastcc(_date), sizeof(int) * DATE_SIZE);
+		// the number of dists:		
+		numofobjects = _districts.getLogicSize();
+			//number of dists:
+		outFile.write(rcastcc(&numofobjects), sizeof(int));
+		//saving the districts:
+		for (int i = 0; i < numofobjects; ++i)
+		{
+			_districts.getDistcritByIndex(i).save(outFile);
+		}
+		// the number of parties:
+		numofobjects = _parties.getLogicSize();
+			//Saving number of dists:
+		outFile.write(rcastcc(&numofobjects), sizeof(int));
+		//Saving the parties:
+		for (int i = 0; i < numofobjects; ++i)
+		{
+			_parties.getPartyByIndex(i).save(outFile);
+		}
+		outFile.close();
+	}
+
 	//todo: fix
 	ostream& operator<<(ostream& os, const ElectionRound& electionRound) {
 	

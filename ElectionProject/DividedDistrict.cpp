@@ -11,3 +11,5 @@ elec::DividedDistrict::~DividedDistrict()
 {
 	delete[] _numOfRepsForParty;
 }
+
+

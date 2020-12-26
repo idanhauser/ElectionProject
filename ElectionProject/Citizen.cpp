@@ -1,21 +1,24 @@
 ﻿//code verison 2.0
 #include "Citizen.h"
 
+#include <fstream>
+
+
 #include "Party.h"
 
 namespace elec
 {
 	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
-		const District& district) : _citizen_name(new char[strlen(citizen_name)+1]), _id_num(id_num),
+		const District& district) : _name(new char[strlen(citizen_name)+1]), _idNum(id_num),
 		_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false),
 		_party(nullptr), _district(district)
 	{
-		strcpy(this->_citizen_name, citizen_name);
+		strcpy(this->_name, citizen_name);
 	}
 
 	Citizen::~Citizen()
 	{
-		delete[] _citizen_name;
+		delete[] _name;
 	}
 
 
@@ -35,13 +38,13 @@ namespace elec
 
 	const char* Citizen::getCitizenName() const
 	{
-		return _citizen_name;
+		return _name;
 
 	}
 
 	const int Citizen::getCitizenID() const
 	{
-		return _id_num;
+		return _idNum;
 
 	}
 
@@ -71,9 +74,37 @@ namespace elec
 	{
 		return _district;
 	}
+
+	void Citizen::save(ofstream& outFile) const
+	{
+		int isParty=-1;
+		int numOfElements = 0;
+		int nameLen = strlen(_name) + 1;
+		//save name of dist:
+			//saving name len
+		outFile.write(rcastcc(&nameLen), sizeof(int));
+		//saving name
+		outFile.write(rcastcc(_name), sizeof(char) * nameLen);
+		//saving _idNum
+		outFile.write(rcastcc(&_idNum), sizeof(int));
+		//saving _birthYear
+		outFile.write(rcastcc(&_birthYear), sizeof(int));
+		//saving _districtNum
+		outFile.write(rcastcc(&_districtNum), sizeof(int));
+		//saving _hasVoted
+		outFile.write(rcastcc(&_hasVoted), sizeof(bool));
+		//saving _party Id
+		if(_party!=__nullptr)
+		{
+			isParty = _party->getPartyID();
+		}
+		//if the citizen also represnt a party we save the party's ID, else we save -1 for nullptr
+		outFile.write(rcastcc(&isParty), sizeof(int));
+	}
+
 	ostream& operator<<(ostream& os, const Citizen& citizen)
 	{
-		os << citizen._citizen_name << ", " << (int)citizen._id_num << ", born in " << (int)citizen._birthYear << endl;
+		os << citizen._name << ", " << (int)citizen._idNum << ", born in " << (int)citizen._birthYear << endl;
 		if (citizen._hasVoted)
 		{
 			os << "and he voted this election round." << endl;
