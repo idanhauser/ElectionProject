@@ -314,16 +314,17 @@ void voting()
 
 }
 
-void results(Start_MenuChoices choice)
+void results()
 {
 	//todo: if choice == 9 -> print, if choice == 11 -> use operator as below to save in file
 	// ofstream myfile;
 	//myfile.open("name.txt");
 	//myfile << election;
 	//myfile.close();
+	election.theResults();
+
 	cout << election << endl;
 	//todo: fix - not sure we need this:
-	election.theResults();
 	
 
 

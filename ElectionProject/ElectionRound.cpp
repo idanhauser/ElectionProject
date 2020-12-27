@@ -13,7 +13,7 @@ using namespace std;
 
 namespace elec {
 	ElectionRound::ElectionRound(int date[8]) :_districts(), _parties(),
-		_results(resultsArr(_parties.getLogicSize(), _districts.getLogicSize())), choice(1)
+		_results(_parties.getLogicSize(), _districts.getLogicSize())
 	{
 
 		for (int i = 0; i < 8; ++i)
@@ -192,10 +192,25 @@ namespace elec {
 
 	bool ElectionRound::theResults()
 	{ // todo: fix
+
+		int districtAmount = _districts.getLogicSize();
+		int partiesAmount =_parties.getLogicSize();
+		for (int j = 0; j < districtAmount; j++)
+		{
+			 calcVotesInDistrictByDistrictID(j + DISTRICT_ID_INIT);
+
+			if (typeid(_districts.getDistcritByIndex(j)) == typeid(UnifiedDistrict))
+			{
+				setWinnerInUnifiedDistrictByDistrictID(j + DISTRICT_ID_INIT);
+
+			
+			}
+		}
+
 		return true;
 	}
 	
-	
+	//move isresultsaloowed to electionround from _results
 	//todo: fix
 	ostream& operator<<(ostream& os, ElectionRound& electionRound) {
 		os << electionRound._date << endl;
@@ -245,7 +260,7 @@ namespace elec {
 							int* PartyIndexesSotedByReps = electionRound._results.getPMNRepsArrInDistrict(m+PARTY_ID_INIT);
 							for (int w = 0; w < districtAmount; w++)
 							{
-								electionRound.checkDistrictWinner(w + DISTRICT_ID_INIT, PartyIndexesSotedByReps);
+								electionRound.sortDistrictWinners(w + DISTRICT_ID_INIT, PartyIndexesSotedByReps);
 							}
 							os << electionRound._parties.getPartyByIndex(PartyIndexesSotedByReps[m]) << endl;
 							os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, PartyIndexesSotedByReps[m]) << " Reps" << endl;
@@ -398,8 +413,8 @@ namespace elec {
 	}
 
 
-	bool ElectionRound::checkDistrictWinner(int districtID, int* partiesIndexes) {
-		//check elections winner
+	bool ElectionRound::sortDistrictWinners(int districtID, int* partiesIndexes) {
+		
 		pair* totalRepsForPmByID = new pair[_parties.getLogicSize()];
 
 		for (int n = 0; n < _districts.getLogicSize(); n++)
