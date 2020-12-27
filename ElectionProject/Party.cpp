@@ -23,6 +23,7 @@ namespace elec {
 	Party::~Party()
 	{
 		delete[] _partyName;
+		delete[] _VotingPercentagesDistrict;
 	}
 
 

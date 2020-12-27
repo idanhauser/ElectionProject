@@ -55,7 +55,8 @@ namespace elec {
 		bool addNewCitizen(const char* name,int id,int birtyear,int districtId);
 		bool addNewParty(const char* name, int pdId,int& partyId);
 		bool addNewPartyRepresentative(int representId,int partyId,int districtId);
-		void viewAllDistricts() const;
+		void viewAllDistricts();
+		bool calcReps();
 		void viewAllCitizens() const;
 		void viewAllParties() const;
 		bool votingAction(int citizenId, int partyId);
@@ -67,13 +68,15 @@ namespace elec {
 
 		void swap(pair* xp, pair* yp);
 		void bubbleSort(pair arr[], int n);
-		int  deleteMax(double* parr, int size);
 	
 	
-		bool calcVotesInDistrictByDistrictID(int districtID);
-		bool setWinnerInUnifiedDistrictByDistrictID(int districtID);
-		bool checkElectionsWinner(int* partiesIndexes);
-		bool sortDistrictWinners(int districtID, int* partiesIndexes);
+		//bool VotesToRepsInDistrictByDistrictID(int districtID); //todo: move to results
+		//bool setWinnerInUnifiedDistrictByDistrictID(int districtID); //todo: move to results
+		bool checkElectionsWinner(int* partiesIndexes); 
+		bool sortDistrictWinners(int districtID, int* partiesIndexes); 
+		bool isResultsAllowed()const;
+
+
 
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 

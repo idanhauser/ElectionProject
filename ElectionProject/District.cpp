@@ -10,13 +10,15 @@ namespace elec {
 	int District::snGenerator = DISTRICT_ID_INIT;
 
 	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps),_numberOfVotesinDist(0)
+		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _repsByPartyLogicSize(0),
+		_repsByPartyPhySize(0), _numOfReps(numOfReps), _numberOfVotesinDist(0)
 	{
 		strcpy(this->_name, name);
 	}
 
 	District::~District()
 	{
+		delete[] _repsByPartyID;
 		delete[] _name;
 	}
 
@@ -30,7 +32,7 @@ namespace elec {
 		return _Citizens;
 	}
 
-	double District::getVotersPercentage() const
+	const double District::getVotersPrecentage() const
 	{
 		return _votersPercentage;
 	}
@@ -50,6 +52,18 @@ namespace elec {
 		_Citizens.addToList(*citz);
 		return true;
 	}
+	
+	bool District::addrepToArr()
+	{
+		if (_repsByPartyLogicSize == _repsByPartyPhySize)
+		{
+			realloc(_repsByPartyPhySize * 2);
+
+		}
+		_repsByPartyID[_repsByPartyLogicSize++] = 0;
+		return true;
+	}
+	
 	//use only if you know that citizen exist
 	const Citizen& District::getCitizenById(int id) const
 	{
@@ -121,11 +135,7 @@ namespace elec {
 		return true;
 	}
 
-	const int  District::getVotersPrecentage() const {
-		return _votersPercentage;
-	}
-
-	void District::operator++(int)
+		void District::operator++(int)
 	{
 		_numberOfVotesinDist++;
 		_votersPercentage = (_numberOfVotesinDist / getNumberOfCitizens()) * 100;
@@ -136,13 +146,38 @@ namespace elec {
 	{
 		os << "District " << district._name << ", its ID is: " << (int)district._serialNum <<" has "<< district.getNumberOfCitizens() << " citizens." << endl;
 		os << "Number of representatives is : " << (double)district._numOfReps << endl;
-		os << "Precentage of voters: " << district.getVotersPercentage() << "%" << endl;
+		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
 		//TODO to check if the next commented line is needed
 		/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
 		
 		return os;
 	}
 
+	void District::realloc(int new_size)
+	{
+		int* new_memory = new int [new_size];
 
+		for (int i = 0; i < min(new_size, _repsByPartyPhySize); ++i)
+		{
+			new_memory[i] = this->_repsByPartyID[i];
+		}
+		if (_repsByPartyLogicSize >= 1)
+		{
+			delete[] _repsByPartyID;
+		}
 
+		_repsByPartyPhySize = new_size;
+		_repsByPartyID = new_memory;
+	}
+
+	int District::getLogicSize() const
+	{
+		return _repsByPartyLogicSize;
+	}
+
+	bool District::setRepsArrByPartyID(int partyID, int repsAmount)
+	{
+		_repsByPartyID[partyID - PARTY_ID_INIT] = repsAmount;
+		return true;
+	}
 }

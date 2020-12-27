@@ -1,6 +1,8 @@
 //code verison 2.0
 #pragma once
-namespace elec {
+#include "District.h"
+namespace elec
+{
 	class resultsArr
 	{
 	private:
@@ -15,18 +17,18 @@ namespace elec {
 	public:
 		resultsArr(int _partiesAmount, int _districtAmount);
 
-		~resultsArr(); 
+		~resultsArr();
 
-	//	friend ostream& operator<<(ostream& os, const resultsArr& results);
+		//	friend ostream& operator<<(ostream& os, const resultsArr& results);
 
 
 		void AddSingleVoteToArr(int party_id, int district_id, int partiesAmount, int districtsAmount);
-		int getDistrictNumberOfVotesInParty( int partyID, int districtSN)const;
+		int getDistrictNumberOfVotesInParty(int partyID, int districtSN)const;
 
 		void reallocVotesArr(int newSize);
 		void reallocVotesArrDistricts(int newSize);
 		void reallocRepsArr(int newSize);
-		
+
 		void initResults();
 
 		int getpartiesAmount()const;
@@ -39,8 +41,8 @@ namespace elec {
 		int* getPMNRepsArrInDistrict(int partyID);
 		int getPMNumberOfRepsInDistrict(int districtSN, int partyID);
 		bool AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
-	
-		
+
+
 		int getPmsRepsTotalByPartyID(int index) const;
 		bool setPmsRepsTotalByPartyID(int partyID, int reps);
 		bool addToPmsRepsTotalByPartyID(int partyID, int reps);
@@ -48,11 +50,21 @@ namespace elec {
 		bool setpartiesAmount();
 		bool setdistrictsAmount();
 
+		struct pair {
+			int index;
+			double repsAmount;
+		};
 
-		bool isResultsAllowed()const;
+		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District& district);
+		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount, District& district);
+
+		void swap(pair* xp, pair* yp);
+		void bubbleSort(pair arr[], int n);
+
+
+
 
 
 
 	};
-
 }

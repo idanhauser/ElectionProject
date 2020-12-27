@@ -18,7 +18,9 @@ namespace elec
 		char* _name;
 		CitizenList _Citizens;
 		double _votersPercentage;
-		int _electionResult;//roee what is that?
+		int* _repsByPartyID;//todo: check
+		int _repsByPartyLogicSize;
+		int _repsByPartyPhySize;
 		int _numOfReps;
 
 		int _numberOfVotesinDist;
@@ -36,12 +38,12 @@ namespace elec
 
 		const CitizenList& getEligibleCitizens() const;
 		const char* getName() const;
-		const int getVotersPrecentage() const;
-		double getVotersPercentage() const;
+		const double getVotersPrecentage() const;
 		CitizenList getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
 		bool addCitizen(Citizen* citz);
+		bool addrepToArr();
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
 		int getNumOfReps() const;
@@ -49,6 +51,8 @@ namespace elec
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
 		void operator++(int);
-		
+		void realloc(int new_size);
+		int getLogicSize() const;
+		bool setRepsArrByPartyID(int partyID, int repsAmount);
 	};
 }

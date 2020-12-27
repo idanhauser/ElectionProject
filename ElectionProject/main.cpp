@@ -321,10 +321,10 @@ void results()
 	//myfile.open("name.txt");
 	//myfile << election;
 	//myfile.close();
+	//todo: fix - not sure we need the next line. maybe should put here isResultsAllowed if, and calcReps
 	election.theResults();
 
 	cout << election << endl;
-	//todo: fix - not sure we need this:
 	
 
 
