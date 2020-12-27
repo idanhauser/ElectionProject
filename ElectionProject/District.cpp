@@ -170,7 +170,7 @@ namespace elec {
 		_repsByPartyID = new_memory;
 	}
 
-	int District::getLogicSize() const
+	int District::getRepsByPartyLogicSizeLogicSize() const
 	{
 		return _repsByPartyLogicSize;
 	}
@@ -179,5 +179,11 @@ namespace elec {
 	{
 		_repsByPartyID[partyID - PARTY_ID_INIT] = repsAmount;
 		return true;
+	}
+
+	bool District::getRepsByPartyID(int partyID)
+	{
+		return _repsByPartyID[partyID - PARTY_ID_INIT];
+		
 	}
 }

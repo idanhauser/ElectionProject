@@ -12,6 +12,8 @@ namespace elec
 		DividedDistrict(const char* name, int numOfReps);
 		~DividedDistrict();
 
+		friend ostream& operator<<(ostream& os, const DividedDistrict& district);
+
 	};
 
 }

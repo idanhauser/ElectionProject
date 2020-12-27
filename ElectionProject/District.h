@@ -52,7 +52,8 @@ namespace elec
 		int getVotingCitizensAmountInDistrict() const;
 		void operator++(int);
 		void realloc(int new_size);
-		int getLogicSize() const;
+		int getRepsByPartyLogicSizeLogicSize() const;
 		bool setRepsArrByPartyID(int partyID, int repsAmount);
+		bool getRepsByPartyID(int partyID) const;
 	};
 }

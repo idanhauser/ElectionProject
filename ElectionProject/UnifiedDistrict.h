@@ -16,6 +16,9 @@ namespace elec
 		Citizen* getPartyLeader() const;
 		bool setLeader(const Citizen* leader);
 		
+		friend ostream& operator<<(ostream& os, const UnifiedDistrict& district);
+
+
 	};
 
 }
