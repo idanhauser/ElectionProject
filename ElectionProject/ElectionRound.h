@@ -13,6 +13,7 @@ using namespace std;
 
 
 namespace elec {
+	class LoadElectionSystem;
 	class DistrictList;
 	class PartyList;
 
@@ -36,8 +37,8 @@ namespace elec {
 		ElectionRound() = delete;
 		ElectionRound(int date[DATE_SIZE]);
 		virtual ~ElectionRound() = default;
-
-
+				
+	explicit ElectionRound(LoadElectionSystem& loader);
 
 		/// <summary>
 		/// virtual function for adding a districts.
@@ -114,7 +115,7 @@ namespace elec {
 		/// Saving election to file
 		/// </summary>
 		/// <param name="fileName">the name of the file we want to </param>
-		void save(const char fileName[MAX_SIZE]) const;
+		virtual void save(ofstream& outFile) const =0;
 
 
 	private:

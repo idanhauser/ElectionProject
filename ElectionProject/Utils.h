@@ -44,5 +44,13 @@ namespace elec
 	};
 
 
+	//for first menu
+	enum class ElectionType
+	{
+		RegularElectionRound = 1,
+		SimpleElectionRound
+	};
+
+
 }
 

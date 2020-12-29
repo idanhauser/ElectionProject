@@ -2,9 +2,11 @@
 //code verison 2.0
 
 #include <iostream>
-#include <ctime>
+#include <fstream>
+
 #include "Utils.h"
 #include "ElectionRound.h"
+#include "LoadElectionSystem.h"
 #include "RegularElectionRound.h"
 #include "SimpleElectionRound.h"
 using namespace std;
@@ -23,7 +25,7 @@ void viewParties();
 void voting();
 void results();
 void saveElections();
-
+bool loadElection();
 void StartMenu();
 
 bool isExit = false;
@@ -74,7 +76,15 @@ void StartMenu()
 			cout << "-------------" << endl;
 			cout << "Load election round from file" << endl;
 			cout << "-------------" << endl;
-			//loadElectionFromFile();
+			if(loadElection())
+			{
+				cout << "Election was loaded successfully." << endl;
+				showMainMenu();
+			}
+			else
+			{
+				cout << "Election was not loaded successfully." << endl;
+			}
 			cout << endl;
 			break;
 		case Start_MenuChoices::exit_menu:
@@ -91,23 +101,24 @@ void StartMenu()
 
 void initElection()
 {
-	
+
 	int numofreps = 0;
 	int date_y;
 	int date_d;
 	int date_m;
 	int datearr[DATE_SIZE];
-	int type;
-	cout << "Enter election's date (ddmmyyyy)" << endl;
+	short typeInput;
+
+	cout << "Enter election's date (dd mm yyyy)" << endl;
 	cin >> date_d >> date_m >> date_y;
-	for (int i = DATE_SIZE-1; i >= 0; --i)
+	for (int i = DATE_SIZE - 1; i >= 0; --i)
 	{
 		if (i >= DATE_SIZE - 4)
 		{
 			datearr[i] = date_y % 10;
 			date_y /= 10;
 		}
-		else if(i>=2)
+		else if (i >= 2)
 		{
 			datearr[i] = date_m % 10;
 			date_m /= 10;
@@ -118,9 +129,10 @@ void initElection()
 			date_d /= 10;
 		}
 	}
-	cout << "\nChoose type of menu 1 - for standart, 2 - for new" << endl;
-	cin >> type;
-	if (type == 1)
+	cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
+	cin >> typeInput;
+	ElectionType choice = static_cast<ElectionType>(typeInput);
+	if (choice == ElectionType::RegularElectionRound)
 	{
 		election = new RegularElectionRound(datearr);
 	}
@@ -158,7 +170,8 @@ void showMainMenu()
 		cout << "Press 8 to voting" << endl;
 		cout << "Press 9 to Presenting the election result" << endl;
 		cout << "Press 10 to exit" << endl;
-
+		cout << "Press 11 to save election system into file" << endl;
+		cout << "Press 12 load election system" << endl;
 		cin >> userChoise;
 		choice = static_cast<Menu_Choices>(userChoise);
 		switch (choice)
@@ -246,7 +259,14 @@ void showMainMenu()
 			cout << "-------------" << endl;
 			cout << "Load Election" << endl;
 			cout << "-------------" << endl;
-			//results();TODO
+			if (loadElection())
+			{
+				cout << "Election was loaded successfully." << endl;
+			}
+			else
+			{
+				cout << "Election was not loaded successfully." << endl;
+			}
 			cout << endl;
 			break;
 		default:
@@ -297,11 +317,11 @@ void addDistrict()
 
 void addCitizen()
 {
-	int id, birtyear, districtId=DISTRICT_ID_INIT;
+	int id, birtyear, districtId = DISTRICT_ID_INIT;
 	char name[MAX_SIZE];
 	const int currYear = election->getYear();
 
-	if (typeid(*election)==typeid(RegularElectionRound))
+	if (typeid(*election) == typeid(RegularElectionRound))
 	{
 		cout << "Insert a citizen name,id ,birth year, district:" << endl;
 		cin >> name >> id >> birtyear >> districtId;
@@ -353,7 +373,7 @@ void addParty()
 
 void addPartyRepresentative()
 {
-	int partyId, representId, districtId=DISTRICT_ID_INIT;
+	int partyId, representId, districtId = DISTRICT_ID_INIT;
 
 	if (typeid(*election) == typeid(RegularElectionRound)) {
 		cout << "Insert a representative citizen's id, district's id, party's id:" << endl;
@@ -421,10 +441,57 @@ void results()
 
 void saveElections()
 {
-	char name[MAX_SIZE];
+	char fileName[MAX_SIZE];
 	cout << "Enter name of file to save" << endl;
-	cin >> name;
-	election->save(name);
+	cin >> fileName;
+	ofstream outFile(fileName, ios::binary | ios::trunc);
+
+	if (!outFile) {
+		cout << "error outfile" << endl;
+		exit(-1);
+	}
+
+
+	cout << "saving election system" << endl;
+	election->save(outFile);
+
+	cout << "election system saved" << endl;
+}
+
+bool loadElection()
+{
+	bool loadedSuccesfully = true;
+	ifstream _inFile;
+	int len;
+
+
+	char fileName[MAX_SIZE];
+	cout << "Enter name of the file you want to load" << endl;
+	cin >> fileName;
+
+	LoadElectionSystem loader(fileName);
+	if (!loader.CheckFile())
+	{
+		cout << "error infile" << endl;
+		loadedSuccesfully = false;
+	}
+	else
+	{
+		delete election;
+		ElectionType type = loader.getElectionType();
+		
+		if (type == ElectionType::RegularElectionRound)
+		{
+			election = new RegularElectionRound(loader);
+		}
+		else
+		{
+			election = new SimpleElectionRound(loader);
+		}
+
+	}
+	return loadedSuccesfully;
+
 }
 
 

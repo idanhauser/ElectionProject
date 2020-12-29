@@ -7,6 +7,7 @@ using namespace std;
 
 namespace elec
 {
+	class LoadElectionSystem;
 	class CitizenList;
 	class Citizen;
 
@@ -23,17 +24,18 @@ namespace elec
 
 		int _numberOfVotesinDist;
 		District(const District& other);
-		const District& operator=(const District&);
+
 
 	public:
-
+		District(LoadElectionSystem& loader);
 		District() = delete;///we delete default constructor
 		District(const char* name, int numOfReps);
 		virtual ~District();
 		friend ostream& operator<<(ostream& os, const District& district);
 		//friend class CitizenList;
 
-
+		Citizen& getCitizenByIndex(int idx);
+		 //District& operator=( District&);
 		const CitizenList& getEligibleCitizens() const;
 		const char* getName() const;
 		double getVotersPercentage() const;
@@ -52,5 +54,6 @@ namespace elec
 		/// </summary>
 		/// <param name="outFile">the file we want to write to</param>
 		void save(ofstream& outFile) const;
+		
 	};
 }

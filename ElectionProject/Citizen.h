@@ -4,6 +4,7 @@
 using namespace std;
 namespace elec
 {
+	class LoadElectionSystem;
 	class District;
 	class Party;
 
@@ -17,6 +18,7 @@ namespace elec
 		bool _hasVoted;
 		//if citizen is also represnt
 		const Party* _party;
+		int _partyId;
 		//reference to an existing district 
 		const District& _district;
 		
@@ -26,6 +28,9 @@ namespace elec
 	public:
 		Citizen() = delete;
 		Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,const District& district);
+		 Citizen(LoadElectionSystem& loader, const District& district);
+
+
 		~Citizen();
 
 		friend ostream& operator<<(ostream& os, const Citizen& citizen);
@@ -35,10 +40,10 @@ namespace elec
 		bool setHasVoted(bool voted);
 		
 		const char* getCitizenName() const;
-		const int getCitizenID() const;
+		int getCitizenID() const;
 		int getCitizenBirthYear() const;
-		const int getDistrictNum() const;
-
+		int getDistrictNum() const;
+		int GetPartyId() const;
 		bool hasVoted()const;
 		const Party* getParty() const;
 		const District& getDistrict() const;

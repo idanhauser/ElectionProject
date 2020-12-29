@@ -22,8 +22,62 @@ namespace elec {
 
 	}
 
+	Party::Party(LoadElectionSystem& loader, Citizen& partyLeader, int numOfDist): _partyMembers(new CitizenList()),
+		_representativesByDist(new CitizenList[numOfDist]), _partyLeader(partyLeader)
+	{
+		ifstream& reader = loader.getReader();
+		int nameLen;
+		int numOfElements = 0;
+		//Reading serial num of party _partyID:
+		reader.read(rcastc(&_partyID), sizeof(int));
+		pdGenerator = _partyID;
+		//Reading len of name:
+		reader.read(rcastc(&nameLen), sizeof(int));
+		_name = new char[nameLen];
+		//Reading name:
+		reader.read(rcastc(_name), sizeof(char) * nameLen);
+		//Reading _PMCandidateID//TODO: need to connect leader
+		reader.read(rcastc(&_PMCandidateID), sizeof(int));
+		//Reading _numOfDist
+		reader.read(rcastc(&_numOfDist), sizeof(int));
+		//Reading _phySize
+		reader.read(rcastc(&_phySize), sizeof(int));
+		_VotingPercentagesDistrict = new double[_phySize];
+		//Reading _logicSize
+		reader.read(rcastc(&_logicSize), sizeof(int));
+		//Reading double arr:
+		for (int i = 0; i < _logicSize; ++i)
+		{
+			reader.read(rcastc(&_VotingPercentagesDistrict[i]), sizeof(int));
+		}
+		//to continue saving to file from this point lefts: _partyMembers list,_representativesByDist,
+		//Reading _partyMembers list
+			//Reding number of objects:
+	//	loader.getWriter().read(rcastc(&numOfElements), sizeof(int));
+	//	for (int i = 0; i < numOfElements; ++i)//TODO : TO Change will be fill when matching between citizen to a party.
+	//	{
+	//		int idOfReps;
+	//		loader.getWriter().read(rcastc(&idOfReps), sizeof(int));
+	//	}
+	//	//Save _representativesByDist list:
+	////save number of objects(=cols in arr):
+	//	loader.getWriter().read(rcastc(&numOfElements), sizeof(int));
+	//	//reaing from file num of cols in arr:
+	//	for (int i = 0; i < numOfElements; ++i)//TODO : TO Change will be fill when matching between citizen to a party.
+	//	{
+	//		int numOfRepsDist;
+	//		loader.getWriter().read(rcastc(&numOfRepsDist), sizeof(int));
+	//		//reading party members ids
+	//		for (int j = 0; j < numOfRepsDist; ++j)
+	//		{
+	//			int rpusid;
+	//			loader.getWriter().read(rcastc(&rpusid), sizeof(int));
+	//		}
+	//	}
+	}
 	Party::~Party()
 	{
+		delete[] _VotingPercentagesDistrict;
 		delete[] _name;
 	}
 
@@ -125,6 +179,8 @@ namespace elec {
 	{
 		int numOfObj=0;
 		int nameLen = strlen(_name) + 1;
+		//save serialNumOfParty:
+		outFile.write(rcastcc(&_partyID), sizeof(int));
 		//save name of dist:
 			//saving name len
 		outFile.write(rcastcc(&nameLen), sizeof(int));
@@ -143,35 +199,35 @@ namespace elec {
 		{
 			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
 		}
-		//Save _partyMembers list:
-			//save number of objects:
-		numOfObj = _partyMembers->getLogicSize();
-			//saving to file num of party members:
-		outFile.write(rcastcc(&numOfObj), sizeof(int));
-			//saving party members ids
-		for (int i = 0; i < numOfObj; ++i)
-		{
-			int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
-			outFile.write(rcastcc(&represntId), sizeof(int));
-		}
-		//Save _representativesByDist list:
-			//save number of objects(=cols in arr):
-		numOfObj = _representativesByDist->getLogicSize();
-			//saving to file num of cols in arr:
-		outFile.write(rcastcc(&numOfObj), sizeof(int));
-			//saving to file num of cols in arr:
-		for (int i = 0; i < numOfObj; ++i)
-		{
-			int numOfRepsDist = _representativesByDist[i].getLogicSize();
-				//saving the number of repsInDist[i]:
-			outFile.write(rcastcc(&numOfRepsDist), sizeof(int));
-				//saving party members ids
-			for (int j = 0; j < numOfRepsDist; ++j)
-			{
-				int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
-				outFile.write(rcastcc(&represntId), sizeof(int));
-			}
-		}
+		////Save _partyMembers list:
+		//	//save number of objects:
+		//numOfObj = _partyMembers->getLogicSize();
+		//	//saving to file num of party members:
+		//outFile.write(rcastcc(&numOfObj), sizeof(int));
+		//	//saving party members ids
+		//for (int i = 0; i < numOfObj; ++i)
+		//{
+		//	int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
+		//	outFile.write(rcastcc(&represntId), sizeof(int));
+		//}
+		////Save _representativesByDist list:
+		//	//save number of objects(=cols in arr):
+		//numOfObj = _representativesByDist->getLogicSize();
+		//	//saving to file num of cols in arr:
+		//outFile.write(rcastcc(&numOfObj), sizeof(int));
+		//	//saving to file num of cols in arr:
+		//for (int i = 0; i < numOfObj; ++i)
+		//{
+		//	int numOfRepsDist = _representativesByDist[i].getLogicSize();
+		//		//saving the number of repsInDist[i]:
+		//	outFile.write(rcastcc(&numOfRepsDist), sizeof(int));
+		//		//saving party members ids
+		//	for (int j = 0; j < numOfRepsDist; ++j)
+		//	{
+		//		int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
+		//		outFile.write(rcastcc(&represntId), sizeof(int));
+		//	}
+		//}
 		
 
 

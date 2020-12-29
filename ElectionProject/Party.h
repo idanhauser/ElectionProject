@@ -2,6 +2,7 @@
 #pragma once
 #include "Utils.h"
 #include "CitizenList.h"
+#include "LoadElectionSystem.h"
 
 namespace elec
 {
@@ -33,6 +34,7 @@ namespace elec
 	public:
 		Party() = delete;
 		Party(const char* partyName, int PMCandidateID, int numOfDist,Citizen& partyLeader);
+		Party( LoadElectionSystem& loader, Citizen& partyLeader,int numOfDist);
 
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);

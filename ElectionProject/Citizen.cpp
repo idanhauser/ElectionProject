@@ -4,16 +4,49 @@
 #include <fstream>
 
 
+
+#include "LoadElectionSystem.h"
 #include "Party.h"
 
 namespace elec
 {
 	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
-		const District& district) : _name(new char[strlen(citizen_name)+1]), _idNum(id_num),
-		_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false),
-		_party(nullptr), _district(district)
+		const District& district) : _name(new char[strlen(citizen_name) + 1]), _idNum(id_num),
+		_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false), _party(nullptr),
+		_partyId(-1), _district(district)
 	{
 		strcpy(this->_name, citizen_name);
+	}
+
+	Citizen::Citizen(LoadElectionSystem& loader, const District& district):_district(district)
+	{
+
+		int partyId = -1;
+		int nameLen;
+		ifstream& reader = loader.getReader();
+		//Reading len of name:
+		reader.read(rcastc(&nameLen), sizeof(int));
+		_name = new char[nameLen];
+		//Reading name:
+		reader.read(rcastc(_name), sizeof(char) * nameLen);
+		//Reading _idNum
+		reader.read(rcastc(&_idNum), sizeof(int));
+		//Reading _birthYear
+		reader.read(rcastc(&_birthYear), sizeof(int));
+		//Reading _districtNum
+		reader.read(rcastc(&_districtNum), sizeof(int));
+		//reading _hasVoted
+		reader.read(rcastc(&_hasVoted), sizeof(bool));
+		//reading _partyID:
+		reader.read(rcastc(&partyId), sizeof(int));
+		if(partyId!=-1)
+		{
+			_partyId = partyId;
+		}
+		else
+		{
+			_partyId = -1;
+		}
 	}
 
 	Citizen::~Citizen()
@@ -27,6 +60,7 @@ namespace elec
 	bool Citizen::setParty(const Party* party)
 	{
 		_party = party;
+		_partyId = party->getPartyID();
 		return true;
 	}
 
@@ -42,7 +76,7 @@ namespace elec
 
 	}
 
-	const int Citizen::getCitizenID() const
+ int Citizen::getCitizenID() const
 	{
 		return _idNum;
 
@@ -55,11 +89,17 @@ namespace elec
 
 	}
 
-	const int Citizen::getDistrictNum() const
+	 int Citizen::getDistrictNum() const
 	{
 		return _districtNum;
 
 	}
+
+	int Citizen::GetPartyId() const
+	{
+		return _partyId;
+	}
+
 	bool Citizen::hasVoted() const
 	{
 		return _hasVoted;
@@ -77,8 +117,8 @@ namespace elec
 
 	void Citizen::save(ofstream& outFile) const
 	{
+		
 		int isParty=-1;
-		int numOfElements = 0;
 		int nameLen = strlen(_name) + 1;
 		//save name of dist:
 			//saving name len

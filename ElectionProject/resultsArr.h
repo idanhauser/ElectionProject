@@ -1,20 +1,26 @@
 //code verison 2.0
 #pragma once
+#include <fstream>
+using namespace std;
 namespace elec {
+	class LoadElectionSystem;
+
 	class resultsArr
 	{
 	private:
-		int partiesLogicSize;
-		int parPhysSize;
-		int districtslogicSize;
-		int disPhysSize;
+		int _partiesLogicSize;
+		int _parPhysSize;
+		int _districtslogicSize;
+		int _disPhysSize;
 
-		int** _votesByIDs; //arr of parties holding in each cell all districts votes
+		int**  _votesByIDs; //arr of parties holding in each cell all districts votes
 		int** _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
 		int* _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
-		resultsArr(int _partiesAmount, int _districtAmount);
-
+		resultsArr(int partiesAmount, int districtAmount);
+		//idan added:
+	//	resultsArr(LoadElectionSystem& loader, int partiesAmount, int districtAmount);
+	//	resultsArr();
 		~resultsArr(); 
 
 	//	friend ostream& operator<<(ostream& os, const resultsArr& results);
@@ -48,9 +54,7 @@ namespace elec {
 
 
 		bool isResultsAllowed()const;
-
-
-
+		//idan added//void save(ofstream& outFile) const;
 	};
 
 }
