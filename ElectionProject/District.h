@@ -31,9 +31,9 @@ namespace elec
 	public:
 	
 		District() = delete;///we delete default constructor
-		District(const char* name, int numOfReps, int numOfParties);
-		~District();
-		//virtual void toOs(ostream& os) const {}
+	    District(const char* name, int numOfReps, int numOfParties);
+		virtual ~District();
+		virtual void toOs(ostream& os) const {}
 		friend ostream& operator<<(ostream& os, const District& district);
 		//friend class CitizenList;
 		virtual const Citizen* getPartyLeader() const { return nullptr; };

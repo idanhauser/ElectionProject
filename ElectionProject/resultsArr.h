@@ -39,7 +39,7 @@ namespace elec
 		int getPmsRepsTotalByDistrictID(int index) const;
 		int getTotalPartyNumberOfVotes(int partyID) const;
 		int* getPMNRepsArrInDistrict(int partyID);
-		int getPMNumberOfRepsInDistrict(int districtSN, int partyID);
+		int getPMNumberOfRepsInDistrict(int districtSN, int partyID) const;
 		bool AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
 
 

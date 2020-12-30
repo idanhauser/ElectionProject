@@ -133,7 +133,7 @@ namespace elec
 			res = res+ getDistrictNumberOfVotesInParty(partyID, i+DISTRICT_ID_INIT);
 		return res;
 	}
-	int resultsArr::getPMNumberOfRepsInDistrict(int districtID, int partyID) 
+	int resultsArr::getPMNumberOfRepsInDistrict(int districtID, int partyID) const
 	{
 		return _repsPartiesByID[partyID][districtID - DISTRICT_ID_INIT];
 	}

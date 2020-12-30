@@ -200,14 +200,18 @@ void addDistrict()
 	int districtId;
 	char name[MAX_SIZE];
 	int numberRepresentatives;
-	int TypeBool;
+	DistcritType distType;
+	int userChoise=0;
 	cout << "Insert a district's name and a number of representatives:" << endl;
 	cin >> name >> numberRepresentatives;
-	cout << "Insert 1 if the district is a unified district, or 0 if divided:" << endl;
-	cin >> TypeBool;
+	cout << "Choose district type:"  << endl;
+	cout << "Press 1 for Unified District" << endl;
+	cout << "Press 2 for load divided District" << endl;
+	cin >> userChoise;
+	distType = static_cast<DistcritType>(userChoise);
 	if (numberRepresentatives >= 0)
 	{
-		if (!election.addNewDistrict(name, numberRepresentatives, districtId, TypeBool))
+		if (!election.addNewDistrict(name, numberRepresentatives, districtId, distType))
 		{
 			cout << "Error:District " << name << " wasn't added." << endl;
 		}

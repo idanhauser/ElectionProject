@@ -2,6 +2,8 @@
 #include "DividedDistrict.h"
 #include <iostream>
 
+#include "Utils.h"
+
 
 using namespace std;
 
@@ -15,20 +17,23 @@ namespace elec {
 	{
 
 	}
-
+	void DividedDistrict::toOs(ostream& os) const
+	{
+		int repSize = getRepsByPartyLogicSize();
+		int reps;
+		for (int i = 0; i < repSize; i++)
+		{
+			reps = getRepsByPartyID(i+ PARTY_ID_INIT);
+			os << "The District Gives Party ID: " << i << endl;
+			os << reps << " Reps." << endl;
+		}
+	}
 	ostream& operator<<(ostream& os, const DividedDistrict& district)
 	{
 		os << "**********************************" << endl;
 		os << "Divided Type District " << district.getName() << ", its ID is: " << (int)district.getSerialNum() << " has " << district.getNumberOfCitizens() << " citizens." << endl;
 		os << "Number of representatives is : " << (double)district.getNumOfReps() << endl;
 		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
-		//TODO to check if the next commented line is needed
-		/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
-		for (int i = 0; i < district.getRepsByPartyLogicSize(); i++)
-		{
-			os << "The District Gives Party ID: " << i << endl;
-			os << district.getRepsByPartyID(i) << " Reps." << endl;
-		}
 		os << "**********************************" << endl;
 		return os;
 	}

@@ -221,4 +221,18 @@ namespace elec {
 		
 		return true;
 	}
+
+	ostream& operator<<(ostream& os, const District& district)
+	{
+		os << "**********************************" << endl;
+		os << typeid(district).name() + 12 << " "<< district.getName() << ", it's id is" << district.
+			getSerialNum() << " has " << district.getNumberOfCitizens() << " citizens." << endl;
+		os << "Number of representatives is : " << static_cast<double>(district.getNumOfReps()) << endl;
+		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
+		//TODO to check if the next commented line is needed
+	/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
+		district.toOs(os);
+		os << "**********************************" << endl;
+		return os;
+	}
 }

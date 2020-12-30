@@ -38,7 +38,7 @@ namespace elec {
 		~ElectionRound() = default;
 
 		void printElectionDate() const;
-		bool addNewDistrict(const char str[MAX_SIZE], int number_representatives,int& districtId, int DistrictType);
+		bool addNewDistrict(const char str[MAX_SIZE], int number_representatives,int& districtId, DistcritType districtType);
 
 		
 		constexpr int getYear() const
@@ -66,15 +66,15 @@ namespace elec {
 
 		
 
-		void swap(pair* xp, pair* yp);
-		void bubbleSort(pair arr[], int n);
+		void swap(pair* xp, pair* yp) ;
+		void bubbleSort(pair arr[], int n) ;
 	
 	
 		//bool VotesToRepsInDistrictByDistrictID(int districtID); //todo: move to results
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount); //todo: move to results
-		bool checkElectionsWinner(int* partiesIndexes); 
-		bool sortDistrictWinners(int districtID, int* partiesIndexes); 
-		bool isResultsAllowed()const;
+		bool checkElectionsWinner(int* partiesIndexes) ; 
+		bool sortDistrictWinners(int districtID, int* partiesIndexes)  ; 
+		bool isResultsAllowed() const;
 
 
 
