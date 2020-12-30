@@ -25,6 +25,8 @@ namespace elec {
 		DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
+		int NoChangeSinceLastCalc;
+
 		const ElectionRound& operator=(const ElectionRound&);
 
 
@@ -39,14 +41,14 @@ namespace elec {
 		virtual ~ElectionRound() = default;
 				
 	explicit ElectionRound(LoadElectionSystem& loader);
-
+	
 		/// <summary>
 		/// virtual function for adding a districts.
 		/// </summary>
 		/// <param name="name">the name of the dist</param>
 		/// <param name="numberRepresentatives">number of reps in dists</param>
 		/// <param name="districtId">the id of dist</param>
-		virtual	bool addNewDistrict(const char name[MAX_SIZE], int numberRepresentatives, int& districtId) = 0;
+		virtual	bool addNewDistrict(const char str[MAX_SIZE], int number_representatives, int& districtId, DistcritType districtType) = 0;
 
 		/// <summary>
 		/// returns the date
@@ -136,15 +138,32 @@ namespace elec {
 		/// </summary>
 		/// <param name="arr">arr of pairs to be sorted</param>
 		/// <param name="n">number of element in the arr</param>
-		void bubbleSort(pair arr[], int n);
-
+		void swap(pair* xp, pair* yp);
 		/// <summary>
 		/// deletes the max cell in arr 
 		/// </summary>
 		/// <param name="parr">arr of pairs</param>
 		/// <param name="size">the size of the arr</param>
 		/// <returns> the index maximum pair</returns>
-		int  deleteMax(double* parr, int size);
+		//int  deleteMax(double* parr, int size);
+
+		//from roee:
+
+
+
+
+		//bool VotesToRepsInDistrictByDistrictID(int districtID); //todo: move to results
+		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount); //todo: move to results
+		bool checkElectionsWinner(int* partiesIndexes);
+		bool sortDistrictWinners(int districtID, int* partiesIndexes);
+		bool isResultsAllowed() const;
+
+
+
+		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
+
+
+		
 	};
 
 

@@ -13,13 +13,16 @@ namespace elec
 
 	class District
 	{
-	private:
+	protected:
 		static int snGenerator;
 		int _serialNum;
 		char* _name;
 		CitizenList _Citizens;
 		double _votersPercentage;
-		int _electionResult;//roee what is that?
+		int* _repsByPartyID;//todo: check
+		int numOfParties;
+		int _repsByPartyLogicSize;
+		int _repsByPartyPhySize;
 		int _numOfReps;
 
 		int _numberOfVotesinDist;
@@ -29,26 +32,45 @@ namespace elec
 	public:
 		District(LoadElectionSystem& loader);
 		District() = delete;///we delete default constructor
-		District(const char* name, int numOfReps);
+	    District(const char* name, int numOfReps, int numOfParties);
 		virtual ~District();
-		friend ostream& operator<<(ostream& os, const District& district);
+		virtual void toOs(ostream& os) const {}
+		friend ostream& operator<<(ostream& os, const District& district)
 		//friend class CitizenList;
+		virtual const Citizen* getPartyLeader() const { return nullptr; }
+		virtual bool setLeader(const Citizen* leader) { return false; }
 
-		Citizen& getCitizenByIndex(int idx);
-		 //District& operator=( District&);
-		const CitizenList& getEligibleCitizens() const;
-		const char* getName() const;
-		double getVotersPercentage() const;
+		//Idan:
+		//Citizen& getCitizenByIndex(int idx);
+		// //District& operator=( District&);
+		//const CitizenList& getEligibleCitizens() const;
+		//const char* getName() const;
+		//double getVotersPercentage() const;
+		//roee:
+		virtual const CitizenList& getEligibleCitizens() const;
+		virtual const char* getName() const = 0;
+		const double getVotersPrecentage() const;
+
+
 		CitizenList getElectionResults()const;
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
 		bool addCitizen(Citizen* citz);
+		bool addrepToArr();
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
-		virtual int getNumOfReps() const;
+		int getNumOfReps() const;
+		bool settVotersPrecentage(const int num);
 		bool isCitizenExist(int id) const;
 		int getVotingCitizensAmountInDistrict() const;
 		void operator++(int);
+		void realloc(int new_size);
+		int getRepsByPartyLogicSize() const;
+		bool setRepsArrByPartyID(int partyID, int repsAmount);
+		int getRepsByPartyID(int partyID) const;
+		bool updateRepsArr();
+		bool AddAnotherColumn();
+		bool addDistToArr();
 		/// <summary>
 		/// saving the citizens in the list
 		/// </summary>

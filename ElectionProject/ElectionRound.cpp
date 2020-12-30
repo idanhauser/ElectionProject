@@ -10,11 +10,13 @@
 #include "CitizenList.h"
 #include "LoadElectionSystem.h"
 #include "PartyList.h"
+#include "UnifiedDistrict.h"
+#include "DividedDistrict.h"
 using namespace std;
 
 namespace elec {
 	ElectionRound::ElectionRound(int date[DATE_SIZE]) :_districts(), _parties(),
-		_results(resultsArr(_parties.getLogicSize(), _districts.getLogicSize()))
+		_results(_parties.getLogicSize(), _districts.getLogicSize()), NoChangeSinceLastCalc(0)
 	{
 		
 
@@ -109,6 +111,32 @@ namespace elec {
 			}
 		}
 	}
+	
+	bool ElectionRound::addNewDistrict(const char name[MAX_SIZE], int numberResentatives, int& districtId, DistcritType districtType)
+	{
+		bool districtAdded;
+		if (districtType==DistcritType::UnifiedDistrict)
+		{
+			UnifiedDistrict* dist = new UnifiedDistrict(name, numberResentatives, _parties.getLogicSize()); 
+			districtId = static_cast<UnifiedDistrict*>(dist)->getSerialNum();
+			districtAdded = _districts.addToList(*dist);
+		}
+			
+		else
+		{
+			DividedDistrict* dist = new DividedDistrict(name, numberResentatives, _parties.getLogicSize());
+			
+			districtId = static_cast<DividedDistrict*>(dist)->getSerialNum();
+			districtAdded = _districts.addToList(*dist);
+		}
+		for (int i = 0; i < _parties.getLogicSize(); ++i)
+		{
+			_parties.getPartyByIndex(i).updateDistricts();
+		}
+		_results.addDistrict();
+		_results.setdistrictsAmount();
+		return districtAdded;
+	}
 
 	bool ElectionRound::addNewCitizen(const char* name, int id, int birthyear, int districtId)
 	{
@@ -139,6 +167,10 @@ namespace elec {
 			leader->setParty(par);
 			partyAdded = _parties.addToList(*par);
 			_results.addParty();
+			for (int j = 0; j < _districts.getLogicSize(); ++j)
+			{
+				_districts.getDistcritByIndex(j).updateRepsArr();
+			}
 		}
 		return partyAdded;
 	}
@@ -161,20 +193,67 @@ namespace elec {
 
 	}
 
-	void ElectionRound::viewAllDistricts() const
+	void ElectionRound::viewAllDistricts()
 	{
 		int len = _districts.getLogicSize();
+
 		if (len > 0)
 		{
-			for (int i = 0; i < len; ++i)
+			calcReps();
+			this->NoChangeSinceLastCalc = 1;
+			for (int i = 0; i <len; i++)
 			{
-				cout << _districts.getDistcritByIndex(i) << endl;
+				//todo:Idan to fix. why the if?
+				if (typeid(_districts.getDistcritByIndex(i)) == typeid(UnifiedDistrict))
+					cout << _districts.getDistcritByIndex(i) << endl;
+				else
+					cout <<_districts.getDistcritByIndex(i) << endl;
+
 			}
 		}
 		else
 		{
 			cout << "There are no districts to show." << endl;
 		}
+	}
+
+	bool ElectionRound::calcReps() {
+
+		if (NoChangeSinceLastCalc)
+			return true;
+		this->NoChangeSinceLastCalc = 1;
+		if (!isResultsAllowed())
+			return false;
+		int districtAmount = _districts.getLogicSize();
+		int partiesAmount = _parties.getLogicSize();
+		for (int j = 0; j < districtAmount; j++)
+		{
+			//todo: fix adding by the number of reps saved in  district repsArr, the parties representives
+			/*for (int k = 0; k < partiesAmount; k++)
+			{
+				for (int k = 0; k < _districts.getDistcritByIndex(j)->getRepsByPartyID(k); k++)
+				{
+					_parties.getPartyByIndex(k).addToRepByDists(_parties.getPartyByIndex(k).getPartyMembers())
+				}
+			}*/
+			_results.VotesToRepsInDistrictByDistrictID(_districts.getDistcritByIndex(j).getSerialNum(),
+				_districts.getDistcritByIndex(j).getNumOfReps(), &(_districts.getDistcritByIndex(j)));
+
+			if (typeid(_districts.getDistcritByIndex(j)) == typeid(UnifiedDistrict))
+			{
+				setWinnerInUnifiedDistrictByDistrictID(_districts.getDistcritByIndex(j).getSerialNum(), _districts.getDistcritByIndex(j).getNumOfReps());
+				
+			}
+			else
+			{
+				// update divided district results to results arr
+				for (int i = 0; i < partiesAmount; i++)
+					_results.addToPmsRepsTotalByPartyID(i, _results.getDistrictNumberOfVotesInParty(i, j + DISTRICT_ID_INIT));
+
+			}
+		}
+		return true;
+
 	}
 
 	void ElectionRound::viewAllCitizens() const
@@ -230,6 +309,12 @@ namespace elec {
 				tempCitizen.setHasVoted(true);
 
 				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum(), _parties.getLogicSize(), _districts.getLogicSize());
+				tempDistrict.settVotersPrecentage(static_cast<double>(tempDistrict.getVotingCitizensAmountInDistrict() / tempDistrict.getNumberOfCitizens()) * 100);
+
+				const double votingForPartyFromVotersInDistrictPrecentage = static_cast<double>(_results.getDistrictNumberOfVotesInParty(partyId - PARTY_ID_INIT, distIndex + DISTRICT_ID_INIT)) /
+					double(_districts.getDistcritById(distIndex + DISTRICT_ID_INIT).getVotingCitizensAmountInDistrict()) * 100;
+				_parties.getPartyByIndex(partyId - PARTY_ID_INIT).setVotingPercentagesDistrict(votingForPartyFromVotersInDistrictPrecentage, distIndex + DISTRICT_ID_INIT);
+
 			}
 			else
 			{
@@ -240,117 +325,110 @@ namespace elec {
 		{
 			isVotedCheck = false;
 		}
+		this->NoChangeSinceLastCalc = 0;
 		return isVotedCheck;
 	}
 
 
 	bool ElectionRound::theResults()
-	{
-//		resultsArr countReps(_parties.getLogicSize(), _districts.getLogicSize());
-		int districtAmount = _districts.getLogicSize();
-		int partiesAmount = _parties.getLogicSize();
-		int allVotesInDis = 0;
-		double minVotesForRep;
-		int amountOfElectedFromDistrict;
-		pair* leftForPartyForElector = new pair[partiesAmount];
-		int leftReps;
-		pair* totalRepsForPmByID = new pair[partiesAmount];
-		if (!_results.isResultsAllowed())
-		{ 
-			cout << "Sorry...Not enough details to get results" << endl; //todo: ask idan what to do about it
+	{ // todo: fix - not sure if needed. we can just call from outside the if and "calcReps"
+		if (!isResultsAllowed())
 			return false;
+		calcReps();
+		
+		return true;
+	}
+	
+	ostream& operator<<(ostream& os, ElectionRound& electionRound) {
+		
+		if (!electionRound.isResultsAllowed())
+		{
+			os << "Sorry...Not enough details to get results" << endl;
+			return os;
 		}
 		else
 		{
-
+			for (int i = 0; i < 3; i+=2) //todo: fix printing address instead of date when written as "os << electionRound._date << endl;"
+				os << electionRound._date[i] << electionRound._date[i + 1] << "/";
+			os << electionRound._date[6] << electionRound._date[7];
+			os << endl;
+			int districtAmount = electionRound._districts.getLogicSize();
+			int partiesAmount = electionRound._parties.getLogicSize();
 			for (int j = 0; j < districtAmount; j++)
 			{
-				for (int n = 0; n < partiesAmount; n++)
+				//todo:Idan to check and fix.
+				if (typeid(electionRound._districts.getDistcritByIndex(j)) == typeid(UnifiedDistrict))
 				{
-					allVotesInDis = allVotesInDis + _results.getDistrictNumberOfVotesInParty(n, j + DISTRICT_ID_INIT);
+					os << electionRound._districts.getDistcritByIndex(j) << endl;
 				}
-				District& tempDis = _districts.getDistcritByIndex(j);
-				//present each district 
-				//and num of representatives each district gives
-				cout << tempDis << endl;
-				//todo: move or delete
-				cout << "each party got:" << endl;
-				//CALCULATING NUMBER OF REPS FROM EACH PARTY
+				else
+					os << electionRound._districts.getDistcritByIndex(j) << endl;
 
-				minVotesForRep = double(allVotesInDis) / double(tempDis.getNumOfReps());
-				for (int i = 0; i < partiesAmount; i++)
-				{
-					amountOfElectedFromDistrict = _results.getDistrictNumberOfVotesInParty(i, j + DISTRICT_ID_INIT)
-						/ (minVotesForRep);
-					_results.AddToPMRepsCount(j + DISTRICT_ID_INIT, i, amountOfElectedFromDistrict);
-					leftForPartyForElector[i].repsAmount = _results.getDistrictNumberOfVotesInParty(i, j + DISTRICT_ID_INIT) -
-						double(amountOfElectedFromDistrict * (allVotesInDis / tempDis.getNumOfReps()));
-					leftForPartyForElector[i].index = i;
-				}
-				leftReps = tempDis.getNumOfReps();
-				for (int k = 0; k < partiesAmount; k++)
-				{
-					leftReps = leftReps - _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, k);
-				}
-				bubbleSort(leftForPartyForElector, partiesAmount);
-				for (int l = 0; l < min(partiesAmount, leftReps); l++)
-				{
-					_results.AddToPMRepsCount(j + DISTRICT_ID_INIT, leftForPartyForElector[l].index, 1);
-				}
-				for (int m = 0; m < partiesAmount; m++) {
-					cout << _parties.getPartyByIndex(m) << endl;
-					//todo: use ostream instead
-					cout << _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
-					cout << "The Reps are: " << endl;
-					//todo: fix - logicSize of representives is zero for some reason
-					_parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(_results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
-					cout << "Amount of Votes For The Party from Voting Citizens In The District: " << _results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT) << endl;
-					//todo: add to party class precentage of votes in each district and add it to operator
-					cout << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
-						double(_results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT)) / double(tempDis.getVotingCitizensAmountInDistrict()) * 100 << "%" << endl;
+				os << "each party got:" << endl;
 
-				} 
-				//todo: update operator and remove after
-				cout << "Voting Citizens Precentage In The District: " << tempDis.getVotersPercentage() << "%" << endl;
-				int max = 0;
-				int leaderWithMostRepsPartyID = 0;
-				for (int p = 0; p < districtAmount; p++)
+				//print results:
+				if (typeid(electionRound._districts.getDistcritByIndex(j)) == typeid(UnifiedDistrict))
 				{
-					int curRepsAmount = _results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, p );
-					if (max < curRepsAmount)
+					for (int m = 0; m < partiesAmount; m++)
 					{
-						max = curRepsAmount;
-						leaderWithMostRepsPartyID = p +PARTY_ID_INIT;
+						os << electionRound._parties.getPartyByIndex(m) ; 
+						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
+						//todo: fix::not printing party members cause they were never added
+						electionRound._parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
+						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
+							electionRound._results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT) << endl;
+						os << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
+							electionRound._parties.getPartyByIndex(m).getVotingPercentagesByDistcritIdx(j) <<
+							"%" << endl;
 
 					}
+
+
+					//todo: check
+					os << "The district belongs to: " << electionRound._districts.getDistcritByIndex(j).getPartyLeader()->getCitizenName() << endl;
 				}
-				//todo: remove "cout" after district leader added to operator in District.h
-				cout << "The district belongs to: " <<
-					_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader().getCitizenName() << endl;
+				else
+				{
+					// = its a divided district - Only needed to present reps in max to min order
+					for (int m = 0; m < partiesAmount; m++)
+					{
+						int* partyIndexesSotedByReps = new int[partiesAmount];
+						for (int w = 0; w < districtAmount; w++)
+						{
+							electionRound.sortDistrictWinners(w + DISTRICT_ID_INIT, partyIndexesSotedByReps);
+						}
+						os << electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]) << endl;
+						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, partyIndexesSotedByReps[m]) << " Reps" << endl;
+						//todo: fix::not printing party members cause they were never added
+						electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).
+							printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, partyIndexesSotedByReps[m]), j + DISTRICT_ID_INIT);
+						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
+							electionRound._results.getDistrictNumberOfVotesInParty(partyIndexesSotedByReps[m], j + DISTRICT_ID_INIT) << endl;
+						os << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
+							electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).getVotingPercentagesByDistcritIdx(j) << "%" << endl;
 
-				_results.setPmsRepsTotalByPartyID(leftForPartyForElector[0].index, tempDis.getNumOfReps());
-			//todo: add district leader member and than apply line
-			//	tempDis.setLeaderInDist(&(_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader()));
-			}
-			//check elections winner
-			for (int n = 0; n < partiesAmount; n++)
-			{
-				totalRepsForPmByID[n].index = n;
-				totalRepsForPmByID[n].repsAmount = _results.getPmsRepsTotalByPartyID(n);
-			}
-			bubbleSort(totalRepsForPmByID, partiesAmount);
+					}//no need to check for winner, printing sorted is enough
+				}
 
+			}
+
+			//elections winner
+			int* partiesIndexs = new int[partiesAmount];
+			electionRound.checkElectionsWinner(partiesIndexs);
 			for (int p = 0; p < partiesAmount; p++)
 			{
-				//todo: print winnig citizen leader using ostream
-				cout << _parties.getPartyByIndex(totalRepsForPmByID[p].index).getPartyLeader().getCitizenName()
-					<< " got " << totalRepsForPmByID[p].repsAmount << " reps ";
-				cout << "his party got total amount of " << _results.getTotalPartyNumberOfVotes(p) << " votes" << endl;
+
+				os << electionRound._parties.getPartyByIndex(partiesIndexs[p]).getPartyLeader().getCitizenName()
+					<< " got " << electionRound._results.getPmsRepsTotalByPartyID(partiesIndexs[p]) << " reps ";
+				os << "his party got total amount of " << electionRound._results.getTotalPartyNumberOfVotes(partiesIndexs[p]) << " votes" << endl;
 
 			}
-			delete[] leftForPartyForElector;
-			delete[] totalRepsForPmByID;
-			return true;
+			delete[] partiesIndexs;
+			return os;
+			///came from idan can delelte.
+			//delete[] leftForPartyForElector;
+			//delete[] totalRepsForPmByID;
+			//return true;
 		}
 
 	}
@@ -395,46 +473,114 @@ namespace elec {
 	}
 
 	//todo: fix
-	ostream& operator<<(ostream& os, const ElectionRound& electionRound) {
-	
+	//ostream& operator<<(ostream& os, const ElectionRound& electionRound) {
+	//
 
-		return os;
-	}
+	//	return os;
+	//}
 
 
-	void ElectionRound::swap(pair* xp, pair* yp)
+
+
+	void ElectionRound::swap(pair* xp, pair* yp) 
 	{
 		pair temp = *xp;
 		*xp = *yp;
 		*yp = temp;
 	}
 
-	void ElectionRound::bubbleSort(pair arr[], int n)
+	void ElectionRound::bubbleSort(pair arr[], int n) 
 	{
 		int i, j;
 		for (i = 0; i < n - 1; i++) {
 			for (j = 0; j < n - i - 1; j++) {
-				if (arr[j].repsAmount > arr[j + 1].repsAmount)
+				if (arr[j].repsAmount < arr[j + 1].repsAmount)
 					swap(&arr[j], &arr[j + 1]);
 			}
 		}
 	}
-	//func deletes the max cell in arr and returns the index
-	int  ElectionRound::deleteMax(double* parr, int size) {
-		int i;
-		double max = parr[0];
-		int res = 0;
-		for (i = 1; i < size; i++)
-			if (parr[i] > max)
-				res = i;
-		parr[i] = 0;
-		return res;
+
+
+	
 
 
 
+
+	bool ElectionRound::setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount) {
+		int max = 0;
+		int leaderWithMostRepsPartyID = 0;
+		for (int p = 0; p < _parties.getLogicSize(); p++)
+		{
+			int curRepsAmount = _results.getPMNumberOfRepsInDistrict(districtID, p + PARTY_ID_INIT);
+			if (max < curRepsAmount)
+			{
+				max = curRepsAmount;
+				leaderWithMostRepsPartyID = p + PARTY_ID_INIT;
+
+			}
+		}
+		_districts.getDistcritById(districtID).setLeader(&(_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader()));
+		for (int i = 0; i < _parties.getLogicSize(); i++)
+		{
+			_districts.getDistcritById(districtID).setRepsArrByPartyID(i, 0);
+		}
+		_districts.getDistcritById(districtID).setRepsArrByPartyID(leaderWithMostRepsPartyID, _districts.getDistcritById(districtID).getNumOfReps());
+		_results.addToPmsRepsTotalByPartyID(leaderWithMostRepsPartyID, repsAmount);
+
+
+		return true;
 	}
 
 
 
+	bool ElectionRound::checkElectionsWinner(int* partiesIndexes) {
+		//check elections winner
+		pair* totalRepsForPmByID = new pair[_parties.getLogicSize()];
+		
+		for (int n = 0; n < _parties.getLogicSize(); n++)
+		{
+			totalRepsForPmByID[n].index = n;
+			totalRepsForPmByID[n].repsAmount = _results.getPmsRepsTotalByPartyID(n);
+		}
+		bubbleSort(totalRepsForPmByID, _parties.getLogicSize());
+
+		for (int p = 0; p < _parties.getLogicSize(); p++)
+		{
+			partiesIndexes[p] = totalRepsForPmByID[p].index;
+
+		}
+		delete[] totalRepsForPmByID;
+		return true;
+	}
+
+
+	bool ElectionRound::sortDistrictWinners(int districtID, int* partiesIndexes)  {
+		
+		pair* totalRepsForPmByID = new pair[_parties.getLogicSize()];
+
+		for (int n = 0; n < _parties.getLogicSize(); n++)
+		{
+			totalRepsForPmByID[n].index = n;
+			totalRepsForPmByID[n].repsAmount = _results.getPMNumberOfRepsInDistrict(districtID, n);
+		}
+		bubbleSort(totalRepsForPmByID, _parties.getLogicSize());
+
+		for (int p = 0; p < _parties.getLogicSize(); p++)
+		{
+			partiesIndexes[p] = totalRepsForPmByID[p].index;
+
+		}
+		delete[] totalRepsForPmByID;
+		return true;
+	}
+
+
+	bool ElectionRound::isResultsAllowed()const
+	{
+		if ((_parties.getLogicSize() != 0) && (_districts.getLogicSize()!= 0))
+			return true;
+		else
+			return false;
+	}
 
 }

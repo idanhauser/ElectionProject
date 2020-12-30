@@ -284,26 +284,25 @@ void addDistrict()
 
 	int districtId = DISTRICT_ID_INIT;
 	char name[MAX_SIZE];
-	int numberRepresentatives = 0;
-	RegularElectionRound* regularElec = dynamic_cast<RegularElectionRound*>(election);
-	if (regularElec != nullptr)
+	int numberRepresentatives;
+	DistcritType distType;
+	int userChoise=0;
+	cout << "Insert a district's name and a number of representatives:" << endl;
+	cin >> name >> numberRepresentatives;
+	cout << "Choose district type:"  << endl;
+	cout << "Press 1 for Unified District" << endl;
+	cout << "Press 2 for load divided District" << endl;
+	cin >> userChoise;
+	distType = static_cast<DistcritType>(userChoise);
+	if (numberRepresentatives >= 0)
 	{
-		cout << "Insert a district's name and a number of representatives:" << endl;
-		cin >> name >> numberRepresentatives;
-		if (numberRepresentatives >= 0)
+		if (!election.addNewDistrict(name, numberRepresentatives, districtId, distType))
 		{
-			if (!regularElec->addNewDistrict(name, numberRepresentatives, districtId))
-			{
-				cout << "Error:District " << name << " wasn't added." << endl;
-			}
-			else
-			{
-				cout << "District " << name << " added. \n And its id is " << districtId << endl;
-			}
+			cout << "Error:District " << name << " wasn't added." << endl;
 		}
 		else
 		{
-			cout << "Negative number of representatives is not allowed." << endl;
+			cout << "District " << name << " added. \n And its id is " << districtId << endl;
 		}
 	}
 	else
@@ -436,7 +435,7 @@ void voting()
 void results()
 {
 	election->theResults();
-	cout << election;
+	cout << election << endl;
 }
 
 void saveElections()

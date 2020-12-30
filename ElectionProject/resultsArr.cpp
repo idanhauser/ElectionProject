@@ -162,7 +162,11 @@ namespace elec
 	{
 		return _repsPartiesByID[partyID][districtID - DISTRICT_ID_INIT];
 	}
-
+	
+	int* resultsArr::getPMNRepsArrInDistrict(int partyID)
+	{
+		return _repsPartiesByID[partyID];
+	}
 	int resultsArr::getPmsRepsTotalByDistrictID(int index) const
 	{
 		int res = 0;
@@ -184,9 +188,21 @@ namespace elec
 	}
 
 
+	bool resultsArr::addToPmsRepsTotalByPartyID(int partyID, int reps)
+	{
+		_PMsRepsTotalByPartyID[partyID] = _PMsRepsTotalByPartyID[partyID] + reps;
+		return true;
+	}
+
+
 	bool resultsArr::AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps)
 	{
 		_repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] = _repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] + amountOfReps;
+		return true;
+	}
+	bool resultsArr::setNewNumForPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps)
+	{
+		_repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] = amountOfReps;
 		return true;
 	}
 	bool resultsArr::setpartiesAmount()
@@ -264,16 +280,101 @@ namespace elec
 	}
 
 
+	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) {
+		int leftReps;
+		double amountOfElectedFromDistrict;
+		pair* leftForPartyForElector = new pair[partiesLogicSize];
+		int allVotesInDis = 0;
+		for (int n = 0; n < partiesLogicSize; n++)
+		{
+			allVotesInDis = allVotesInDis + getDistrictNumberOfVotesInParty(n + PARTY_ID_INIT, districtID);
+		}
 
-
-
-	bool resultsArr::isResultsAllowed()const
-	{
-		if ((_partiesLogicSize != 0) && (_districtslogicSize != 0))
-			return true;
-		else
-			return false;
+		//CALCULATING NUMBER OF REPS FROM EACH PARTY
+		if (allVotesInDis)
+		{
+			double minVotesForRep = double(allVotesInDis) / repsAmount;
+			for (int i = 0; i < partiesLogicSize; i++)
+			{
+				if (minVotesForRep)
+					amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
+				else
+					amountOfElectedFromDistrict = 0;
+				AddToPMRepsCount(districtID, i, amountOfElectedFromDistrict);
+				if (amountOfElectedFromDistrict == repsAmount)
+					leftForPartyForElector[i].repsAmount = 0;
+				else
+					leftForPartyForElector[i].repsAmount = getDistrictNumberOfVotesInParty(i, districtID) -
+					double(amountOfElectedFromDistrict * minVotesForRep);
+				leftForPartyForElector[i].index = i;
+			}
+			leftReps = repsAmount;
+			for (int k = 0; k < partiesLogicSize; k++)
+			{
+				leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
+			}
+			bubbleSort(leftForPartyForElector, partiesLogicSize);
+			for (int l = 0; l < min(partiesLogicSize, leftReps); l++)
+			{
+				AddToPMRepsCount(districtID, leftForPartyForElector[l].index, 1);
+			}
+			// copy all values from _repsPartiesByID[districtID] to parameter "district" reps member
+			for (int i = 0; i < partiesLogicSize; i++)
+			{
+				district->setRepsArrByPartyID(i, getPMNumberOfRepsInDistrict(districtID, i));
+			}
+			delete[] leftForPartyForElector;
+		}
+		return true;
 	}
+
+	//bool resultsArr::setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount, District* district) {
+	//	int max = 0;
+	//	int leaderWithMostRepsPartyID = 0;
+	//	for (int p = 0; p < partiesLogicSize; p++)
+	//	{
+	//		int curRepsAmount = getPMNumberOfRepsInDistrict(districtID, p + PARTY_ID_INIT);
+	//		if (max < curRepsAmount)
+	//		{
+	//			max = curRepsAmount;
+	//			leaderWithMostRepsPartyID = p + PARTY_ID_INIT;
+
+	//		}
+	//	}
+	//	//todo: update for unified district the leader
+	//	district->setLeader(_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader());
+	//	for (int i = 0; i < partiesLogicSize; i++)
+	//	{
+	//		district->setRepsArrByPartyID(i, 0);
+	//	}
+	//	district->setRepsArrByPartyID(leaderWithMostRepsPartyID, district->getNumOfReps());
+	//	addToPmsRepsTotalByPartyID(leaderWithMostRepsPartyID, repsAmount);
+
+	//	//todo: remove next comment after district leader is set in UnifiedDistrict.h
+	//	//cout << "The district belongs to: " <<
+	//	//	_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader().getCitizenName() << endl;
+
+	//	return true;
+	//}
+	
+	void resultsArr::swap(pair* xp, pair* yp)
+	{
+		pair temp = *xp;
+		*xp = *yp;
+		*yp = temp;
+	}
+	//from idan to check if needed:
+	//bool resultsArr::isResultsAllowed()const
+	//{
+	//	if ((_partiesLogicSize != 0) && (_districtslogicSize != 0))
+	//		return true;
+	//	else
+	//		return false;
+	//}
+
+
+
+	
 	////idan added (for reading):
 	//void resultsArr::save(ofstream& outFile) const
 	//{
@@ -287,6 +388,18 @@ namespace elec
 	//	}
 	//}
 
+	void resultsArr::bubbleSort(pair arr[], int n)
+	{
+		int i, j;
+		for (i = 0; i < n - 1; i++)
+		{
+			for (j = 0; j < n - i - 1; j++)
+			{
+				if (arr[j].repsAmount > arr[j + 1].repsAmount)
+					swap(&arr[j], &arr[j + 1]);
+			}
+		}
+	}
 
 	//todo: fix
 	/*ostream& operator<<(ostream& os, const resultsArr& resultsArr) {

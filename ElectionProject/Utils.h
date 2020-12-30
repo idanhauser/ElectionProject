@@ -52,5 +52,14 @@ namespace elec
 	};
 
 
+
+	enum class DistcritType
+	{
+		
+		UnifiedDistrict =1,
+		DividedDistrictType,
+	};
+
+
 }
 

@@ -18,7 +18,7 @@ namespace elec
 		CitizenList*_partyMembers;
 		CitizenList* _representativesByDist;
 		Citizen& _partyLeader;
-		int _numOfDist;
+		int _numOfDist; //todo: idan: isn't it the same as _logicSize?
 		double* _VotingPercentagesDistrict;
 		int _logicSize;
 		int _phySize;
@@ -41,11 +41,15 @@ namespace elec
 
 		friend class PartyList;
 	
-		bool setPMCandidateID(int idNum);
+		bool setPMCandidateID(int idNums);
+		bool setVotingPercentagesDistrict(double num, int districtID);
 
 		bool addPartyMembers(Citizen* citizen);
 
-
+		bool addToRepByDists(CitizenList& reps, int district) {
+			_representativesByDist[district] = reps;
+			return true;
+		}
 
 		const char* getPartyName() const;
 		const int getPartyID() const;
@@ -55,13 +59,13 @@ namespace elec
 		bool addPartyMember( Citizen& citizen,int distIndex);
 		bool addToMembers( Citizen& citizen) ;
 
-		bool updateParties();
+		bool updateDistricts();
 		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex) ;
 		Citizen& getPartyLeader() const;
-		double getVotingPercentagesByDistrictIdx(int index) const;
-		void addVotingToPartyFromDistIdx(int index);
-		void save( ofstream& outFile) const;
+		double getVotingPercentagesByDistcritIdx(int index) const;
+		//void addVotingToPartyFromDistIdx(int index);
+		void save(ofstream& outFile) const;
 		
 	};
 }
