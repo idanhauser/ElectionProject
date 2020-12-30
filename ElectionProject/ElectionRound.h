@@ -92,7 +92,7 @@ namespace elec {
 		/// <summary>
 		/// prints all the Districts
 		/// </summary>
-		void viewAllDistricts() const;
+		void viewAllDistricts();
 		/// <summary>
 		/// prints all the citizens
 		/// </summary>
@@ -138,7 +138,7 @@ namespace elec {
 		/// </summary>
 		/// <param name="arr">arr of pairs to be sorted</param>
 		/// <param name="n">number of element in the arr</param>
-		void swap(pair* xp, pair* yp);
+		void bubbleSort(pair arr[], int n);
 		/// <summary>
 		/// deletes the max cell in arr 
 		/// </summary>
@@ -146,19 +146,17 @@ namespace elec {
 		/// <param name="size">the size of the arr</param>
 		/// <returns> the index maximum pair</returns>
 		//int  deleteMax(double* parr, int size);
-
-		//from roee:
-
+		
 
 
 
-		//bool VotesToRepsInDistrictByDistrictID(int districtID); //todo: move to results
-		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount); //todo: move to results
+		//bool VotesToRepsInDistrictByDistrictID(int districtID); //todo:roee move to results
+		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount); //todo roee: move to results
 		bool checkElectionsWinner(int* partiesIndexes);
 		bool sortDistrictWinners(int districtID, int* partiesIndexes);
 		bool isResultsAllowed() const;
 
-
+		bool calcReps();
 
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 

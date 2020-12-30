@@ -24,7 +24,7 @@ namespace elec
 		int _repsByPartyLogicSize;
 		int _repsByPartyPhySize;
 		int _numOfReps;
-
+		int _electionResult;//todo:idan- can be deleted
 		int _numberOfVotesinDist;
 		District(const District& other);
 
@@ -35,13 +35,13 @@ namespace elec
 	    District(const char* name, int numOfReps, int numOfParties);
 		virtual ~District();
 		virtual void toOs(ostream& os) const {}
-		friend ostream& operator<<(ostream& os, const District& district)
+		friend ostream& operator<<(ostream& os, const District& district);
 		//friend class CitizenList;
 		virtual const Citizen* getPartyLeader() const { return nullptr; }
 		virtual bool setLeader(const Citizen* leader) { return false; }
 
 		//Idan:
-		//Citizen& getCitizenByIndex(int idx);
+		Citizen& getCitizenByIndex(int idx);
 		// //District& operator=( District&);
 		//const CitizenList& getEligibleCitizens() const;
 		//const char* getName() const;

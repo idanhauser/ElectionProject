@@ -40,8 +40,9 @@ namespace elec {
 
 		for (int i = 0; i < numberOfdist; ++i)
 		{
-			District* dist = new District(loader);
-			_districts.addToList(*dist);
+			//todo: idan need to change it by type of dist
+			//District* dist = new District(/*loader*/);
+		//	_districts.addToList(*dist);
 
 		}
 
@@ -228,7 +229,7 @@ namespace elec {
 		int partiesAmount = _parties.getLogicSize();
 		for (int j = 0; j < districtAmount; j++)
 		{
-			//todo: fix adding by the number of reps saved in  district repsArr, the parties representives
+			//todo roee: fix adding by the number of reps saved in  district repsArr, the parties representives
 			/*for (int k = 0; k < partiesAmount; k++)
 			{
 				for (int k = 0; k < _districts.getDistcritByIndex(j)->getRepsByPartyID(k); k++)
@@ -331,7 +332,7 @@ namespace elec {
 
 
 	bool ElectionRound::theResults()
-	{ // todo: fix - not sure if needed. we can just call from outside the if and "calcReps"
+	{ // todo:roee fix - not sure if needed. we can just call from outside the if and "calcReps"
 		if (!isResultsAllowed())
 			return false;
 		calcReps();
@@ -348,7 +349,7 @@ namespace elec {
 		}
 		else
 		{
-			for (int i = 0; i < 3; i+=2) //todo: fix printing address instead of date when written as "os << electionRound._date << endl;"
+			for (int i = 0; i < 3; i+=2) //todo:idan fix printing address instead of date when written as "os << electionRound._date << endl;"
 				os << electionRound._date[i] << electionRound._date[i + 1] << "/";
 			os << electionRound._date[6] << electionRound._date[7];
 			os << endl;
@@ -373,7 +374,7 @@ namespace elec {
 					{
 						os << electionRound._parties.getPartyByIndex(m) ; 
 						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
-						//todo: fix::not printing party members cause they were never added
+						//todo:roee fix::not printing party members cause they were never added
 						electionRound._parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
 						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
 							electionRound._results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT) << endl;
@@ -384,7 +385,7 @@ namespace elec {
 					}
 
 
-					//todo: check
+					//todo:roee check
 					os << "The district belongs to: " << electionRound._districts.getDistcritByIndex(j).getPartyLeader()->getCitizenName() << endl;
 				}
 				else
@@ -399,7 +400,7 @@ namespace elec {
 						}
 						os << electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]) << endl;
 						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, partyIndexesSotedByReps[m]) << " Reps" << endl;
-						//todo: fix::not printing party members cause they were never added
+						//todo:roee fix::not printing party members cause they were never added
 						electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).
 							printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, partyIndexesSotedByReps[m]), j + DISTRICT_ID_INIT);
 						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
@@ -472,7 +473,7 @@ namespace elec {
 		cout << "done" << endl;
 	}
 
-	//todo: fix
+	//todo:idan fix
 	//ostream& operator<<(ostream& os, const ElectionRound& electionRound) {
 	//
 

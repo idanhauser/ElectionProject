@@ -44,12 +44,7 @@ namespace elec
 		bool setPMCandidateID(int idNums);
 		bool setVotingPercentagesDistrict(double num, int districtID);
 
-		bool addPartyMembers(Citizen* citizen);
-
-		bool addToRepByDists(CitizenList& reps, int district) {
-			_representativesByDist[district] = reps;
-			return true;
-		}
+		bool addToRepByDists(CitizenList& reps, int district);
 
 		const char* getPartyName() const;
 		const int getPartyID() const;

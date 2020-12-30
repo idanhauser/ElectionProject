@@ -158,14 +158,14 @@ namespace elec
 			res = res + getDistrictNumberOfVotesInParty(partyID, i + DISTRICT_ID_INIT);
 		return res;
 	}
-	int resultsArr::getPMNumberOfRepsInDistrict(int districtID, int partyID)
+	int resultsArr::getPMNumberOfRepsInDistrict(int districtId, int partyId) const
 	{
-		return _repsPartiesByID[partyID][districtID - DISTRICT_ID_INIT];
+		return _repsPartiesByID[partyId][districtId - DISTRICT_ID_INIT];
 	}
 	
-	int* resultsArr::getPMNRepsArrInDistrict(int partyID)
+	int* resultsArr::getPMNRepsArrInDistrict(int partyId)
 	{
-		return _repsPartiesByID[partyID];
+		return _repsPartiesByID[partyId];
 	}
 	int resultsArr::getPmsRepsTotalByDistrictID(int index) const
 	{
@@ -283,9 +283,9 @@ namespace elec
 	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) {
 		int leftReps;
 		double amountOfElectedFromDistrict;
-		pair* leftForPartyForElector = new pair[partiesLogicSize];
+		pair* leftForPartyForElector = new pair[_partiesLogicSize];
 		int allVotesInDis = 0;
-		for (int n = 0; n < partiesLogicSize; n++)
+		for (int n = 0; n < _partiesLogicSize; n++)
 		{
 			allVotesInDis = allVotesInDis + getDistrictNumberOfVotesInParty(n + PARTY_ID_INIT, districtID);
 		}
@@ -294,7 +294,7 @@ namespace elec
 		if (allVotesInDis)
 		{
 			double minVotesForRep = double(allVotesInDis) / repsAmount;
-			for (int i = 0; i < partiesLogicSize; i++)
+			for (int i = 0; i < _partiesLogicSize; i++)
 			{
 				if (minVotesForRep)
 					amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
@@ -309,17 +309,17 @@ namespace elec
 				leftForPartyForElector[i].index = i;
 			}
 			leftReps = repsAmount;
-			for (int k = 0; k < partiesLogicSize; k++)
+			for (int k = 0; k < _partiesLogicSize; k++)
 			{
 				leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
 			}
-			bubbleSort(leftForPartyForElector, partiesLogicSize);
-			for (int l = 0; l < min(partiesLogicSize, leftReps); l++)
+			bubbleSort(leftForPartyForElector, _partiesLogicSize);
+			for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
 			{
 				AddToPMRepsCount(districtID, leftForPartyForElector[l].index, 1);
 			}
 			// copy all values from _repsPartiesByID[districtID] to parameter "district" reps member
-			for (int i = 0; i < partiesLogicSize; i++)
+			for (int i = 0; i < _partiesLogicSize; i++)
 			{
 				district->setRepsArrByPartyID(i, getPMNumberOfRepsInDistrict(districtID, i));
 			}
@@ -341,7 +341,7 @@ namespace elec
 
 	//		}
 	//	}
-	//	//todo: update for unified district the leader
+	//	//todo:roee update for unified district the leader
 	//	district->setLeader(_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader());
 	//	for (int i = 0; i < partiesLogicSize; i++)
 	//	{
@@ -350,7 +350,7 @@ namespace elec
 	//	district->setRepsArrByPartyID(leaderWithMostRepsPartyID, district->getNumOfReps());
 	//	addToPmsRepsTotalByPartyID(leaderWithMostRepsPartyID, repsAmount);
 
-	//	//todo: remove next comment after district leader is set in UnifiedDistrict.h
+	//	//todo:roee remove next comment after district leader is set in UnifiedDistrict.h
 	//	//cout << "The district belongs to: " <<
 	//	//	_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader().getCitizenName() << endl;
 
@@ -363,14 +363,6 @@ namespace elec
 		*xp = *yp;
 		*yp = temp;
 	}
-	//from idan to check if needed:
-	//bool resultsArr::isResultsAllowed()const
-	//{
-	//	if ((_partiesLogicSize != 0) && (_districtslogicSize != 0))
-	//		return true;
-	//	else
-	//		return false;
-	//}
 
 
 
@@ -401,7 +393,7 @@ namespace elec
 		}
 	}
 
-	//todo: fix
+	//todo:roee fix
 	/*ostream& operator<<(ostream& os, const resultsArr& resultsArr) {
 		for (int i = 0; i < resultsArr.getdistrictsAmount(); i++)
 		{

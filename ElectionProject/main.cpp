@@ -296,7 +296,7 @@ void addDistrict()
 	distType = static_cast<DistcritType>(userChoise);
 	if (numberRepresentatives >= 0)
 	{
-		if (!election.addNewDistrict(name, numberRepresentatives, districtId, distType))
+		if (!election->addNewDistrict(name, numberRepresentatives, districtId, distType))
 		{
 			cout << "Error:District " << name << " wasn't added." << endl;
 		}
@@ -307,7 +307,7 @@ void addDistrict()
 	}
 	else
 	{
-		if (!election->addNewDistrict(name, numberRepresentatives, districtId))
+		if (!election->addNewDistrict(name, numberRepresentatives, districtId,distType))
 		{
 			cout << "ERROR: You chose 'Simple election round' therefor you can not add districts." << endl;
 		}

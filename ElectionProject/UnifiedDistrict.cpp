@@ -33,6 +33,11 @@ namespace elec
 		return false;
 	}
 
+	const char* UnifiedDistrict::getName() const
+	{
+		return District::getName();
+	}
+
 	void UnifiedDistrict::toOs(ostream& os) const
 	{
 		int repByParty=0;
@@ -49,25 +54,6 @@ namespace elec
 		}
 	}
 
-
-	//ostream& operator<<(ostream& os, const UnifiedDistrict& district)
-	//{
-	//	os << "**********************************" << endl;
-	//	os << "Unified Type District " << district.getName() << ", its ID is: " << static_cast<int>(district.getSerialNum()) << " has " << district.getNumberOfCitizens() << " citizens." << endl;
-	//	os << "Number of representatives is : " << static_cast<double>(district.getNumOfReps()) << endl;
-	//	os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
-	//	//TODO to check if the next commented line is needed
-	//	/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
-	//	for (int i = 0; i < district.getRepsByPartyLogicSize(); i++)
-	//		if (district.getRepsByPartyID(i) != 0)
-	//		{
-	//			os << "Only Party Id " << i << " Leader" << endl;
-	//			os<<"Gets all " << district.getRepsByPartyID(i) << " reps from the district." << endl;
-	//			os << "The other party leaders get None" << endl;
-	//		}
-	//	os << "**********************************" << endl;
-	//	return os;
-	//}
 
 
 

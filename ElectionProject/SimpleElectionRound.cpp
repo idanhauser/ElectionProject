@@ -11,9 +11,9 @@ namespace elec
 	{
 	}
 
-	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int num_of_rep) :ElectionRound(date),_numOfReps(num_of_rep)
+	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int numOfReps) :ElectionRound(date),_numOfReps(numOfReps)
 	{
-		DividedDistrict* dist = new DividedDistrict("singleDist", _numOfReps);
+		DividedDistrict* dist = new DividedDistrict("singleDist", _numOfReps,0);
 		_districts.addToList(*dist);
 		_results.addDistrict();
 		_results.setdistrictsAmount();
@@ -24,7 +24,7 @@ namespace elec
 		return _numOfReps;
 	}
 
-	bool SimpleElectionRound::addNewDistrict(const char str[MAX_SIZE], int numbeRepresentatives, int& districtId)
+	bool SimpleElectionRound::addNewDistrict(const char str[MAX_SIZE], int numberRepresentatives, int& districtId,DistcritType districtType)
 	{
 		return false;
 	}

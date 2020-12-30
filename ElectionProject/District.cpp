@@ -70,26 +70,6 @@ namespace elec {
 	{
 		return _Citizens.getCitizenByIndex(idx);
 	}
-	//todo: to delete.
-	// District& District::operator=( District& other)
-	//{
-	//	if(this!=&other)
-	//	{
-	//		strcpy(_name, other._name);
-	//		_electionResult = other._electionResult;
-	//		_numOfReps = other._numOfReps;
-	//		_serialNum = other._serialNum;
-	//		_numberOfVotesinDist = other._numberOfVotesinDist;
-	//		_votersPercentage = other._votersPercentage;
-	//		
-	//		for (int i = 0; i < other._Citizens.getLogicSize(); ++i)
-	//		{
-	//			this->addCitizen(&other.getCitizenByIndex(i));
-	//		}
-	//	}
-	//	return *this;
-	//}
-
 	const CitizenList& District::getEligibleCitizens() const
 	{
 		return _Citizens;
@@ -234,8 +214,37 @@ namespace elec {
 		}
 
 	}
+	int District::getRepsByPartyID(int partyID) const
+	{
+		return _repsByPartyID[partyID - PARTY_ID_INIT];
 
+	}
 
+	bool District::setRepsArrByPartyID(int partyID, int repsAmount)
+	{
+			_repsByPartyID[partyID - PARTY_ID_INIT] = repsAmount;
+			return true;
+	}
+	int District::getRepsByPartyLogicSize() const
+	{
+		return _repsByPartyLogicSize;
+	}
+	void District::realloc(int new_size)
+	{
+		int* new_memory = new int[new_size];
+
+		for (int i = 0; i < min(new_size, _repsByPartyPhySize); ++i)
+		{
+			new_memory[i] = _repsByPartyID[i];
+		}
+		if (_repsByPartyLogicSize >= 1)
+		{
+			delete[] _repsByPartyID;
+		}
+
+		_repsByPartyPhySize = new_size;
+		_repsByPartyID = new_memory;
+	}
 	bool District::updateRepsArr()
 	{
 		numOfParties++;
@@ -273,7 +282,7 @@ namespace elec {
 			getSerialNum() << " has " << district.getNumberOfCitizens() << " citizens." << endl;
 		os << "Number of representatives is : " << static_cast<double>(district.getNumOfReps()) << endl;
 		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
-		//TODO to check if the next commented line is needed
+		//TODO:roee: to check if the next commented line is needed
 	/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
 		district.toOs(os);
 		os << "**********************************" << endl;

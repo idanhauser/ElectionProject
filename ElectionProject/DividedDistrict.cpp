@@ -28,11 +28,18 @@ namespace elec {
 			os << reps << " Reps." << endl;
 		}
 	}
+
+	const char* DividedDistrict::getName() const
+	{
+		return District::getName();
+	}
+
 	ostream& operator<<(ostream& os, const DividedDistrict& district)
 	{
 		os << "**********************************" << endl;
-		os << "Divided Type District " << district.getName() << ", its ID is: " << (int)district.getSerialNum() << " has " << district.getNumberOfCitizens() << " citizens." << endl;
-		os << "Number of representatives is : " << (double)district.getNumOfReps() << endl;
+		os << "Divided Type District " << district.getName() << ", its ID is: " << static_cast<int>(district.
+			getSerialNum()) << " has " << district.getNumberOfCitizens() << " citizens." << endl;
+		os << "Number of representatives is : " << static_cast<double>(district.getNumOfReps()) << endl;
 		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
 		os << "**********************************" << endl;
 		return os;

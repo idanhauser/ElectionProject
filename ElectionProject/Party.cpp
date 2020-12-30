@@ -18,7 +18,7 @@ namespace elec {
 		_partyLeader(partyLeader), _numOfDist(numOfDist),_VotingPercentagesDistrict(new double[MAX_SIZE]),_logicSize(0),_phySize(MAX_SIZE)
 	{
 		_partyMembers->addToList(partyLeader);
-		strcpy(this->_partyName, partyName);
+		strcpy(this->_name, partyName);
 		for (int i = 0; i < numOfDist; i++)
 		{
 			_VotingPercentagesDistrict[i] = 0;
@@ -40,7 +40,7 @@ namespace elec {
 		_name = new char[nameLen];
 		//Reading name:
 		reader.read(rcastc(_name), sizeof(char) * nameLen);
-		//Reading _PMCandidateID//TODO: need to connect leader
+		//Reading _PMCandidateID//
 		reader.read(rcastc(&_PMCandidateID), sizeof(int));
 		//Reading _numOfDist
 		reader.read(rcastc(&_numOfDist), sizeof(int));
@@ -54,30 +54,6 @@ namespace elec {
 		{
 			reader.read(rcastc(&_VotingPercentagesDistrict[i]), sizeof(int));
 		}
-		//to continue saving to file from this point lefts: _partyMembers list,_representativesByDist,
-		//Reading _partyMembers list
-			//Reding number of objects:
-	//	loader.getWriter().read(rcastc(&numOfElements), sizeof(int));
-	//	for (int i = 0; i < numOfElements; ++i)//TODO : TO Change will be fill when matching between citizen to a party.
-	//	{
-	//		int idOfReps;
-	//		loader.getWriter().read(rcastc(&idOfReps), sizeof(int));
-	//	}
-	//	//Save _representativesByDist list:
-	////save number of objects(=cols in arr):
-	//	loader.getWriter().read(rcastc(&numOfElements), sizeof(int));
-	//	//reaing from file num of cols in arr:
-	//	for (int i = 0; i < numOfElements; ++i)//TODO : TO Change will be fill when matching between citizen to a party.
-	//	{
-	//		int numOfRepsDist;
-	//		loader.getWriter().read(rcastc(&numOfRepsDist), sizeof(int));
-	//		//reading party members ids
-	//		for (int j = 0; j < numOfRepsDist; ++j)
-	//		{
-	//			int rpusid;
-	//			loader.getWriter().read(rcastc(&rpusid), sizeof(int));
-	//		}
-	//	}
 	}
 	Party::~Party()
 	{
@@ -94,6 +70,12 @@ namespace elec {
 	const int Party::getPartyID() const
 	{
 		return _partyID;
+	}
+
+	bool Party::addToRepByDists(CitizenList& reps, int district)
+	{
+		_representativesByDist[district] = reps;
+		return true;
 	}
 
 	const char* Party::getPartyName() const
@@ -171,10 +153,11 @@ namespace elec {
 		return _partyLeader;
 	}
 
-	double Party::getVotingPercentagesByDistrictIdx(int index) const
+	double Party::getVotingPercentagesByDistcritIdx(int index) const
 	{
 		return _VotingPercentagesDistrict[index];
 	}
+
 
 	/*void Party::addVotingToPartyFromDistIdx(int index)
 	{
@@ -289,8 +272,8 @@ namespace elec {
 	ostream& operator<<(ostream& os, const Party& party)
 	{
 		os << "**********************************" << endl;
-		os << party._partyName << ","<< (int)party._partyID << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
-			(int)party.getPartyPMCandidateID() << "." << endl << "Party members are:" << endl;
+		os << party._name << ","<< static_cast<int>(party._partyID) << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
+			static_cast<int>(party.getPartyPMCandidateID()) << "." << endl << "Party members are:" << endl;
 		for (int i = 1; i < party.getPartyMembers().getLogicSize(); ++i)
 		{
 			os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
