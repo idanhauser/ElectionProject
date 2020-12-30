@@ -24,7 +24,7 @@ namespace elec {
 		DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
-
+		int NoChangeSinceLastCalc;
 
 		const ElectionRound& operator=(const ElectionRound&);
 
@@ -38,7 +38,7 @@ namespace elec {
 		~ElectionRound() = default;
 
 		void printElectionDate() const;
-		bool addNewDistrict(const char str[MAX_SIZE], int number_representatives,int& districtId);
+		bool addNewDistrict(const char str[MAX_SIZE], int number_representatives,int& districtId, int DistrictType);
 
 		
 		constexpr int getYear() const
@@ -71,7 +71,7 @@ namespace elec {
 	
 	
 		//bool VotesToRepsInDistrictByDistrictID(int districtID); //todo: move to results
-		//bool setWinnerInUnifiedDistrictByDistrictID(int districtID); //todo: move to results
+		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount); //todo: move to results
 		bool checkElectionsWinner(int* partiesIndexes); 
 		bool sortDistrictWinners(int districtID, int* partiesIndexes); 
 		bool isResultsAllowed()const;

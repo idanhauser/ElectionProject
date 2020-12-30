@@ -3,16 +3,21 @@
 #include <iostream>
 namespace elec
 {
-
-
-	UnifiedDistrict::UnifiedDistrict(char* name, int numOfReps) : District(name, numOfReps),
+	UnifiedDistrict::UnifiedDistrict(const char* name, int numOfReps, int numOfParties) : District(name, numOfReps, numOfParties),
 		_partyLeader(nullptr)
 	{
+	}	
+
+	UnifiedDistrict::~UnifiedDistrict()
+	{
+
 	}
 
-	Citizen* UnifiedDistrict::getPartyLeader() const
+
+
+	const Citizen* UnifiedDistrict::getPartyLeader() const
 	{
-		return this->getPartyLeader();
+		return _partyLeader;
 	}
 
 	bool UnifiedDistrict::setLeader(const Citizen* leader)
@@ -28,17 +33,38 @@ namespace elec
 
 	ostream& operator<<(ostream& os, const UnifiedDistrict& district)
 	{
-		os << "District " << district.getName() << ", its ID is: " << (int)district.getSerialNum() << " has " << district.getNumberOfCitizens() << " citizens." << endl;
+		os << "**********************************" << endl;
+		os << "Unified Type District " << district.getName() << ", its ID is: " << (int)district.getSerialNum() << " has " << district.getNumberOfCitizens() << " citizens." << endl;
 		os << "Number of representatives is : " << (double)district.getNumOfReps() << endl;
 		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
 		//TODO to check if the next commented line is needed
 		/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
-		for (int i = 0; i < district.getRepsByPartyLogicSizeLogicSize(); i++)
-			if (!district.getRepsByPartyID(i))
+		for (int i = 0; i < district.getRepsByPartyLogicSize(); i++)
+			if (district.getRepsByPartyID(i) != 0)
 			{
-				os << "The District Gives " << district.getRepsByPartyID(i) <<
-					" Reps only for party id: " << i << endl;
+				os << "Only Party Id " << i << " Leader" << endl;
+				os<<"Gets all " << district.getRepsByPartyID(i) << " reps from the district." << endl;
+				os << "The other party leaders get None" << endl;
 			}
+		os << "**********************************" << endl;
 		return os;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

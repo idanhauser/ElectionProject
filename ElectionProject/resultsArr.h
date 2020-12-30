@@ -46,6 +46,7 @@ namespace elec
 		int getPmsRepsTotalByPartyID(int index) const;
 		bool setPmsRepsTotalByPartyID(int partyID, int reps);
 		bool addToPmsRepsTotalByPartyID(int partyID, int reps);
+		bool setNewNumForPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
 
 		bool setpartiesAmount();
 		bool setdistrictsAmount();
@@ -55,8 +56,8 @@ namespace elec
 			double repsAmount;
 		};
 
-		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District& district);
-		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount, District& district);
+		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district);
+		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount, District* district);
 
 		void swap(pair* xp, pair* yp);
 		void bubbleSort(pair arr[], int n);

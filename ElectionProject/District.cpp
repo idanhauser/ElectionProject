@@ -9,11 +9,15 @@ using namespace std;
 namespace elec {
 	int District::snGenerator = DISTRICT_ID_INIT;
 
-	District::District(const char* name, int numOfReps) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _repsByPartyLogicSize(0),
-		_repsByPartyPhySize(0), _numOfReps(numOfReps), _numberOfVotesinDist(0)
+	District::District(const char* name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
+		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _repsByPartyLogicSize(numOfParties),
+		_repsByPartyPhySize(MAX_SIZE), _numOfReps(numOfReps), _numberOfVotesinDist(0)
 	{
 		strcpy(this->_name, name);
+		for (int i = 0; i < numOfParties; i++)
+		{
+			_repsByPartyID[i] = 0;
+		}
 	}
 
 	District::~District()
@@ -60,7 +64,7 @@ namespace elec {
 			realloc(_repsByPartyPhySize * 2);
 
 		}
-		_repsByPartyID[_repsByPartyLogicSize++] = 0;
+		_repsByPartyID[numOfParties] = 0;
 		return true;
 	}
 	
@@ -135,23 +139,24 @@ namespace elec {
 		return true;
 	}
 
-		void District::operator++(int)
+	void District::operator++(int)
 	{
 		_numberOfVotesinDist++;
 		_votersPercentage = (_numberOfVotesinDist / getNumberOfCitizens()) * 100;
 	}
 
+	//ostream& operator<<(ostream& os, const District& district)
+	//{
+	//	//district.toOs(ostream & os);
 
-	ostream& operator<<(ostream& os, const District& district)
-	{
-		os << "District " << district._name << ", its ID is: " << (int)district._serialNum <<" has "<< district.getNumberOfCitizens() << " citizens." << endl;
-		os << "Number of representatives is : " << (double)district._numOfReps << endl;
-		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
-		//TODO to check if the next commented line is needed
-		/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
-		
-		return os;
-	}
+	//	os << "District " << district._name << ", its ID is: " << (int)district._serialNum <<" has "<< district.getNumberOfCitizens() << " citizens." << endl;
+	//	os << "Number of representatives is : " << (double)district._numOfReps << endl;
+	//	os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;
+	//	//TODO to check if the next commented line is needed
+	//	/*<< "and the election's result is " <<(int)district._electionResult << "." << endl;*/
+	//	
+	//	return os;
+	//}
 
 	void District::realloc(int new_size)
 	{
@@ -159,7 +164,7 @@ namespace elec {
 
 		for (int i = 0; i < min(new_size, _repsByPartyPhySize); ++i)
 		{
-			new_memory[i] = this->_repsByPartyID[i];
+			new_memory[i] = _repsByPartyID[i];
 		}
 		if (_repsByPartyLogicSize >= 1)
 		{
@@ -170,7 +175,7 @@ namespace elec {
 		_repsByPartyID = new_memory;
 	}
 
-	int District::getRepsByPartyLogicSizeLogicSize() const
+	int District::getRepsByPartyLogicSize() const
 	{
 		return _repsByPartyLogicSize;
 	}
@@ -181,9 +186,39 @@ namespace elec {
 		return true;
 	}
 
-	bool District::getRepsByPartyID(int partyID)
+	int District::getRepsByPartyID(int partyID) const
 	{
 		return _repsByPartyID[partyID - PARTY_ID_INIT];
 		
+	}
+
+	bool District::updateRepsArr()
+	{
+		numOfParties++;
+		return AddAnotherColumn() && addDistToArr();
+	}
+
+	bool District::AddAnotherColumn()
+	{
+		int* new_memory = new int[numOfParties];
+		for (int i = 0; i < min(numOfParties, _repsByPartyPhySize); ++i)
+		{
+			new_memory[i] = (_repsByPartyID[i]);
+		}
+		_repsByPartyID = new_memory;
+
+		return true;
+	}
+
+	bool District::addDistToArr()
+	{
+		if (_repsByPartyLogicSize == _repsByPartyPhySize)
+		{
+			realloc(_repsByPartyPhySize * 2);
+
+		}
+		_repsByPartyID[_repsByPartyLogicSize++] = 0;
+		
+		return true;
 	}
 }

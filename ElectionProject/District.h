@@ -12,32 +12,36 @@ namespace elec
 
 	class District
 	{
-	private:
+	protected:
 		static int snGenerator;
 		int _serialNum;
 		char* _name;
 		CitizenList _Citizens;
 		double _votersPercentage;
 		int* _repsByPartyID;//todo: check
+		int numOfParties;
 		int _repsByPartyLogicSize;
 		int _repsByPartyPhySize;
 		int _numOfReps;
 
 		int _numberOfVotesinDist;
 		District(const District& other);
-		const District& operator=(const District&);
+
 
 	public:
 	
 		District() = delete;///we delete default constructor
-		District(const char* name, int numOfReps);
+		District(const char* name, int numOfReps, int numOfParties);
 		~District();
+		//virtual void toOs(ostream& os) const {}
 		friend ostream& operator<<(ostream& os, const District& district);
 		//friend class CitizenList;
+		virtual const Citizen* getPartyLeader() const { return nullptr; };
+		virtual bool setLeader(const Citizen* leader) { return 0; };
 
 
-		const CitizenList& getEligibleCitizens() const;
-		const char* getName() const;
+		virtual const CitizenList& getEligibleCitizens() const;
+		virtual const char* getName() const = 0;
 		const double getVotersPrecentage() const;
 		CitizenList getElectionResults()const;
 		int getSerialNum() const;
@@ -52,8 +56,11 @@ namespace elec
 		int getVotingCitizensAmountInDistrict() const;
 		void operator++(int);
 		void realloc(int new_size);
-		int getRepsByPartyLogicSizeLogicSize() const;
+		int getRepsByPartyLogicSize() const;
 		bool setRepsArrByPartyID(int partyID, int repsAmount);
-		bool getRepsByPartyID(int partyID) const;
+		int getRepsByPartyID(int partyID) const;
+		bool updateRepsArr();
+		bool AddAnotherColumn();
+		bool addDistToArr();
 	};
 }

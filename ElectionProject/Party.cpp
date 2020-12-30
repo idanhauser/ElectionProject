@@ -15,8 +15,12 @@ namespace elec {
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
 		_partyLeader(partyLeader), _numOfDist(numOfDist),_VotingPercentagesDistrict(new double[MAX_SIZE]),_logicSize(0),_phySize(MAX_SIZE)
 	{
-
+		_partyMembers->addToList(partyLeader);
 		strcpy(this->_partyName, partyName);
+		for (int i = 0; i < numOfDist; i++)
+		{
+			_VotingPercentagesDistrict[i] = 0;
+		}
 
 	}
 
@@ -61,7 +65,7 @@ namespace elec {
 	bool Party::AddAnotherColumn()
 	{
 		CitizenList* new_memory = new CitizenList[_numOfDist ];
-		for (int i = 0; i < min(_numOfDist , _numOfDist); ++i)
+		for (int i = 0; i < min(_numOfDist , _numOfDist); ++i) //todo: idan: fix min
 		{
 			new_memory[i] = (_representativesByDist[i]);
 		}
@@ -78,10 +82,11 @@ namespace elec {
 
 		}
 		_VotingPercentagesDistrict[_numOfDist] = 0;
+		_logicSize++;
 		return true;
 	}
 
-	bool Party::updateParties()
+	bool Party::updateDistricts()
 	{
 		_numOfDist++;
 		return AddAnotherColumn() && addDistToArr();
@@ -92,6 +97,7 @@ namespace elec {
 	{
 		CitizenList& represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];
 		int amountToPrint = min(num, represnts.getLogicSize());
+		cout << "The Reps are: " << endl;
 		for (int i = 0; i < amountToPrint; ++i)
 		{
 			cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
@@ -115,10 +121,10 @@ namespace elec {
 		return _VotingPercentagesDistrict[index];
 	}
 
-	void Party::addVotingToPartyFromDistIdx(int index)
+	/*void Party::addVotingToPartyFromDistIdx(int index)
 	{
 		_VotingPercentagesDistrict[index]++;
-	}
+	}*/
 
 	CitizenList* Party::getRepresentativesByDis() const
 	{
@@ -163,20 +169,18 @@ namespace elec {
 		return true;
 	}
 
-	bool  Party::getVotingPercentagesDistrict(int districtID)
-	{
-		return _VotingPercentagesDistrict[districtID - DISTRICT_ID_INIT];
-	}
 
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{
+		os << "**********************************" << endl;
 		os << party._partyName << ","<< (int)party._partyID << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
 			(int)party.getPartyPMCandidateID() << "." << endl << "Party members are:" << endl;
-		for (int i = 0; i < party.getPartyMembers().getLogicSize(); ++i)
+		for (int i = 1; i < party.getPartyMembers().getLogicSize(); ++i)
 		{
 			os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
 		}
+		os << "**********************************" << endl;
 		return os;
 	}
 }

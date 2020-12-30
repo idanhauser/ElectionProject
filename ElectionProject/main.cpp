@@ -200,11 +200,14 @@ void addDistrict()
 	int districtId;
 	char name[MAX_SIZE];
 	int numberRepresentatives;
+	int TypeBool;
 	cout << "Insert a district's name and a number of representatives:" << endl;
 	cin >> name >> numberRepresentatives;
+	cout << "Insert 1 if the district is a unified district, or 0 if divided:" << endl;
+	cin >> TypeBool;
 	if (numberRepresentatives >= 0)
 	{
-		if (!election.addNewDistrict(name, numberRepresentatives, districtId))
+		if (!election.addNewDistrict(name, numberRepresentatives, districtId, TypeBool))
 		{
 			cout << "Error:District " << name << " wasn't added." << endl;
 		}
@@ -316,12 +319,6 @@ void voting()
 
 void results()
 {
-	//todo: if choice == 9 -> print, if choice == 11 -> use operator as below to save in file
-	// ofstream myfile;
-	//myfile.open("name.txt");
-	//myfile << election;
-	//myfile.close();
-	//todo: fix - not sure we need the next line. maybe should put here isResultsAllowed if, and calcReps
 	election.theResults();
 
 	cout << election << endl;

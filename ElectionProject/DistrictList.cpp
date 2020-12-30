@@ -38,14 +38,14 @@ namespace elec {
 	}
 
 
-	bool DistrictList::addToList(District& district)
+	bool DistrictList::addToList(District* district)
 	{
 		if (_logicSize == _phySize)
 		{
 			realloc(_phySize * 2);
 
 		}
-		_districts[_logicSize++] = &district;
+		_districts[_logicSize++] = district;
 		return true;
 	}
 
@@ -102,10 +102,10 @@ namespace elec {
 			return *_districts[index];
 	}
 
-	District& DistrictList::getDistcritByIndex(int index)
+	District* DistrictList::getDistcritByIndex(int index)
 	{
 		if (index < _logicSize)
-			return *_districts[index];
+			return _districts[index];
 	}
 
 
