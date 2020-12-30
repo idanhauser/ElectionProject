@@ -29,10 +29,7 @@ namespace elec {
 		}
 	}
 
-	const char* DividedDistrict::getName() const
-	{
-		return District::getName();
-	}
+
 
 	ostream& operator<<(ostream& os, const DividedDistrict& district)
 	{

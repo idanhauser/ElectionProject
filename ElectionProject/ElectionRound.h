@@ -119,13 +119,13 @@ namespace elec {
 		/// <param name="fileName">the name of the file we want to </param>
 		virtual void save(ofstream& outFile) const =0;
 
-
-	private:
 		///utils:
 		/// <summary>
 		/// printing the date of the election
 		/// </summary>
 		void printElectionDate() const;
+	private:
+
 		/// <summary>
 		/// swap between two pairs.
 		/// </summary>

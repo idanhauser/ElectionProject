@@ -76,7 +76,7 @@ void StartMenu()
 			cout << "-------------" << endl;
 			cout << "Load election round from file" << endl;
 			cout << "-------------" << endl;
-			if(loadElection())
+			if (loadElection())
 			{
 				cout << "Election was loaded successfully." << endl;
 				showMainMenu();
@@ -149,8 +149,6 @@ void initElection()
 	}
 	showMainMenu();
 }
-
-
 
 
 void showMainMenu()
@@ -285,31 +283,34 @@ void addDistrict()
 	int districtId = DISTRICT_ID_INIT;
 	char name[MAX_SIZE];
 	int numberRepresentatives;
-	DistcritType distType;
-	int userChoise=0;
-	cout << "Insert a district's name and a number of representatives:" << endl;
-	cin >> name >> numberRepresentatives;
-	cout << "Choose district type:"  << endl;
-	cout << "Press 1 for Unified District" << endl;
-	cout << "Press 2 for load divided District" << endl;
-	cin >> userChoise;
-	distType = static_cast<DistcritType>(userChoise);
-	if (numberRepresentatives >= 0)
+	int userChoise = 0;
+	if (typeid(*election) == typeid(SimpleElectionRound))
 	{
-		if (!election->addNewDistrict(name, numberRepresentatives, districtId, distType))
-		{
-			cout << "Error:District " << name << " wasn't added." << endl;
-		}
-		else
-		{
-			cout << "District " << name << " added. \n And its id is " << districtId << endl;
-		}
+		cout << "ERROR: You chose 'Simple election round' therefor you can not add districts." << endl;
 	}
 	else
 	{
-		if (!election->addNewDistrict(name, numberRepresentatives, districtId,distType))
+		cout << "Insert a district's name and a number of representatives:" << endl;
+		cin >> name >> numberRepresentatives;
+		cout << "Choose district type:" << endl;
+		cout << "Press 1 for Unified District" << endl;
+		cout << "Press 2 for load divided District" << endl;
+		cin >> userChoise;
+		DistcritType distType = static_cast<DistcritType>(userChoise);
+		if (numberRepresentatives >= 0)
 		{
-			cout << "ERROR: You chose 'Simple election round' therefor you can not add districts." << endl;
+			if (!election->addNewDistrict(name, numberRepresentatives, districtId, distType))
+			{
+				cout << "Error:District " << name << " wasn't added." << endl;
+			}
+			else
+			{
+				cout << "District " << name << " added. \n And its id is " << districtId << endl;
+			}
+		}
+		else
+		{
+			cout << "ERROR: Negative number of representatives is not allowed." << endl;
 		}
 	}
 }
@@ -435,7 +436,7 @@ void voting()
 void results()
 {
 	election->theResults();
-	cout << election << endl;
+	cout << *election << endl;
 }
 
 void saveElections()
@@ -478,7 +479,7 @@ bool loadElection()
 	{
 		delete election;
 		ElectionType type = loader.getElectionType();
-		
+
 		if (type == ElectionType::RegularElectionRound)
 		{
 			election = new RegularElectionRound(loader);

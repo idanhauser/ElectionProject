@@ -111,33 +111,9 @@ namespace elec {
 				cout << '.';
 			}
 		}
-	}
 	
-	bool ElectionRound::addNewDistrict(const char name[MAX_SIZE], int numberResentatives, int& districtId, DistcritType districtType)
-	{
-		bool districtAdded;
-		if (districtType==DistcritType::UnifiedDistrict)
-		{
-			UnifiedDistrict* dist = new UnifiedDistrict(name, numberResentatives, _parties.getLogicSize()); 
-			districtId = static_cast<UnifiedDistrict*>(dist)->getSerialNum();
-			districtAdded = _districts.addToList(*dist);
-		}
-			
-		else
-		{
-			DividedDistrict* dist = new DividedDistrict(name, numberResentatives, _parties.getLogicSize());
-			
-			districtId = static_cast<DividedDistrict*>(dist)->getSerialNum();
-			districtAdded = _districts.addToList(*dist);
-		}
-		for (int i = 0; i < _parties.getLogicSize(); ++i)
-		{
-			_parties.getPartyByIndex(i).updateDistricts();
-		}
-		_results.addDistrict();
-		_results.setdistrictsAmount();
-		return districtAdded;
 	}
+
 
 	bool ElectionRound::addNewCitizen(const char* name, int id, int birthyear, int districtId)
 	{
@@ -204,12 +180,7 @@ namespace elec {
 			this->NoChangeSinceLastCalc = 1;
 			for (int i = 0; i <len; i++)
 			{
-				//todo:Idan to fix. why the if?
-				if (typeid(_districts.getDistcritByIndex(i)) == typeid(UnifiedDistrict))
 					cout << _districts.getDistcritByIndex(i) << endl;
-				else
-					cout <<_districts.getDistcritByIndex(i) << endl;
-
 			}
 		}
 		else
@@ -349,10 +320,11 @@ namespace elec {
 		}
 		else
 		{
-			for (int i = 0; i < 3; i+=2) //todo:idan fix printing address instead of date when written as "os << electionRound._date << endl;"
+			for (int i = 0; i < 3; i+=2) //todo: fix printing address instead of date when written as "os << electionRound._date << endl;"
 				os << electionRound._date[i] << electionRound._date[i + 1] << "/";
 			os << electionRound._date[6] << electionRound._date[7];
 			os << endl;
+
 			int districtAmount = electionRound._districts.getLogicSize();
 			int partiesAmount = electionRound._parties.getLogicSize();
 			for (int j = 0; j < districtAmount; j++)
@@ -426,10 +398,8 @@ namespace elec {
 			}
 			delete[] partiesIndexs;
 			return os;
-			///came from idan can delelte.
-			//delete[] leftForPartyForElector;
-			//delete[] totalRepsForPmByID;
-			//return true;
+		
+
 		}
 
 	}
@@ -468,17 +438,10 @@ namespace elec {
 		//Saving resultArr:
 	//	_results.save(outFile);
 
-
-		
 		cout << "done" << endl;
 	}
 
-	//todo:idan fix
-	//ostream& operator<<(ostream& os, const ElectionRound& electionRound) {
-	//
 
-	//	return os;
-	//}
 
 
 

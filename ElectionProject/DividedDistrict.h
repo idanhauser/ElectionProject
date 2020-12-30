@@ -13,7 +13,6 @@ namespace elec
 		virtual void toOs(ostream& os) const override;
 		//friend ostream& operator<<(ostream& os, const DividedDistrict& district);
 
-		virtual const char* getName() const override;
 
 
 

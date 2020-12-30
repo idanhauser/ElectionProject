@@ -34,21 +34,17 @@ namespace elec
 		District() = delete;///we delete default constructor
 	    District(const char* name, int numOfReps, int numOfParties);
 		virtual ~District();
-		virtual void toOs(ostream& os) const {}
+		virtual void toOs(ostream& os) const = 0;
 		friend ostream& operator<<(ostream& os, const District& district);
-		//friend class CitizenList;
+	
 		virtual const Citizen* getPartyLeader() const { return nullptr; }
 		virtual bool setLeader(const Citizen* leader) { return false; }
 
 		//Idan:
 		Citizen& getCitizenByIndex(int idx);
-		// //District& operator=( District&);
-		//const CitizenList& getEligibleCitizens() const;
-		//const char* getName() const;
-		//double getVotersPercentage() const;
-		//roee:
+
 		virtual const CitizenList& getEligibleCitizens() const;
-		virtual const char* getName() const = 0;
+		virtual const char* getName() const;
 		const double getVotersPrecentage() const;
 
 

@@ -19,10 +19,6 @@ namespace elec
 		
 		//friend ostream& operator<<(ostream& os, const UnifiedDistrict& district);
 
-		virtual const char* getName() const override;
-
-
-		//idan added:
 		virtual void toOs(ostream& os) const override;
 
 	
