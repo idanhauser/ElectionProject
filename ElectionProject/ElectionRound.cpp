@@ -1,4 +1,4 @@
-﻿//code verison 2.0
+﻿//code verison 2.5
 #include "ElectionRound.h"
 #include <iostream>
 #include <algorithm>
