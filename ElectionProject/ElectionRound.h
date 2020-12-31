@@ -37,7 +37,7 @@ namespace elec {
 			double repsAmount;
 		};
 		ElectionRound() = delete;
-		ElectionRound(int date[DATE_SIZE]);
+		ElectionRound(int date[DATE_SIZE]);	
 		virtual ~ElectionRound() = default;
 				
 	explicit ElectionRound(LoadElectionSystem& loader);
@@ -150,8 +150,7 @@ namespace elec {
 
 
 
-		//bool VotesToRepsInDistrictByDistrictID(int districtID); //todo:roee move to results
-		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount); //todo roee: move to results
+		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount);
 		bool checkElectionsWinner(int* partiesIndexes);
 		bool sortDistrictWinners(int districtID, int* partiesIndexes);
 		bool isResultsAllowed() const;

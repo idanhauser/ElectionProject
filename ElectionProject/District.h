@@ -19,12 +19,12 @@ namespace elec
 		char* _name;
 		CitizenList _Citizens;
 		double _votersPercentage;
-		int* _repsByPartyID;//todo: check
+		int* _repsByPartyID;
 		int _numOfParties;
 		int _repsByPartyLogicSize;
 		int _repsByPartyPhySize;
 		int _numOfReps;
-		int _electionResult;//todo:idan- can be deleted
+		int _electionResult;
 		int _numberOfVotesinDist;
 		District(const District& other);
 
@@ -40,7 +40,6 @@ namespace elec
 		virtual const Citizen* getPartyLeader() const { return nullptr; }
 		virtual bool setLeader(const Citizen* leader) { return false; }
 
-		//Idan:
 		Citizen& getCitizenByIndex(int idx);
 
 		virtual const CitizenList& getEligibleCitizens() const;

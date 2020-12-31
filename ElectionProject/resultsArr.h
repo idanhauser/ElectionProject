@@ -18,13 +18,15 @@ namespace elec {
 		int** _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
 		int* _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
+		struct pair {
+			int index;
+			double repsAmount;
+		};
 		resultsArr(int partiesAmount, int districtAmount);
-		//idan added:
 		resultsArr(LoadElectionSystem& loader, int partiesAmount, int districtAmount);
-	//	resultsArr();
+	//	resultsArr() = delete;
 		~resultsArr(); 
 
-		//	friend ostream& operator<<(ostream& os, const resultsArr& results);
 
 
 		void AddSingleVoteToArr(int party_id, int district_id, int partiesAmount, int districtsAmount);
@@ -57,20 +59,15 @@ namespace elec {
 		bool setdistrictsAmount();
 		void save( ofstream& outFile) const;
 		 resultsArr& operator=(const resultsArr&other);
-		struct pair {
-			int index;
-			double repsAmount;
-		};
+		
 
 		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district);
-		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount, District* district);
 
 		void swap(pair* xp, pair* yp);
 		void bubbleSort(pair arr[], int n);
 
 
 		bool isResultsAllowed()const;
-		//idan added//void save(ofstream& outFile) const;
 	};
 
 }

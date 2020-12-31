@@ -78,13 +78,6 @@ namespace elec {
 
 
 
-	//const CitizenList& CitizenList::operator=(const CitizenList& other)
-	//{
-	//	this->_citizens = other._citizens;
-	//	this->_logicSize = other._logicSize;
-	//	this->_phySize = other._phySize;
-	//	return *this;
-	//}
 
 
 

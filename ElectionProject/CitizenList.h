@@ -19,7 +19,6 @@ namespace elec {
 	public:
 		CitizenList();
 
-		//const CitizenList& operator=(const CitizenList&);
 
 		~CitizenList();
 		void realloc(int new_size);

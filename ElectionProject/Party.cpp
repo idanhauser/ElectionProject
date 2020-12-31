@@ -101,7 +101,7 @@ namespace elec {
 	bool Party::AddAnotherColumn()
 	{
 		CitizenList* new_memory = new CitizenList[_numOfDist ];
-		for (int i = 0; i < min(_numOfDist , _numOfDist); ++i) //todo: idan: fix min
+		for (int i = 0; i < min(_numOfDist , _numOfDist); ++i)
 		{
 			new_memory[i] = (_representativesByDist[i]);
 		}
@@ -158,10 +158,6 @@ namespace elec {
 	}
 
 
-	/*void Party::addVotingToPartyFromDistIdx(int index)
-	{
-		_VotingPercentagesDistrict[index]++;
-	}*/
 
 	void Party::save(ofstream& outFile) const
 	{
@@ -187,37 +183,6 @@ namespace elec {
 		{
 			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
 		}
-		////Save _partyMembers list:
-		//	//save number of objects:
-		//numOfObj = _partyMembers->getLogicSize();
-		//	//saving to file num of party members:
-		//outFile.write(rcastcc(&numOfObj), sizeof(int));
-		//	//saving party members ids
-		//for (int i = 0; i < numOfObj; ++i)
-		//{
-		//	int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
-		//	outFile.write(rcastcc(&represntId), sizeof(int));
-		//}
-		////Save _representativesByDist list:
-		//	//save number of objects(=cols in arr):
-		//numOfObj = _representativesByDist->getLogicSize();
-		//	//saving to file num of cols in arr:
-		//outFile.write(rcastcc(&numOfObj), sizeof(int));
-		//	//saving to file num of cols in arr:
-		//for (int i = 0; i < numOfObj; ++i)
-		//{
-		//	int numOfRepsDist = _representativesByDist[i].getLogicSize();
-		//		//saving the number of repsInDist[i]:
-		//	outFile.write(rcastcc(&numOfRepsDist), sizeof(int));
-		//		//saving party members ids
-		//	for (int j = 0; j < numOfRepsDist; ++j)
-		//	{
-		//		int represntId = _partyMembers->getCitizenByIndex(i).getCitizenID();
-		//		outFile.write(rcastcc(&represntId), sizeof(int));
-		//	}
-		//}
-		
-
 
 		
 		

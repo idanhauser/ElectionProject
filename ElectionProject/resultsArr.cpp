@@ -249,7 +249,7 @@ namespace elec
 
 
 	bool resultsArr::addParty()
-	{  //check if delete pntrs is needed
+	{  
 		reallocVotesArr(_partiesLogicSize + 1);
 		_partiesLogicSize++;
 		int* districts = new int[_districtslogicSize];
@@ -355,34 +355,6 @@ namespace elec
 		return true;
 	}
 
-	//bool resultsArr::setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount, District* district) {
-	//	int max = 0;
-	//	int leaderWithMostRepsPartyID = 0;
-	//	for (int p = 0; p < partiesLogicSize; p++)
-	//	{
-	//		int curRepsAmount = getPMNumberOfRepsInDistrict(districtID, p + PARTY_ID_INIT);
-	//		if (max < curRepsAmount)
-	//		{
-	//			max = curRepsAmount;
-	//			leaderWithMostRepsPartyID = p + PARTY_ID_INIT;
-
-	//		}
-	//	}
-	//	//todo:roee update for unified district the leader
-	//	district->setLeader(_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader());
-	//	for (int i = 0; i < partiesLogicSize; i++)
-	//	{
-	//		district->setRepsArrByPartyID(i, 0);
-	//	}
-	//	district->setRepsArrByPartyID(leaderWithMostRepsPartyID, district->getNumOfReps());
-	//	addToPmsRepsTotalByPartyID(leaderWithMostRepsPartyID, repsAmount);
-
-	//	//todo:roee remove next comment after district leader is set in UnifiedDistrict.h
-	//	//cout << "The district belongs to: " <<
-	//	//	_parties.getPartyByIndex(leaderWithMostRepsPartyID).getPartyLeader().getCitizenName() << endl;
-
-	//	return true;
-	//}
 	
 	void resultsArr::swap(pair* xp, pair* yp)
 	{
@@ -394,18 +366,7 @@ namespace elec
 
 
 	
-	////idan added (for reading):
-	//void resultsArr::save(ofstream& outFile) const
-	//{
-	//	//saving _votesByIDs:
-	//		//don't need to save the number of cols in arr because its the size of parties.
-	//		// every cell in this arr is a vector in the length of the size of dists.
-	//	for (int i = 0; i < _partiesLogicSize; i++) {
-	//		_votesByIDs[i] = new int[_districtslogicSize];
-	//		for (int j = 0; j < _districtslogicSize; j++)
-	//			outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
-	//	}
-	//}
+
 
 	void resultsArr::bubbleSort(pair arr[], int n)
 	{
@@ -420,20 +381,4 @@ namespace elec
 		}
 	}
 
-	//todo:roee fix
-	/*ostream& operator<<(ostream& os, const resultsArr& resultsArr) {
-		for (int i = 0; i < resultsArr.getdistrictsAmount(); i++)
-		{
-			os << "The District with ID: " << i + DISTRICT_ID_INIT << " got " << endl;
-			for (int j = 0; j < resultsArr.getpartiesAmount(); j++)
-			{
-				os << "from Party with ID: " << j + PARTY_ID_INIT << " - " <<
-				resultsArr.getDistrictNumberOfVotesInParty(i + PARTY_ID_INIT, j + DISTRICT_ID_INIT)<< " votes" << endl;
-
-			}
-		}
-
-		return os;
-
-	}*/
 }

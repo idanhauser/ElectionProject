@@ -16,10 +16,8 @@ namespace elec
 		int _birthYear;
 		int _districtNum;
 		bool _hasVoted;
-		//if citizen is also represnt
 		const Party* _party;
 		int _partyId;
-		//reference to an existing district 
 		const District& _district;
 		
 		Citizen(const Citizen& other);

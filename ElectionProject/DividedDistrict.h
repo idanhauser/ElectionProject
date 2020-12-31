@@ -12,7 +12,6 @@ namespace elec
 		DividedDistrict( LoadElectionSystem& loader);
 		virtual ~DividedDistrict();
 		virtual void toOs(ostream& os) const override;
-		//friend ostream& operator<<(ostream& os, const DividedDistrict& district);
 
 
 

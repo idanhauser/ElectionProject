@@ -11,7 +11,6 @@ namespace elec
 	public:
 		RegularElectionRound() = delete;
 		explicit RegularElectionRound(LoadElectionSystem& loader);
-		//explicit RegularElectionRound(ifstream inFile);
 		explicit RegularElectionRound(int date[DATE_SIZE]);
 		virtual bool addNewDistrict(const char str[MAX_SIZE], int numberRepresentatives, int& districtId,
 		                            DistcritType districtType) override;

@@ -18,7 +18,7 @@ namespace elec
 		CitizenList*_partyMembers;
 		CitizenList* _representativesByDist;
 		Citizen& _partyLeader;
-		int _numOfDist; //todo: idan: isn't it the same as _logicSize?
+		int _numOfDist;
 		double* _VotingPercentagesDistrict;
 		int _logicSize;
 		int _phySize;
