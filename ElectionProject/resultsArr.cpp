@@ -393,19 +393,7 @@ namespace elec
 
 
 
-	
-	////idan added (for reading):
-	//void resultsArr::save(ofstream& outFile) const
-	//{
-	//	//saving _votesByIDs:
-	//		//don't need to save the number of cols in arr because its the size of parties.
-	//		// every cell in this arr is a vector in the length of the size of dists.
-	//	for (int i = 0; i < _partiesLogicSize; i++) {
-	//		_votesByIDs[i] = new int[_districtslogicSize];
-	//		for (int j = 0; j < _districtslogicSize; j++)
-	//			outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
-	//	}
-	//}
+
 
 	void resultsArr::bubbleSort(pair arr[], int n)
 	{
