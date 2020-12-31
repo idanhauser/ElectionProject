@@ -9,7 +9,11 @@ namespace elec
 	UnifiedDistrict::UnifiedDistrict(const char* name, int numOfReps, int numOfParties) : District(name, numOfReps, numOfParties),
 		_partyLeader(nullptr)
 	{
-	}	
+	}
+
+	UnifiedDistrict::UnifiedDistrict(LoadElectionSystem& loader):District(loader),_partyLeader(nullptr)
+	{
+	}
 
 	UnifiedDistrict::~UnifiedDistrict()
 	{

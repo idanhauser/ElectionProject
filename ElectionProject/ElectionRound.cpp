@@ -18,7 +18,7 @@ namespace elec {
 	ElectionRound::ElectionRound(int date[DATE_SIZE]) :_districts(), _parties(),
 		_results(_parties.getLogicSize(), _districts.getLogicSize()), NoChangeSinceLastCalc(0)
 	{
-		
+
 
 		for (int i = 0; i < DATE_SIZE; ++i)
 		{
@@ -26,11 +26,12 @@ namespace elec {
 		}
 	}
 
-	ElectionRound::ElectionRound(LoadElectionSystem& loader): _districts(), _parties(), _results(0,0)
+	ElectionRound::ElectionRound(LoadElectionSystem& loader) : _districts(), _parties(), _results(0, 0)
 	{
 		bool represntAdded;
 		int numberOfparties;
 		int numberOfdist;
+		DistcritType type;
 		ifstream& reader = loader.getReader();
 		//Reading Date:
 		reader.read(rcastc(_date), sizeof(int) * DATE_SIZE);
@@ -40,9 +41,19 @@ namespace elec {
 
 		for (int i = 0; i < numberOfdist; ++i)
 		{
-			//todo: idan need to change it by type of dist
-			//District* dist = new District(/*loader*/);
-		//	_districts.addToList(*dist);
+			District* dist = nullptr;
+			reader.read(rcastc(&type), sizeof(DistcritType));
+			if(type==DistcritType::DividedDistrictType)
+			{
+				dist = new DividedDistrict(loader);
+			}
+			else
+			{
+				dist= new UnifiedDistrict(loader);
+			}
+			
+
+			_districts.addToList(*dist);
 
 		}
 
@@ -58,37 +69,34 @@ namespace elec {
 			//reading partyLeaderId:
 			reader.read(rcastc(&partyLeaderId), sizeof(int));
 			if (_districts.isCitizenExist(partyLeaderId, indexOfDist)) {
-				Party* party = new Party(loader, _districts.getDistcritByIndex(indexOfDist).getCitizenById(partyLeaderId),numberOfdist);
+				Party* party = new Party(loader, _districts.getDistcritByIndex(indexOfDist).getCitizenById(partyLeaderId), numberOfdist);
 				_parties.addToList(*party);
-				//cout << "read " <<party->getPartyID() <<" party" << endl;
+
 			}
 		}
-		cout << "read parties" << endl;
+		cout << "read parties done" << endl;
 
+		cout << "resultarr" << endl;
 		//Reading _votesByIDs:
-		//_results= resultsArr(loader, numberOfparties, numberOfdist);
+		_results= resultsArr(loader, numberOfparties, numberOfdist);
 
-		
+
 		//-------------------------------------------------------------------------
 		// match between represent to a party. and party to a dist and citizen:
 		//i - dist index; j - party index; t - citizen index.
 		for (int i = 0; i < numberOfdist; ++i)
 		{
 			District& distTemp = _districts.getDistcritByIndex(i);
-			//for (int j = 0; j < numberOfparties; ++j)
-			//{
-			//	_parties.getPartyByIndex(i).updateParties();
-			//}
 			int numOfCitizens = distTemp.getNumberOfCitizens();
 			for (int t = 0; t < numOfCitizens; ++t)
 			{
 				Citizen& citizTemp = distTemp.getCitizenByIndex(t);
 				if (citizTemp.GetPartyId() != -1)
 				{
-					Party& currParty = _parties.getPartyByIndex(citizTemp.GetPartyId()-PARTY_ID_INIT);
-					represntAdded= currParty.addPartyMember(citizTemp, i);
+					Party& currParty = _parties.getPartyByIndex(citizTemp.GetPartyId() - PARTY_ID_INIT);
+					represntAdded = currParty.addPartyMember(citizTemp, i);
 					citizTemp.setParty(&currParty);
-					if(!represntAdded)
+					if (!represntAdded)
 					{//todo:to fix that if.(to delete maybe)
 						cout << "Error:Couldn't finish the loading." << endl;
 						return;
@@ -101,17 +109,18 @@ namespace elec {
 
 
 
-	void ElectionRound::printElectionDate() const
+	void ElectionRound::printElectionDate(ostream& os) const
 	{
 		for (int i = 0; i < DATE_SIZE; ++i)
 		{
-			cout << static_cast<char>(_date[i] + '0');
+			os << static_cast<char>(_date[i] + '0');
 			if (i == 1 || i == 3)
 			{
-				cout << '.';
+				os << '/';
 			}
 		}
-	
+		os << endl;
+
 	}
 
 
@@ -130,7 +139,7 @@ namespace elec {
 		return citizenAdded;
 	}
 
-	bool ElectionRound::addNewParty(const char* name,int pdId, int& partyId)
+	bool ElectionRound::addNewParty(const char* name, int pdId, int& partyId)
 	{
 		int distIndex;
 
@@ -161,7 +170,7 @@ namespace elec {
 			Citizen& citizenReprenst = _districts.getDistcritByIndex(distIndex).getCitizenById(representId);
 			if (_districts.isDistcritExist(districtId) && _parties.IsPartyExist(partyId))
 			{
-				Party& currParty = _parties.getPartyByIndex(partyId );
+				Party& currParty = _parties.getPartyByIndex(partyId);
 				represntAdded = currParty.addPartyMember(citizenReprenst, abs(DISTRICT_ID_INIT - districtId));
 				citizenReprenst.setParty(&currParty);
 			}
@@ -178,9 +187,9 @@ namespace elec {
 		{
 			calcReps();
 			this->NoChangeSinceLastCalc = 1;
-			for (int i = 0; i <len; i++)
+			for (int i = 0; i < len; i++)
 			{
-					cout << _districts.getDistcritByIndex(i) << endl;
+				cout << _districts.getDistcritByIndex(i) << endl;
 			}
 		}
 		else
@@ -214,7 +223,7 @@ namespace elec {
 			if (typeid(_districts.getDistcritByIndex(j)) == typeid(UnifiedDistrict))
 			{
 				setWinnerInUnifiedDistrictByDistrictID(_districts.getDistcritByIndex(j).getSerialNum(), _districts.getDistcritByIndex(j).getNumOfReps());
-				
+
 			}
 			else
 			{
@@ -307,12 +316,12 @@ namespace elec {
 		if (!isResultsAllowed())
 			return false;
 		calcReps();
-		
+
 		return true;
 	}
-	
+
 	ostream& operator<<(ostream& os, ElectionRound& electionRound) {
-		
+
 		if (!electionRound.isResultsAllowed())
 		{
 			os << "Sorry...Not enough details to get results" << endl;
@@ -320,22 +329,24 @@ namespace elec {
 		}
 		else
 		{
-			for (int i = 0; i < 3; i+=2) //todo: fix printing address instead of date when written as "os << electionRound._date << endl;"
-				os << electionRound._date[i] << electionRound._date[i + 1] << "/";
-			os << electionRound._date[6] << electionRound._date[7];
-			os << endl;
+			cout << "Election Round" << endl;
+			electionRound.printElectionDate(os);
+			//for (int i = 0; i < 3; i+=2) //todo: fix printing address instead of date when written as "os << electionRound._date << endl;"
+			//	os << electionRound._date[i] << electionRound._date[i + 1] << "/";
+			//os << electionRound._date[6] << electionRound._date[7];
+			//os << endl;
 
 			int districtAmount = electionRound._districts.getLogicSize();
 			int partiesAmount = electionRound._parties.getLogicSize();
 			for (int j = 0; j < districtAmount; j++)
 			{
-				//todo:Idan to check and fix.
-				if (typeid(electionRound._districts.getDistcritByIndex(j)) == typeid(UnifiedDistrict))
-				{
-					os << electionRound._districts.getDistcritByIndex(j) << endl;
-				}
-				else
-					os << electionRound._districts.getDistcritByIndex(j) << endl;
+
+				//if (typeid(electionRound._districts.getDistcritByIndex(j)) == typeid(UnifiedDistrict))
+				//{
+				os << electionRound._districts.getDistcritByIndex(j) << endl;
+				//}
+				//else
+				//	os << electionRound._districts.getDistcritByIndex(j) << endl;
 
 				os << "each party got:" << endl;
 
@@ -344,7 +355,7 @@ namespace elec {
 				{
 					for (int m = 0; m < partiesAmount; m++)
 					{
-						os << electionRound._parties.getPartyByIndex(m) ; 
+						os << electionRound._parties.getPartyByIndex(m);
 						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
 						//todo:roee fix::not printing party members cause they were never added
 						electionRound._parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
@@ -398,7 +409,7 @@ namespace elec {
 			}
 			delete[] partiesIndexs;
 			return os;
-		
+
 
 		}
 
@@ -409,23 +420,33 @@ namespace elec {
 		cout << "saving ElectionRound" << endl;
 		int numOfParties;
 		int numOfDists;
-
+		DistcritType type;
 		//Saving Date:
 		outFile.write(rcastcc(_date), sizeof(int) * DATE_SIZE);
 		// the number of dists:		
 		numOfDists = _districts.getLogicSize();
-			//number of dists:
+		//number of dists:
 		outFile.write(rcastcc(&numOfDists), sizeof(int));
 		//saving the districts:
 		cout << "saving districts" << endl;
 		for (int i = 0; i < numOfDists; ++i)
 		{
-			_districts.getDistcritByIndex(i).save(outFile);
+			const District& distTemp = _districts.getDistcritByIndex(i);
+			if (typeid(distTemp) == typeid(UnifiedDistrict))
+			{
+				type = DistcritType::UnifiedDistrict;
+			}
+			else
+			{
+				type = DistcritType::DividedDistrictType;
+			}
+			outFile.write(rcastcc(&type), sizeof(DistcritType));
+			distTemp.save(outFile);
 		}
 		cout << "saving parties" << endl;
 		// the number of parties:
 		numOfParties = _parties.getLogicSize();
-			//Saving number of parties:
+		//Saving number of parties:
 		outFile.write(rcastcc(&numOfParties), sizeof(int));
 		//Saving the parties:
 		for (int i = 0; i < numOfParties; ++i)
@@ -436,7 +457,7 @@ namespace elec {
 			_parties.getPartyByIndex(i).save(outFile);
 		}
 		//Saving resultArr:
-	//	_results.save(outFile);
+		_results.save(outFile);
 
 		cout << "done" << endl;
 	}
@@ -446,14 +467,14 @@ namespace elec {
 
 
 
-	void ElectionRound::swap(pair* xp, pair* yp) 
+	void ElectionRound::swap(pair* xp, pair* yp)
 	{
 		pair temp = *xp;
 		*xp = *yp;
 		*yp = temp;
 	}
 
-	void ElectionRound::bubbleSort(pair arr[], int n) 
+	void ElectionRound::bubbleSort(pair arr[], int n)
 	{
 		int i, j;
 		for (i = 0; i < n - 1; i++) {
@@ -465,7 +486,7 @@ namespace elec {
 	}
 
 
-	
+
 
 
 
@@ -500,7 +521,7 @@ namespace elec {
 	bool ElectionRound::checkElectionsWinner(int* partiesIndexes) {
 		//check elections winner
 		pair* totalRepsForPmByID = new pair[_parties.getLogicSize()];
-		
+
 		for (int n = 0; n < _parties.getLogicSize(); n++)
 		{
 			totalRepsForPmByID[n].index = n;
@@ -518,8 +539,8 @@ namespace elec {
 	}
 
 
-	bool ElectionRound::sortDistrictWinners(int districtID, int* partiesIndexes)  {
-		
+	bool ElectionRound::sortDistrictWinners(int districtID, int* partiesIndexes) {
+
 		pair* totalRepsForPmByID = new pair[_parties.getLogicSize()];
 
 		for (int n = 0; n < _parties.getLogicSize(); n++)
@@ -541,7 +562,7 @@ namespace elec {
 
 	bool ElectionRound::isResultsAllowed()const
 	{
-		if ((_parties.getLogicSize() != 0) && (_districts.getLogicSize()!= 0))
+		if ((_parties.getLogicSize() != 0) && (_districts.getLogicSize() != 0))
 			return true;
 		else
 			return false;

@@ -15,29 +15,23 @@ namespace elec
 	{
 		initResults();
 	}
-	////idan added (for reading):
-	//resultsArr::resultsArr(LoadElectionSystem& loader, int partiesAmount, int districtAmount):
-	//	_partiesLogicSize(partiesAmount), _parPhysSize(MAX_SIZE + partiesAmount), _districtslogicSize(districtAmount),
-	//	_disPhysSize(MAX_SIZE + districtAmount), _votesByIDs(new int*[partiesAmount]),
-	//	_repsPartiesByID(new int*[partiesAmount]), _PMsRepsTotalByPartyID(new int[partiesAmount])
-	//{
-	//	initResults();
-	//	ifstream& reader = loader.getWriter();
-	//	for (int i = 0; i < _partiesLogicSize; ++i)
-	//	{
-	//		for (int j = 0; j < _districtslogicSize; ++j)
-	//		{
-	//			reader.read(rcastc(&_votesByIDs[i][j]), sizeof(int));
-	//		}
-	//	}
-	//}
-	////idan added (for reading):
-	//resultsArr::resultsArr():_partiesLogicSize(0), _parPhysSize(MAX_SIZE ), _districtslogicSize(0),
-	//	_disPhysSize(MAX_SIZE), _votesByIDs(new int* [MAX_SIZE]),
-	//	_repsPartiesByID(new int* [MAX_SIZE]), _PMsRepsTotalByPartyID(new int[MAX_SIZE])
-	//{
-	//	initResults();
-	//}
+
+	resultsArr::resultsArr(LoadElectionSystem& loader, int partiesAmount, int districtAmount):
+		_partiesLogicSize(partiesAmount), _parPhysSize(MAX_SIZE + partiesAmount), _districtslogicSize(districtAmount),
+		_disPhysSize(MAX_SIZE + districtAmount), _votesByIDs(new int*[partiesAmount]),
+		_repsPartiesByID(new int*[partiesAmount]), _PMsRepsTotalByPartyID(new int[partiesAmount])
+	{
+		initResults();
+		ifstream& reader = loader.getReader();
+		for (int i = 0; i < _partiesLogicSize; ++i)
+		{
+			for (int j = 0; j < _districtslogicSize; ++j)
+			{
+				reader.read(rcastc(&_votesByIDs[i][j]), sizeof(int));
+			}
+		}
+	}
+
 
 	void resultsArr::initResults() {
 		for (int i = 0; i < _partiesLogicSize; i++) {
@@ -60,7 +54,7 @@ namespace elec
 		for (int i = 0; i < _partiesLogicSize; i++) {
 			delete _votesByIDs[i];
 		}
-		delete[] _votesByIDs;
+			delete[] _votesByIDs;
 		for (int j = 0; j < _partiesLogicSize; j++) {
 			delete _repsPartiesByID[j];
 		}
@@ -218,6 +212,40 @@ namespace elec
 		_districtslogicSize++;
 		return true;
 
+	}
+
+	void resultsArr::save(ofstream& outFile) const
+	{
+		//saving _votesByIDs:
+		for (int i = 0; i < _partiesLogicSize; i++) {
+			for (int j = 0; j < _districtslogicSize; j++)
+				outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
+		}
+	}
+
+	resultsArr& resultsArr::operator=(const resultsArr& other)
+	{
+		if(this != &other)
+		{
+			_partiesLogicSize = other._partiesLogicSize;
+			_parPhysSize = other._parPhysSize;
+			_districtslogicSize = other._districtslogicSize;
+			_disPhysSize = other._disPhysSize;
+
+			for (int i = 0; i < _partiesLogicSize; i++) {
+				_votesByIDs[i] = new int[_districtslogicSize];
+				for (int j = 0; j < _districtslogicSize; j++)
+					_votesByIDs[i][j] = other._votesByIDs[i][j];
+			}
+			for (int i = 0; i < _partiesLogicSize; i++) {
+				_repsPartiesByID[i] = new int[_districtslogicSize];
+				for (int j = 0; j < _districtslogicSize; j++)
+					_repsPartiesByID[i][j] = other._repsPartiesByID[i][j];
+			}
+			for (int k = 0; k < _partiesLogicSize; k++)
+				_PMsRepsTotalByPartyID[k] = other._PMsRepsTotalByPartyID[k];
+		}
+		return *this;
 	}
 
 

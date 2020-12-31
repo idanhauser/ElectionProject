@@ -20,7 +20,7 @@ namespace elec
 		CitizenList _Citizens;
 		double _votersPercentage;
 		int* _repsByPartyID;//todo: check
-		int numOfParties;
+		int _numOfParties;
 		int _repsByPartyLogicSize;
 		int _repsByPartyPhySize;
 		int _numOfReps;
@@ -32,11 +32,11 @@ namespace elec
 	public:
 		District(LoadElectionSystem& loader);
 		District() = delete;///we delete default constructor
-	    District(const char* name, int numOfReps, int numOfParties);
+		District(const char* name, int numOfReps, int numOfParties);
 		virtual ~District();
 		virtual void toOs(ostream& os) const = 0;
 		friend ostream& operator<<(ostream& os, const District& district);
-	
+
 		virtual const Citizen* getPartyLeader() const { return nullptr; }
 		virtual bool setLeader(const Citizen* leader) { return false; }
 
@@ -72,6 +72,6 @@ namespace elec
 		/// </summary>
 		/// <param name="outFile">the file we want to write to</param>
 		void save(ofstream& outFile) const;
-		
+
 	};
 }

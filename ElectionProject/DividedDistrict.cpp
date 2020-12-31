@@ -13,6 +13,11 @@ namespace elec {
 	{
 	}
 
+	DividedDistrict::DividedDistrict( LoadElectionSystem& loader):District(loader)
+	{
+		
+	}
+
 	DividedDistrict::~DividedDistrict()
 	{
 

@@ -20,7 +20,7 @@ namespace elec {
 	public:
 		resultsArr(int partiesAmount, int districtAmount);
 		//idan added:
-	//	resultsArr(LoadElectionSystem& loader, int partiesAmount, int districtAmount);
+		resultsArr(LoadElectionSystem& loader, int partiesAmount, int districtAmount);
 	//	resultsArr();
 		~resultsArr(); 
 
@@ -55,7 +55,8 @@ namespace elec {
 
 		bool setpartiesAmount();
 		bool setdistrictsAmount();
-
+		void save( ofstream& outFile) const;
+		 resultsArr& operator=(const resultsArr&other);
 		struct pair {
 			int index;
 			double repsAmount;

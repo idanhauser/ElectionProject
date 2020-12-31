@@ -42,11 +42,18 @@ namespace elec {
 			Citizen* dist = new Citizen(loader,*this);
 			_Citizens.addToList(*dist);
 		}
+		//reading numOfParties:
+		reader.read(rcastc(&_numOfParties), sizeof(int));
+		_repsByPartyID = new int[MAX_SIZE];
+		for (int i = 0; i < _numOfParties; i++)
+		{
+			_repsByPartyID[i] = 0;
+		}
 	}
 
 	District::District(const char* name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
-		_Citizens(CitizenList()), _votersPercentage(0), _electionResult(0), _numOfReps(numOfReps), _numberOfVotesinDist(0),
-		 _repsByPartyID(new int[MAX_SIZE]), _repsByPartyLogicSize(numOfParties), _repsByPartyPhySize(MAX_SIZE)
+		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _numOfParties(numOfParties), _repsByPartyLogicSize(numOfParties),
+		 _repsByPartyPhySize(MAX_SIZE), _numOfReps(numOfReps), _electionResult(0),_numberOfVotesinDist(0)
 	{
 		strcpy(this->_name, name);
 		for (int i = 0; i < numOfParties; i++)
@@ -103,7 +110,7 @@ namespace elec {
 			realloc(_repsByPartyPhySize * 2);
 
 		}
-		_repsByPartyID[numOfParties] = 0;
+		_repsByPartyID[_numOfParties] = 0;
 		return true;
 	}
 	
@@ -186,7 +193,7 @@ namespace elec {
 
 	void District::save(ofstream& outFile) const
 	{
-		int numOfElements = 0;
+		int numOfCitizens;
 		int nameLen = strlen(_name) + 1;
 		//save serialNumOfDist:
 		outFile.write(rcastcc(&_serialNum), sizeof(int));
@@ -204,15 +211,16 @@ namespace elec {
 		//saving _numberOfVotesinDist
 		outFile.write(rcastcc(&_numberOfVotesinDist), sizeof(int));
 		//save citizens list:
-		numOfElements = _Citizens.getLogicSize();
+		numOfCitizens = _Citizens.getLogicSize();
 		//saving citizens list's len
-		outFile.write(rcastcc(&numOfElements), sizeof(int));
+		outFile.write(rcastcc(&numOfCitizens), sizeof(int));
 		//saving citizens:
-		for (int i = 0; i < numOfElements; ++i)
+		for (int i = 0; i < numOfCitizens; ++i)
 		{
 			_Citizens.getCitizenByIndex(i).save(outFile);
 		}
-
+		//saving numofParties:
+		outFile.write(rcastcc(&_numOfParties), sizeof(int));
 	}
 	int District::getRepsByPartyID(int partyID) const
 	{
@@ -247,14 +255,14 @@ namespace elec {
 	}
 	bool District::updateRepsArr()
 	{
-		numOfParties++;
+		_numOfParties++;
 		return AddAnotherColumn() && addDistToArr();
 	}
 
 	bool District::AddAnotherColumn()
 	{
-		int* new_memory = new int[numOfParties];
-		for (int i = 0; i < min(numOfParties, _repsByPartyPhySize); ++i)
+		int* new_memory = new int[_numOfParties];
+		for (int i = 0; i < min(_numOfParties, _repsByPartyPhySize); ++i)
 		{
 			new_memory[i] = (_repsByPartyID[i]);
 		}
@@ -278,7 +286,7 @@ namespace elec {
 	ostream& operator<<(ostream& os, const District& district)
 	{
 		os << "**********************************" << endl;
-		os << typeid(district).name() + 12 << " "<< district.getName() << ", it's id is" << district.
+		os << typeid(district).name() + 12 << " "<< district.getName() << ", it's id is " << district.
 			getSerialNum() << " has " << district.getNumberOfCitizens() << " citizens." << endl;
 		os << "Number of representatives is : " << static_cast<double>(district.getNumOfReps()) << endl;
 		os << "Precentage of voters: " << district.getVotersPrecentage() << "%" << endl;

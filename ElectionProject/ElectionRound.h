@@ -123,7 +123,7 @@ namespace elec {
 		/// <summary>
 		/// printing the date of the election
 		/// </summary>
-		void printElectionDate() const;
+		void printElectionDate(ostream& os) const;
 	private:
 
 		/// <summary>

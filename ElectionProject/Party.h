@@ -59,7 +59,7 @@ namespace elec
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex) ;
 		Citizen& getPartyLeader() const;
 		double getVotingPercentagesByDistcritIdx(int index) const;
-		//void addVotingToPartyFromDistIdx(int index);
+
 		void save(ofstream& outFile) const;
 		
 	};

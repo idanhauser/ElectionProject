@@ -31,7 +31,6 @@ namespace elec {
 	{
 		ifstream& reader = loader.getReader();
 		int nameLen;
-		int numOfElements = 0;
 		//Reading serial num of party _partyID:
 		reader.read(rcastc(&_partyID), sizeof(int));
 		pdGenerator = _partyID;
@@ -52,7 +51,7 @@ namespace elec {
 		//Reading double arr:
 		for (int i = 0; i < _logicSize; ++i)
 		{
-			reader.read(rcastc(&_VotingPercentagesDistrict[i]), sizeof(int));
+			reader.read(rcastc(&_VotingPercentagesDistrict[i]), sizeof(double));
 		}
 	}
 	Party::~Party()
@@ -182,9 +181,9 @@ namespace elec {
 		//saving _phySize
 		outFile.write(rcastcc(&_phySize), sizeof(int));
 		//saving _logicSize
-		outFile.write(rcastcc(&_logicSize), sizeof(int));
+		outFile.write(rcastcc(&_numOfDist), sizeof(int));
 		//saving double arr:
-		for (int i = 0; i < _logicSize; ++i)
+		for (int i = 0; i < _numOfDist; ++i)
 		{
 			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
 		}

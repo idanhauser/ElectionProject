@@ -9,6 +9,7 @@ namespace elec
 	{
 	public:
 		DividedDistrict(const char* name, int numOfReps, int numOfParties);
+		DividedDistrict( LoadElectionSystem& loader);
 		virtual ~DividedDistrict();
 		virtual void toOs(ostream& os) const override;
 		//friend ostream& operator<<(ostream& os, const DividedDistrict& district);
