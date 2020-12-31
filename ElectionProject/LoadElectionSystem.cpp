@@ -1,4 +1,5 @@
-﻿#include "LoadElectionSystem.h"
+﻿//code verison 2.5
+#include "LoadElectionSystem.h"
 
 namespace elec
 {

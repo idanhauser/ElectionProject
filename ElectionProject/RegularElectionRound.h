@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//code verison 2.5
+#pragma once
 #include "ElectionRound.h"
 
 namespace elec
