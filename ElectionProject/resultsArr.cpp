@@ -96,7 +96,6 @@ namespace elec
 	{
 		int** newVotesByPartiesIDs = new int* [_partiesLogicSize];
 		for (int i = 0; i < min(newSize, _disPhysSize); i++) {
-			int* newVotesByDistrictsIDs = new int[newSize];
 			for (int j = 0; j < min(newSize, _disPhysSize); j++) {
 				newVotesByPartiesIDs[i][j] = _votesByIDs[i][j];
 			}

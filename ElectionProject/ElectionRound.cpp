@@ -41,7 +41,7 @@ namespace elec {
 
 		for (int i = 0; i < numberOfdist; ++i)
 		{
-			District* dist = nullptr;
+			District* dist;
 			reader.read(rcastc(&type), sizeof(DistcritType));
 			if(type==DistcritType::DividedDistrictType)
 			{
@@ -57,7 +57,7 @@ namespace elec {
 
 		}
 
-		cout << "read dists" << endl;
+		//cout << "read dists" << endl;
 		//Reading parties:
 		//Read Dists:
 			//reading number of parties:
@@ -74,9 +74,9 @@ namespace elec {
 
 			}
 		}
-		cout << "read parties done" << endl;
+	//	cout << "read parties done" << endl;
 
-		cout << "resultarr" << endl;
+		//cout << "resultarr" << endl;
 		//Reading _votesByIDs:
 		_results= resultsArr(loader, numberOfparties, numberOfdist);
 
@@ -97,7 +97,7 @@ namespace elec {
 					represntAdded = currParty.addPartyMember(citizTemp, i);
 					citizTemp.setParty(&currParty);
 					if (!represntAdded)
-					{//todo:to fix that if.(to delete maybe)
+					{
 						cout << "Error:Couldn't finish the loading." << endl;
 						return;
 					}
@@ -417,7 +417,7 @@ namespace elec {
 
 	void ElectionRound::save(ofstream& outFile) const
 	{
-		cout << "saving ElectionRound" << endl;
+		//cout << "saving ElectionRound" << endl;
 		int numOfParties;
 		int numOfDists;
 		DistcritType type;
@@ -428,7 +428,7 @@ namespace elec {
 		//number of dists:
 		outFile.write(rcastcc(&numOfDists), sizeof(int));
 		//saving the districts:
-		cout << "saving districts" << endl;
+		//cout << "saving districts" << endl;
 		for (int i = 0; i < numOfDists; ++i)
 		{
 			const District& distTemp = _districts.getDistcritByIndex(i);
@@ -443,7 +443,7 @@ namespace elec {
 			outFile.write(rcastcc(&type), sizeof(DistcritType));
 			distTemp.save(outFile);
 		}
-		cout << "saving parties" << endl;
+	//	cout << "saving parties" << endl;
 		// the number of parties:
 		numOfParties = _parties.getLogicSize();
 		//Saving number of parties:
@@ -459,7 +459,7 @@ namespace elec {
 		//Saving resultArr:
 		_results.save(outFile);
 
-		cout << "done" << endl;
+//		cout << "done" << endl;
 	}
 
 

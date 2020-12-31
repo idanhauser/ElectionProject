@@ -37,18 +37,12 @@ int main()
 	StartMenu();
 
 
-
-
-	cout << "bye" << endl;
-
-
 }
 
 void initElection();
 
 void StartMenu()
 {
-	int chosen;
 	short userChoise;
 	Start_MenuChoices choice = Start_MenuChoices::startNewElectionRound;
 	while (choice != Start_MenuChoices::exit_menu && !isExit)
@@ -293,8 +287,8 @@ void addDistrict()
 		cout << "Insert a district's name and a number of representatives:" << endl;
 		cin >> name >> numberRepresentatives;
 		cout << "Choose district type:" << endl;
-		cout << "Press 1 for Unified District" << endl;
-		cout << "Press 2 for load divided District" << endl;
+		cout << "Press 1 for unified District" << endl;
+		cout << "Press 2 for divided District" << endl;
 		cin >> userChoise;
 		DistcritType distType = static_cast<DistcritType>(userChoise);
 		if (numberRepresentatives >= 0)
@@ -452,15 +446,14 @@ void saveElections()
 	}
 
 
-	cout << "saving election system" << endl;
+	cout << "Saving election system..." << endl;
 	election->save(outFile);
-
-	cout << "election system saved" << endl;
+	cout << "election system saved successfully." << endl;
 }
 
 bool loadElection()
 {
-	bool loadedSuccesfully = true;
+	bool loadedSuccessfully = true;
 	ifstream _inFile;
 	int len;
 
@@ -473,7 +466,7 @@ bool loadElection()
 	if (!loader.CheckFile())
 	{
 		cout << "error infile" << endl;
-		loadedSuccesfully = false;
+		loadedSuccessfully = false;
 	}
 	else
 	{
@@ -490,7 +483,7 @@ bool loadElection()
 		}
 
 	}
-	return loadedSuccesfully;
+	return loadedSuccessfully;
 
 }
 
