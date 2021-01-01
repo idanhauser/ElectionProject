@@ -1,4 +1,4 @@
-//code verison 2.0
+//code verison 3.0
 #pragma once
 #pragma  warning(disable:4996)
 
@@ -19,7 +19,6 @@ namespace elec {
 	public:
 		CitizenList();
 
-		const CitizenList& operator=(const CitizenList&);
 
 		~CitizenList();
 		void realloc(int new_size);
@@ -28,7 +27,6 @@ namespace elec {
 		const Citizen& getCitizenByIndex(int index) const;
 		Citizen& getCitizenByIndex(int index);
 		Citizen** getCitizens();
-
 
 	};
 }

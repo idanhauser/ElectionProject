@@ -1,4 +1,4 @@
-﻿//code verison 2.0
+﻿//code verison 3.0
 #pragma once
 
 #include "District.h"
@@ -11,11 +11,20 @@ namespace elec
 	{
 		const Citizen* _partyLeader;
 	public:
-		UnifiedDistrict(char* name, int numOfReps);
+		UnifiedDistrict(const char* name, int numOfReps, int numOfParties);
+		UnifiedDistrict( LoadElectionSystem& loader);
+		virtual ~UnifiedDistrict() override;
 
-		Citizen* getPartyLeader() const;
-		bool setLeader(const Citizen* leader);
-		
+		virtual const Citizen* getPartyLeader() const override ;
+		virtual bool setLeader(const Citizen* leader) override;
+		/// <summary>
+/// printing function of this class
+/// </summary>
+/// <param name="os">the file we print to.</param>
+		virtual void toOs(ostream& os) const override;
+
+	
+	
 	};
 
 }

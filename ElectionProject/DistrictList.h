@@ -1,4 +1,4 @@
-﻿//code verison 2.0
+﻿//code verison 3.0
 #pragma once
 
 using namespace std;
@@ -27,7 +27,7 @@ namespace elec {
 		int getLogicSize() const;
 		bool isDistcritExist(int id) const;
 		const District& getDistcritByIndex(int index) const;
-		 District& getDistcritByIndex(int index) ;
+		District& getDistcritByIndex(int index);
 
 
 

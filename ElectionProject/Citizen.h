@@ -1,24 +1,24 @@
-﻿//code verison 2.0
+﻿//code verison 3.0
 #pragma once
 #include "Utils.h"
 using namespace std;
 namespace elec
 {
+	class LoadElectionSystem;
 	class District;
 	class Party;
 
 	class Citizen
 	{
 	private:
-		char* _citizen_name;
-		int _id_num;
+		char* _name;
+		int _idNum;
 		int _birthYear;
 		int _districtNum;
 		bool _hasVoted;
 		const Party* _party;
-		//reference to an existing district 
+		int _partyId;
 		const District& _district;
-		bool setDistrict(District& dist);
 		
 		Citizen(const Citizen& other);
 		const Citizen& operator=(const Citizen&);
@@ -26,23 +26,40 @@ namespace elec
 	public:
 		Citizen() = delete;
 		Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,const District& district);
+		 Citizen(LoadElectionSystem& loader, const District& district);
+
+
 		~Citizen();
 
 		friend ostream& operator<<(ostream& os, const Citizen& citizen);
 
-		
+		/// <summary>
+		/// set the party for citizen who is also a repsentive.
+		/// </summary>
+		/// <param name="party">pointer to the party</param>
+		/// <returns>true for check</returns>
 		bool setParty(const Party* party);
+		/// <summary>
+		/// sets if the citizen has voted.
+		/// </summary>
+		/// <param name="voted">true if he voted else false</param>
+		/// <returns></returns>
 		bool setHasVoted(bool voted);
-		
-		const char* getCitizenName() const;
-		const int getCitizenID() const;
-		int getCitizenBirthYear() const;
-		const int getDistrictNum() const;
 
+
+		const char* getCitizenName() const;
+		int getCitizenID() const;
+		int getCitizenBirthYear() const;
+		int getDistrictNum() const;
+		int GetPartyId() const;
 		bool hasVoted()const;
 		const Party* getParty() const;
 		const District& getDistrict() const;
-
+		/// <summary>
+		/// Save citizen into file
+		/// </summary>
+		/// <param name="outFile">the file we write to</param>
+		void save(ofstream& outFile) const;
 	};
 
 

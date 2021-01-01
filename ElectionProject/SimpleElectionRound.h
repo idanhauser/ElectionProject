@@ -1,4 +1,4 @@
-﻿//code verison 2.0
+﻿//code verison 3.0
 #pragma once
 #include "ElectionRound.h"
 
@@ -6,11 +6,17 @@ namespace elec
 {
 
 
-	class SimpleElctionRound :public ElectionRound
+	class SimpleElectionRound :public ElectionRound
 	{
-		int _numOfRep;
 	public:
 
-		explicit SimpleElctionRound(int date[8],int numOfReps);
+		int _numOfReps;
+	public:
+		explicit SimpleElectionRound(LoadElectionSystem& loader);
+		explicit SimpleElectionRound(int date[DATE_SIZE],int numOfReps);
+		int getNumOfReps() const;
+		virtual bool addNewDistrict(const char str[MAX_SIZE], int number_representatives, int& districtId, DistcritType districtType)override ;
+		virtual ~SimpleElectionRound() override;
+		virtual void save(ofstream& outFile) const override;
 	};
 }

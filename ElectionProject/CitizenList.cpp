@@ -1,11 +1,11 @@
-//code verison 2.0
+//code verison 3.0
 #include "Utils.h"
 using namespace std;
 #include "Citizen.h"
 #include "CitizenList.h"
 namespace elec {
 
-	CitizenList::CitizenList() : _logicSize(0), _phySize(MAX_SIZE), _citizens(new Citizen* [MAX_SIZE]) //roee: not sure about these values for the sizes...//idan : these are the values.
+	CitizenList::CitizenList() : _logicSize(0), _phySize(MAX_SIZE), _citizens(new Citizen* [MAX_SIZE]) 
 	{
 	}
 
@@ -78,13 +78,6 @@ namespace elec {
 
 
 
-	const CitizenList& CitizenList::operator=(const CitizenList& other)
-	{
-		this->_citizens = other._citizens;
-		this->_logicSize = other._logicSize;
-		this->_phySize = other._phySize;
-		return *this;
-	}
 
 
 

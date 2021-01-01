@@ -1,9 +1,11 @@
-﻿//code verison 2.0
+﻿//code verison 3.0
 #include "Party.h"
 #include <algorithm>
+#include <fstream>
+
 #include "Citizen.h"
 #include "CitizenList.h"
-#include "Citizen.h"
+
 
 namespace elec {
 
@@ -11,23 +13,56 @@ namespace elec {
 
 
 	Party::Party(const char* partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
-		_partyName(new char[strlen(partyName) + 1]),
+		_name(new char[strlen(partyName) + 1]),
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
-		_partyLeader(partyLeader), _numOfDist(numOfDist)
+		_partyLeader(partyLeader), _numOfDist(numOfDist),_VotingPercentagesDistrict(new double[MAX_SIZE]),_logicSize(0),_phySize(MAX_SIZE)
 	{
-
-		strcpy(this->_partyName, partyName);
+		_partyMembers->addToList(partyLeader);
+		strcpy(this->_name, partyName);
+		for (int i = 0; i < numOfDist; i++)
+		{
+			_VotingPercentagesDistrict[i] = 0;
+		}
 
 	}
 
+	Party::Party(LoadElectionSystem& loader, Citizen& partyLeader, int numOfDist): _partyMembers(new CitizenList()),
+		_representativesByDist(new CitizenList[numOfDist]), _partyLeader(partyLeader)
+	{
+		ifstream& reader = loader.getReader();
+		int nameLen;
+		//Reading serial num of party _partyID:
+		reader.read(rcastc(&_partyID), sizeof(int));
+		pdGenerator = _partyID;
+		//Reading len of name:
+		reader.read(rcastc(&nameLen), sizeof(int));
+		_name = new char[nameLen];
+		//Reading name:
+		reader.read(rcastc(_name), sizeof(char) * nameLen);
+		//Reading _PMCandidateID//
+		reader.read(rcastc(&_PMCandidateID), sizeof(int));
+		//Reading _numOfDist
+		reader.read(rcastc(&_numOfDist), sizeof(int));
+		//Reading _phySize
+		reader.read(rcastc(&_phySize), sizeof(int));
+		_VotingPercentagesDistrict = new double[_phySize];
+		//Reading _logicSize
+		reader.read(rcastc(&_logicSize), sizeof(int));
+		//Reading double arr:
+		for (int i = 0; i < _logicSize; ++i)
+		{
+			reader.read(rcastc(&_VotingPercentagesDistrict[i]), sizeof(double));
+		}
+	}
 	Party::~Party()
 	{
-		delete[] _partyName;
+		delete[] _VotingPercentagesDistrict;
+		delete[] _name;
 	}
 
 
-	bool Party::setPMCandidateID(int idnum) {
-		_PMCandidateID = idnum;
+	bool Party::setPMCandidateID(int idNum) {
+		_PMCandidateID = idNum;
 		return true;
 	}
 
@@ -36,9 +71,15 @@ namespace elec {
 		return _partyID;
 	}
 
+	bool Party::addToRepByDists(CitizenList& reps, int district)
+	{
+		_representativesByDist[district] = reps;
+		return true;
+	}
+
 	const char* Party::getPartyName() const
 	{
-		return _partyName;
+		return _name;
 	}
 
 	int Party::getPartyPMCandidateID() const
@@ -59,14 +100,32 @@ namespace elec {
 
 	bool Party::AddAnotherColumn()
 	{
-		CitizenList* new_memory = new CitizenList[_numOfDist + 1];
-		for (int i = 0; i < min(_numOfDist + 1, _numOfDist); ++i)
+		CitizenList* new_memory = new CitizenList[_numOfDist ];
+		for (int i = 0; i < min(_numOfDist , _numOfDist); ++i)
 		{
 			new_memory[i] = (_representativesByDist[i]);
 		}
 		_representativesByDist = new_memory;
-		_numOfDist++;
+
 		return true;
+	}
+
+	bool Party::addDistToArr()
+	{
+		if (_logicSize == _phySize)
+		{
+			realloc(_phySize * 2);
+
+		}
+		_VotingPercentagesDistrict[_numOfDist] = 0;
+		_logicSize++;
+		return true;
+	}
+
+	bool Party::updateDistricts()
+	{
+		_numOfDist++;
+		return AddAnotherColumn() && addDistToArr();
 	}
 
 
@@ -74,11 +133,19 @@ namespace elec {
 	{
 		CitizenList& represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];
 		int amountToPrint = min(num, represnts.getLogicSize());
-		for (int i = 0; i < amountToPrint; ++i)
+		if(amountToPrint==0)
 		{
-			cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
-
+			cout << endl << "The are no any representatives.(user didn't add any representatives)." << endl;
 		}
+		else
+		{
+			cout << "And they are:" << endl;
+			for (int i = 0; i < amountToPrint; ++i)
+			{
+				cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
+			}
+		}
+		cout << "**********************************" << endl;
 	}
 
 
@@ -92,17 +159,53 @@ namespace elec {
 		return _partyLeader;
 	}
 
+	double Party::getVotingPercentagesByDistcritIdx(int index) const
+	{
+		return _VotingPercentagesDistrict[index];
+	}
+
+
+
+	void Party::save(ofstream& outFile) const
+	{
+		int numOfObj=0;
+		int nameLen = strlen(_name) + 1;
+		//save serialNumOfParty:
+		outFile.write(rcastcc(&_partyID), sizeof(int));
+		//save name of dist:
+			//saving name len
+		outFile.write(rcastcc(&nameLen), sizeof(int));
+		//saving name
+		outFile.write(rcastcc(_name), sizeof(char) * nameLen);
+		//saving _PMCandidateID
+		outFile.write(rcastcc(&_PMCandidateID), sizeof(int));
+		//saving _numOfDist
+		outFile.write(rcastcc(&_numOfDist), sizeof(int));
+		//saving _phySize
+		outFile.write(rcastcc(&_phySize), sizeof(int));
+		//saving _logicSize
+		outFile.write(rcastcc(&_numOfDist), sizeof(int));
+		//saving double arr:
+		for (int i = 0; i < _numOfDist; ++i)
+		{
+			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
+		}
+
+		
+		
+	}
+
 	CitizenList* Party::getRepresentativesByDis() const
 	{
 		return _representativesByDist;
 	}
 
 	/// <summary>
-	/// adding a citizen as a party memebr, adds to the party memeber list and to the
-	/// Representatives list By the distcrit they represnt.
+	/// adding a citizen as a party member, adds to the party member list and to the
+	/// Representatives list By the district they represnt.
 	/// </summary>
 	/// <param name="citizen">the citizen we want to add to the lists</param>
-	/// <param name="distIndex">the distcrit he represnt</param>
+	/// <param name="distIndex">the district he represnt</param>
 	/// <returns>true if everything is ok else false </returns>
 	bool Party::addPartyMember( Citizen& citizen, int distIndex)
 	{
@@ -112,16 +215,49 @@ namespace elec {
 		return addtomembers && addtodis;
 	}
 
+	void Party::realloc(int new_size)
+	{
+		double* new_memory = new double[new_size];
+
+		for (int i = 0; i < min(new_size, _phySize); ++i)
+		{
+			new_memory[i] = _VotingPercentagesDistrict[i];
+		}
+		if (_logicSize >= 1)
+		{
+			delete[] _VotingPercentagesDistrict;
+		}
+
+		_phySize = new_size;
+		_VotingPercentagesDistrict = new_memory;
+	}
+
+	bool  Party::setVotingPercentagesDistrict(double num, int districtID)
+	{
+		_VotingPercentagesDistrict[districtID - DISTRICT_ID_INIT] = num;
+		return true;
+	}
+
 
 
 	ostream& operator<<(ostream& os, const Party& party)
 	{
-		os << party._partyName << ","<< (int)party._partyID << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
-			(int)party.getPartyPMCandidateID() << "." << endl << "Party members are:" << endl;
-		for (int i = 0; i < party.getPartyMembers().getLogicSize(); ++i)
+		os << "**********************************" << endl;
+		os << party._name << ","<< static_cast<int>(party._partyID) << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
+			static_cast<int>(party.getPartyPMCandidateID()) << "." << endl << "Party members are:" << endl;
+		int sizeOfPartyMemberList = party.getPartyMembers().getLogicSize();
+		if (sizeOfPartyMemberList > 1)
 		{
-			os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
+			for (int i = 1; i < sizeOfPartyMemberList; ++i)
+			{
+				os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
+			}
 		}
+		else
+		{
+			os << "There are no any party member in this party." << endl;
+		}
+		os << "**********************************" << endl;
 		return os;
 	}
 }
