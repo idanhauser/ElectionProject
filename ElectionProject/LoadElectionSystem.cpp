@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #include "LoadElectionSystem.h"
 
 namespace elec
@@ -14,7 +14,10 @@ namespace elec
 
 	LoadElectionSystem::~LoadElectionSystem()
 	{
-		_inFile.close();
+		if (_inFile.is_open())
+		{
+			_inFile.close();
+		}
 	}
 
 	ElectionType LoadElectionSystem::getElectionType()

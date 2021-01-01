@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #pragma once
 #include "Utils.h"
 using namespace std;
@@ -33,10 +33,20 @@ namespace elec
 
 		friend ostream& operator<<(ostream& os, const Citizen& citizen);
 
-		
+		/// <summary>
+		/// set the party for citizen who is also a repsentive.
+		/// </summary>
+		/// <param name="party">pointer to the party</param>
+		/// <returns>true for check</returns>
 		bool setParty(const Party* party);
+		/// <summary>
+		/// sets if the citizen has voted.
+		/// </summary>
+		/// <param name="voted">true if he voted else false</param>
+		/// <returns></returns>
 		bool setHasVoted(bool voted);
-		
+
+
 		const char* getCitizenName() const;
 		int getCitizenID() const;
 		int getCitizenBirthYear() const;

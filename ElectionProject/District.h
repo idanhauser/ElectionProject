@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #pragma once
 #include "CitizenList.h"
 using namespace std;
@@ -31,14 +31,22 @@ namespace elec
 
 	public:
 		District(LoadElectionSystem& loader);
-		District() = delete;///we delete default constructor
+		District() = delete;
 		District(const char* name, int numOfReps, int numOfParties);
 		virtual ~District();
 		virtual void toOs(ostream& os) const = 0;
 		friend ostream& operator<<(ostream& os, const District& district);
 
-		virtual const Citizen* getPartyLeader() const { return nullptr; }
-		virtual bool setLeader(const Citizen* leader) { return false; }
+		/// <summary>
+		/// this function to get the leader this dist chosen.
+		/// </summary>
+		/// <returns>citizen which is the party leader</returns>
+		virtual const Citizen* getPartyLeader() const;
+		/// <summary>
+		/// this function helps us to set the leader this dist chosen.
+		/// </summary>
+		/// <returns>true if evertything is good else false.</returns>
+		virtual bool setLeader(const Citizen* leader);
 
 		Citizen& getCitizenByIndex(int idx);
 
@@ -47,24 +55,51 @@ namespace elec
 		const double getVotersPrecentage() const;
 
 
-		CitizenList getElectionResults()const;
+
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
+		
 		bool addCitizen(Citizen* citz);
-		bool addrepToArr();
+		bool addRepToArr();
+		
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
+		
 		int getNumOfReps() const;
-		bool settVotersPrecentage(const int num);
+		bool setVotersPrecentage(const int num);
+		
 		bool isCitizenExist(int id) const;
+		/// <summary>
+		/// returns how many citizrn has voted
+		/// </summary>
+		/// <returns>the amount of citizen voted.</returns>
 		int getVotingCitizensAmountInDistrict() const;
+		/// <summary>
+		/// this function calculate the VotersPrecentage in the dist.
+		/// </summary>
+		/// <param name="">int</param>
 		void operator++(int);
-		void realloc(int new_size);
+		/// <summary>
+		/// this function is utils to manage the arr RepsByPartyID
+		/// this function does like realloc from c
+		/// </summary>
+		/// <param name="new_size">the new size of the arr</param>
+		void reallocRepsByPartyID(int new_size);
+		/// <summary>
+		/// the logic count of reps of a party in this dist.
+		/// </summary>
+		/// <returns>returns the ammount</returns>
 		int getRepsByPartyLogicSize() const;
 		bool setRepsArrByPartyID(int partyID, int repsAmount);
 		int getRepsByPartyID(int partyID) const;
 		bool updateRepsArr();
+		/// <summary>
+		///this is utils function to manage the reps arr by party.
+		/// we are adding a col to the arr when we have new party.
+		/// </summary>
+		/// <returns>true if rvreything is good.</returns>
 		bool AddAnotherColumn();
+				
 		bool addDistToArr();
 		/// <summary>
 		/// saving the citizens in the list

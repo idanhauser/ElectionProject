@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #include "SimpleElectionRound.h"
 
 #include <fstream>
@@ -13,10 +13,10 @@ namespace elec
 
 	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int numOfReps) :ElectionRound(date),_numOfReps(numOfReps)
 	{
-		DividedDistrict* dist = new DividedDistrict("singleDist", _numOfReps,0);
+		DividedDistrict* dist = new DividedDistrict("Simple_Election_Round", _numOfReps,0);
 		_districts.addToList(*dist);
 		_results.addDistrict();
-		_results.setdistrictsAmount();
+		_results.setDistrictsAmount();
 	}
 
 	int SimpleElectionRound::getNumOfReps() const

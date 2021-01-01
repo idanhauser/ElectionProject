@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #include "District.h"
 
 #include <fstream>
@@ -73,6 +73,16 @@ namespace elec {
 		return _name;
 	}
 
+	const Citizen* District::getPartyLeader() const
+	{
+		return nullptr;
+	}
+
+	bool District::setLeader(const Citizen* leader)
+	{
+		return false;
+	}
+
 	Citizen& District::getCitizenByIndex(int idx) 
 	{
 		return _Citizens.getCitizenByIndex(idx);
@@ -103,11 +113,11 @@ namespace elec {
 		return true;
 	}
 	
-	bool District::addrepToArr()
+	bool District::addRepToArr()
 	{
 		if (_repsByPartyLogicSize == _repsByPartyPhySize)
 		{
-			realloc(_repsByPartyPhySize * 2);
+			reallocRepsByPartyID(_repsByPartyPhySize * 2);
 
 		}
 		_repsByPartyID[_numOfParties] = 0;
@@ -180,7 +190,7 @@ namespace elec {
 		return counter;
 	}
 
-	bool  District::settVotersPrecentage(const int num) {
+	bool  District::setVotersPrecentage(const int num) {
 		_votersPercentage = num;
 		return true;
 	}
@@ -237,7 +247,7 @@ namespace elec {
 	{
 		return _repsByPartyLogicSize;
 	}
-	void District::realloc(int new_size)
+	void District::reallocRepsByPartyID(int new_size)
 	{
 		int* new_memory = new int[new_size];
 
@@ -275,7 +285,7 @@ namespace elec {
 	{
 		if (_repsByPartyLogicSize == _repsByPartyPhySize)
 		{
-			realloc(_repsByPartyPhySize * 2);
+			reallocRepsByPartyID(_repsByPartyPhySize * 2);
 
 		}
 		_repsByPartyID[_repsByPartyLogicSize++] = 0;

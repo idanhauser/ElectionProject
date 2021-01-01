@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #include "ElectionRound.h"
 #include <iostream>
 #include <algorithm>
@@ -124,7 +124,7 @@ namespace elec {
 	}
 
 
-	bool ElectionRound::addNewCitizen(const char* name, int id, int birthyear, int districtId)
+	bool ElectionRound::addNewCitizen(const char* name, int id, int birthYear, int districtId)
 	{
 		int saveDis;
 		bool citizenAdded = false;
@@ -132,7 +132,7 @@ namespace elec {
 		{
 			if (_districts.isDistcritExist(districtId))
 			{
-				Citizen* citiz = new Citizen(name, id, birthyear, districtId, nullptr, _districts.getDistcritById(districtId));
+				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
 				citizenAdded = _districts.getDistcritById(districtId).addCitizen(citiz);
 			}
 		}
@@ -281,8 +281,8 @@ namespace elec {
 			if (tempCitizen.hasVoted() == false) {
 				tempCitizen.setHasVoted(true);
 
-				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum(), _parties.getLogicSize(), _districts.getLogicSize());
-				tempDistrict.settVotersPrecentage(static_cast<double>(tempDistrict.getVotingCitizensAmountInDistrict() / tempDistrict.getNumberOfCitizens()) * 100);
+				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum());
+				tempDistrict.setVotersPrecentage(static_cast<double>(tempDistrict.getVotingCitizensAmountInDistrict() / tempDistrict.getNumberOfCitizens()) * 100);
 
 				const double votingForPartyFromVotersInDistrictPrecentage = static_cast<double>(_results.getDistrictNumberOfVotesInParty(partyId - PARTY_ID_INIT, distIndex + DISTRICT_ID_INIT)) /
 					double(_districts.getDistcritById(distIndex + DISTRICT_ID_INIT).getVotingCitizensAmountInDistrict()) * 100;
@@ -338,7 +338,8 @@ namespace elec {
 					for (int m = 0; m < partiesAmount; m++)
 					{
 						os << electionRound._parties.getPartyByIndex(m);
-						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " Reps" << endl;
+						os << "And the have ";
+						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " representatives." << endl;
 						electionRound._parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
 						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
 							electionRound._results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT) << endl;
@@ -347,8 +348,9 @@ namespace elec {
 							"%" << endl;
 
 					}
-
+					os << endl;
 					os << "The district belongs to: " << electionRound._districts.getDistcritByIndex(j).getPartyLeader()->getCitizenName() << endl;
+					os << endl;
 				}
 				else
 				{

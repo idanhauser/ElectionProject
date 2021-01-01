@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #pragma once
 #include "Utils.h"
 #include "CitizenList.h"
@@ -59,7 +59,10 @@ namespace elec
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex) ;
 		Citizen& getPartyLeader() const;
 		double getVotingPercentagesByDistcritIdx(int index) const;
-
+		/// <summary>
+		/// this function saves file the class.
+		/// </summary>
+		/// <param name="outFile">the file we write to,</param>
 		void save(ofstream& outFile) const;
 		
 	};

@@ -1,4 +1,4 @@
-//code verison 2.5
+//code verison 3.0
 #pragma once
 #pragma  warning(disable:4996)
 #include <ostream>

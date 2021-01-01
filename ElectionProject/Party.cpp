@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #include "Party.h"
 #include <algorithm>
 #include <fstream>
@@ -133,12 +133,19 @@ namespace elec {
 	{
 		CitizenList& represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];
 		int amountToPrint = min(num, represnts.getLogicSize());
-		cout << "The Reps are: " << endl;
-		for (int i = 0; i < amountToPrint; ++i)
+		if(amountToPrint==0)
 		{
-			cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
-
+			cout << endl << "The are no any representatives.(user didn't add any representatives)." << endl;
 		}
+		else
+		{
+			cout << "And they are:" << endl;
+			for (int i = 0; i < amountToPrint; ++i)
+			{
+				cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
+			}
+		}
+		cout << "**********************************" << endl;
 	}
 
 
@@ -238,9 +245,17 @@ namespace elec {
 		os << "**********************************" << endl;
 		os << party._name << ","<< static_cast<int>(party._partyID) << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
 			static_cast<int>(party.getPartyPMCandidateID()) << "." << endl << "Party members are:" << endl;
-		for (int i = 1; i < party.getPartyMembers().getLogicSize(); ++i)
+		int sizeOfPartyMemberList = party.getPartyMembers().getLogicSize();
+		if (sizeOfPartyMemberList > 1)
 		{
-			os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
+			for (int i = 1; i < sizeOfPartyMemberList; ++i)
+			{
+				os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
+			}
+		}
+		else
+		{
+			os << "There are no any party member in this party." << endl;
 		}
 		os << "**********************************" << endl;
 		return os;

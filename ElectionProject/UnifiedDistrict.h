@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #pragma once
 
 #include "District.h"
@@ -17,7 +17,10 @@ namespace elec
 
 		virtual const Citizen* getPartyLeader() const override ;
 		virtual bool setLeader(const Citizen* leader) override;
-
+		/// <summary>
+/// printing function of this class
+/// </summary>
+/// <param name="os">the file we print to.</param>
 		virtual void toOs(ostream& os) const override;
 
 	

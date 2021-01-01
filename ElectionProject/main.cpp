@@ -1,5 +1,5 @@
 
-//code verison 2.5
+//code verison 3.0
 
 #include <iostream>
 #include <fstream>
@@ -100,7 +100,7 @@ void initElection()
 	int date_y;
 	int date_d;
 	int date_m;
-	int datearr[DATE_SIZE];
+	int dateArr[DATE_SIZE];
 	short typeInput;
 
 	cout << "Enter election's date (dd mm yyyy)" << endl;
@@ -109,17 +109,17 @@ void initElection()
 	{
 		if (i >= DATE_SIZE - 4)
 		{
-			datearr[i] = date_y % 10;
+			dateArr[i] = date_y % 10;
 			date_y /= 10;
 		}
 		else if (i >= 2)
 		{
-			datearr[i] = date_m % 10;
+			dateArr[i] = date_m % 10;
 			date_m /= 10;
 		}
 		else
 		{
-			datearr[i] = date_d % 10;
+			dateArr[i] = date_d % 10;
 			date_d /= 10;
 		}
 	}
@@ -128,7 +128,7 @@ void initElection()
 	ElectionType choice = static_cast<ElectionType>(typeInput);
 	if (choice == ElectionType::RegularElectionRound)
 	{
-		election = new RegularElectionRound(datearr);
+		election = new RegularElectionRound(dateArr);
 	}
 	else
 	{
@@ -139,7 +139,7 @@ void initElection()
 			cout << "Number of reps can't be negative or zero, please insert netrual number" << endl;
 			cin >> numofreps;
 		}
-		election = new SimpleElectionRound(datearr, numofreps);
+		election = new SimpleElectionRound(dateArr, numofreps);
 	}
 	showMainMenu();
 }
@@ -455,7 +455,7 @@ bool loadElection()
 {
 	bool loadedSuccessfully = true;
 	ifstream _inFile;
-	int len;
+	
 
 
 	char fileName[MAX_SIZE];

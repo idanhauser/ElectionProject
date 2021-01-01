@@ -1,4 +1,4 @@
-﻿//code verison 2.5
+﻿//code verison 3.0
 #pragma once
 #include "resultsArr.h"
 
@@ -69,10 +69,10 @@ namespace elec {
 		/// </summary>
 		/// <param name="name">a name of the citizen</param>
 		/// <param name="id">the ID of the citizen</param>
-		/// <param name="birthyear">the birth year of the citizen</param>
+		/// <param name="birthYear">the birth year of the citizen</param>
 		/// <param name="districtId">the Id of the district</param>
 		/// <returns>returns true if citizen was added, else false</returns>
-		bool addNewCitizen(const char* name, int id, int birthyear, int districtId);
+		bool addNewCitizen(const char* name, int id, int birthYear, int districtId);
 		/// <summary>
 		///Adding a new party to the election system.
 		/// </summary>
@@ -139,14 +139,7 @@ namespace elec {
 		/// <param name="arr">arr of pairs to be sorted</param>
 		/// <param name="n">number of element in the arr</param>
 		void bubbleSort(pair arr[], int n);
-		/// <summary>
-		/// deletes the max cell in arr 
-		/// </summary>
-		/// <param name="parr">arr of pairs</param>
-		/// <param name="size">the size of the arr</param>
-		/// <returns> the index maximum pair</returns>
-		//int  deleteMax(double* parr, int size);
-		
+
 
 
 
