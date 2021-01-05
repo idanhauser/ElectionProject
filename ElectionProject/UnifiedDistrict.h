@@ -2,7 +2,7 @@
 #pragma once
 
 #include "District.h"
-
+#include <string>
 namespace elec
 {
 
@@ -11,8 +11,8 @@ namespace elec
 	{
 		const Citizen* _partyLeader;
 	public:
-		UnifiedDistrict(const char* name, int numOfReps, int numOfParties);
-		UnifiedDistrict( LoadElectionSystem& loader);
+		UnifiedDistrict(string& name, int numOfReps, int numOfParties);
+		UnifiedDistrict(LoadElectionSystem& loader);
 		virtual ~UnifiedDistrict() override;
 
 		virtual const Citizen* getPartyLeader() const override ;

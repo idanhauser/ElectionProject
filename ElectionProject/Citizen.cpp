@@ -10,25 +10,23 @@
 
 namespace elec
 {
-	Citizen::Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
-		const District& district) : _name(new char[strlen(citizen_name) + 1]), _idNum(id_num),
+	Citizen::Citizen(string& citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
+		const District& district) : _name(citizen_name), _idNum(id_num),
 		_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false), _party(nullptr),
 		_partyId(-1), _district(district)
 	{
-		strcpy(this->_name, citizen_name);
+		
 	}
 
 	Citizen::Citizen(LoadElectionSystem& loader, const District& district):_district(district)
 	{
 
 		int partyId = -1;
-		int nameLen;
 		ifstream& reader = loader.getReader();
 		//Reading len of name:
-		reader.read(rcastc(&nameLen), sizeof(int));
-		_name = new char[nameLen];
+
 		//Reading name:
-		reader.read(rcastc(_name), sizeof(char) * nameLen);
+		reader.read(rcastc(&_name), sizeof(string) );
 		//Reading _idNum
 		reader.read(rcastc(&_idNum), sizeof(int));
 		//Reading _birthYear
@@ -51,7 +49,7 @@ namespace elec
 
 	Citizen::~Citizen()
 	{
-		delete[] _name;
+
 	}
 
 
@@ -70,7 +68,7 @@ namespace elec
 		return true;
 	}
 
-	const char* Citizen::getCitizenName() const
+	const string Citizen::getCitizenName() const
 	{
 		return _name;
 
@@ -119,12 +117,10 @@ namespace elec
 	{
 		
 		int isParty=-1;
-		int nameLen = strlen(_name) + 1;
+
 		//save name of dist:
-			//saving name len
-		outFile.write(rcastcc(&nameLen), sizeof(int));
 		//saving name
-		outFile.write(rcastcc(_name), sizeof(char) * nameLen);
+		outFile.write(rcastcc(&_name), sizeof(string));
 		//saving _idNum
 		outFile.write(rcastcc(&_idNum), sizeof(int));
 		//saving _birthYear

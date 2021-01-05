@@ -1,7 +1,7 @@
 ﻿//code verison 3.0
 #pragma once
 #include <fstream>
-
+#include <string>
 #include "Utils.h"
 
 namespace elec
@@ -13,7 +13,7 @@ namespace elec
 		 bool _isFileNotOk;
 	public:
 		LoadElectionSystem() = delete;
-		LoadElectionSystem(char fileName[MAX_SIZE]);
+		LoadElectionSystem(string fileName);
 
 
 		///closing the file.

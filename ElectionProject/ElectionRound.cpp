@@ -124,7 +124,7 @@ namespace elec {
 	}
 
 
-	bool ElectionRound::addNewCitizen(const char* name, int id, int birthYear, int districtId)
+	bool ElectionRound::addNewCitizen(string& name, int id, int birthYear, int districtId)
 	{
 		int saveDis;
 		bool citizenAdded = false;
@@ -139,7 +139,7 @@ namespace elec {
 		return citizenAdded;
 	}
 
-	bool ElectionRound::addNewParty(const char* name, int pdId, int& partyId)
+	bool ElectionRound::addNewParty(string& name, int pdId, int& partyId)
 	{
 		int distIndex;
 

@@ -1,6 +1,7 @@
 ﻿//code verison 3.0
 #pragma once
 #include "District.h"
+#include <string>
 using namespace std;
 
 namespace elec
@@ -8,8 +9,8 @@ namespace elec
 	class DividedDistrict : public District
 	{
 	public:
-		DividedDistrict(const char* name, int numOfReps, int numOfParties);
-		DividedDistrict( LoadElectionSystem& loader);
+		DividedDistrict(string& name, int numOfReps, int numOfParties);
+		DividedDistrict(LoadElectionSystem& loader);
 		virtual ~DividedDistrict();
 		/// <summary>
 		/// printing function of this class

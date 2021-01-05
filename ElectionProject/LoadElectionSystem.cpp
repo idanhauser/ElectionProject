@@ -4,7 +4,7 @@
 namespace elec
 {
 
-	LoadElectionSystem::LoadElectionSystem(char fileName[MAX_SIZE]) :_inFile(fileName, ios::binary), _isFileNotOk(false)
+	LoadElectionSystem::LoadElectionSystem(string fileName) :_inFile(fileName, ios::binary), _isFileNotOk(false)
 	{
 
 		if (!_inFile) {
