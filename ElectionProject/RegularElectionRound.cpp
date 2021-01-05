@@ -21,7 +21,7 @@ namespace elec
 
 
 
-	bool RegularElectionRound::addNewDistrict(const char name[MAX_SIZE], int numberRepresentatives, int& districtId, DistcritType districtType)
+	bool RegularElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId, DistcritType districtType)
 	{
 		bool districtAdded;
 		if (districtType == DistcritType::UnifiedDistrict)

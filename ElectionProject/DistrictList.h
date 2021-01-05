@@ -1,6 +1,6 @@
 ﻿//code verison 3.0
 #pragma once
-
+#include <string>
 using namespace std;
 
 namespace elec {

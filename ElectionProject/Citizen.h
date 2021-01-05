@@ -1,6 +1,7 @@
 ﻿//code verison 3.0
 #pragma once
 #include "Utils.h"
+#include <string>
 using namespace std;
 namespace elec
 {
@@ -11,7 +12,7 @@ namespace elec
 	class Citizen
 	{
 	private:
-		char* _name;
+		string _name;
 		int _idNum;
 		int _birthYear;
 		int _districtNum;
@@ -25,7 +26,7 @@ namespace elec
 
 	public:
 		Citizen() = delete;
-		Citizen(const char* citizen_name, int id_num, int birthYear, int districtNum, const Party* party,const District& district);
+		Citizen(string& citizen_name, int id_num, int birthYear, int districtNum, const Party* party,const District& district);
 		 Citizen(LoadElectionSystem& loader, const District& district);
 
 
@@ -47,7 +48,7 @@ namespace elec
 		bool setHasVoted(bool voted);
 
 
-		const char* getCitizenName() const;
+		const string getCitizenName() const;
 		int getCitizenID() const;
 		int getCitizenBirthYear() const;
 		int getDistrictNum() const;

@@ -16,7 +16,7 @@ namespace elec
 	protected:
 		static int snGenerator;
 		int _serialNum;
-		char* _name;
+		string _name;
 		CitizenList _Citizens;
 		double _votersPercentage;
 		int* _repsByPartyID;
@@ -32,7 +32,7 @@ namespace elec
 	public:
 		District(LoadElectionSystem& loader);
 		District() = delete;
-		District(const char* name, int numOfReps, int numOfParties);
+		District(string& name, int numOfReps, int numOfParties);
 		virtual ~District();
 		virtual void toOs(ostream& os) const = 0;
 		friend ostream& operator<<(ostream& os, const District& district);
@@ -51,7 +51,7 @@ namespace elec
 		Citizen& getCitizenByIndex(int idx);
 
 		virtual const CitizenList& getEligibleCitizens() const;
-		virtual const char* getName() const;
+		virtual const string& getName() const;
 		const double getVotersPrecentage() const;
 
 

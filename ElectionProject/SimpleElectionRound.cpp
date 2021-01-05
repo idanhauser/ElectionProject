@@ -13,7 +13,8 @@ namespace elec
 
 	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int numOfReps) :ElectionRound(date),_numOfReps(numOfReps)
 	{
-		DividedDistrict* dist = new DividedDistrict("Simple_Election_Round", _numOfReps,0);
+		string name("simple_Election_Round");
+		DividedDistrict* dist = new DividedDistrict(name ,_numOfReps,0);
 		_districts.addToList(*dist);
 		_results.addDistrict();
 		_results.setDistrictsAmount();
@@ -24,7 +25,7 @@ namespace elec
 		return _numOfReps;
 	}
 
-	bool SimpleElectionRound::addNewDistrict(const char str[MAX_SIZE], int numberRepresentatives, int& districtId,DistcritType districtType)
+	bool SimpleElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId,DistcritType districtType)
 	{
 		return false;
 	}

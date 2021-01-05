@@ -9,7 +9,7 @@ using namespace std;
 
 namespace elec {
 
-	DividedDistrict::DividedDistrict(const char* name, int numOfReps, int numOfParties) :District(name, numOfReps, numOfParties)
+	DividedDistrict::DividedDistrict( string& name, int numOfReps, int numOfParties) :District(name, numOfReps, numOfParties)
 	{
 	}
 

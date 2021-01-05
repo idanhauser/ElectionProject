@@ -275,7 +275,7 @@ void addDistrict()
 {
 
 	int districtId = DISTRICT_ID_INIT;
-	char name[MAX_SIZE];
+	string name;
 	int numberRepresentatives;
 	int userChoise = 0;
 	if (typeid(*election) == typeid(SimpleElectionRound))
@@ -312,7 +312,7 @@ void addDistrict()
 void addCitizen()
 {
 	int id, birtyear, districtId = DISTRICT_ID_INIT;
-	char name[MAX_SIZE];
+	string name;
 	const int currYear = election->getYear();
 
 	if (typeid(*election) == typeid(RegularElectionRound))
@@ -351,7 +351,7 @@ void addCitizen()
 void addParty()
 {
 	int idPd;
-	char name[MAX_SIZE];
+	string name;
 	int partyId;
 	cout << "Insert a party name,id of PD of party:" << endl;
 	cin >> name >> idPd;

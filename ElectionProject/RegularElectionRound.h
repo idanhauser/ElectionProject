@@ -1,7 +1,7 @@
 ﻿//code verison 3.0
 #pragma once
 #include "ElectionRound.h"
-
+#include <string>
 namespace elec
 {
 	class LoadElectionSystem;
@@ -12,7 +12,7 @@ namespace elec
 		RegularElectionRound() = delete;
 		explicit RegularElectionRound(LoadElectionSystem& loader);
 		explicit RegularElectionRound(int date[DATE_SIZE]);
-		virtual bool addNewDistrict(const char str[MAX_SIZE], int numberRepresentatives, int& districtId,
+		virtual bool addNewDistrict(string& name, int numberRepresentatives, int& districtId,
 		                            DistcritType districtType) override;
 		virtual ~RegularElectionRound() override;
 
