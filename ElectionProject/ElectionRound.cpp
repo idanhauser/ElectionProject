@@ -179,8 +179,9 @@ namespace elec {
 
 	}
 
-	void ElectionRound::viewAllDistricts()
+	void ElectionRound::viewAllDistricts()  noexcept(false)
 	{
+		string output;
 		int len = _districts.getLogicSize();
 
 		if (len > 0)
@@ -194,7 +195,8 @@ namespace elec {
 		}
 		else
 		{
-			cout << "There are no districts to show." << endl;
+			output.append("There are no districts to show.");
+			throw output;
 		}
 	}
 
@@ -229,8 +231,9 @@ namespace elec {
 
 	}
 
-	void ElectionRound::viewAllCitizens() const
+	void ElectionRound::viewAllCitizens() const noexcept(false)
 	{
+		
 		int len = _districts.getLogicSize();
 		if (len > 0)
 		{
@@ -249,12 +252,14 @@ namespace elec {
 		}
 		else
 		{
-			cout << "There are no citizens to show." << endl;
+			const string msg = "There are no citizens to show.";
+			throw msg;
 		}
 	}
 
-	void ElectionRound::viewAllParties() const
+	void ElectionRound::viewAllParties() const noexcept(false)
 	{
+		
 		int len = _parties.getLogicSize();
 		if (len > 0)
 		{

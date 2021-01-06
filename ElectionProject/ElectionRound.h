@@ -92,15 +92,15 @@ namespace elec {
 		/// <summary>
 		/// prints all the Districts
 		/// </summary>
-		void viewAllDistricts();
+		void viewAllDistricts() noexcept(false);
 		/// <summary>
 		/// prints all the citizens
 		/// </summary>
-		void viewAllCitizens() const;
+		void viewAllCitizens() const noexcept(false);
 		/// <summary>
 		/// prints all the parties
 		/// </summary>
-		void viewAllParties() const;
+		void viewAllParties() const noexcept(false);
 		/// <summary>
 		/// adding a vote of a person to the party
 		/// </summary>

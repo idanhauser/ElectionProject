@@ -397,18 +397,43 @@ void addPartyRepresentative()
 }
 void viewDistricts()
 {
-	election->viewAllDistricts();
+	try
+	{
+		election->viewAllDistricts();
+	}
+	catch (string &msg)
+	{
+		cout << msg << endl;
+	}
+
 }
 
 
 void viewCitizens()
 {
-	election->viewAllCitizens();
+	try
+	{
+		election->viewAllCitizens();
+
+	}
+	catch (string& msg)
+	{
+		cout << msg << endl;
+	}
 }
 
 void viewParties()
 {
-	election->viewAllParties();
+	try
+	{
+		election->viewAllParties();
+
+	}
+	catch (string& msg)
+	{
+		cout << msg << endl;
+	}
+
 }
 
 void voting()
