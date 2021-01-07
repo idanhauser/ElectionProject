@@ -3,7 +3,7 @@
 #include "Utils.h"
 #include "CitizenList.h"
 #include "LoadElectionSystem.h"
-
+#include <string>
 namespace elec
 {
 	class CitizenList;
@@ -13,7 +13,7 @@ namespace elec
 		static int pdGenerator;
 
 		int _partyID;
-		char* _name;
+		string _name;
 		int _PMCandidateID;
 		CitizenList*_partyMembers;
 		CitizenList* _representativesByDist;
@@ -33,7 +33,7 @@ namespace elec
 		
 	public:
 		Party() = delete;
-		Party(const char* partyName, int PMCandidateID, int numOfDist,Citizen& partyLeader);
+		Party(const string& partyName, int PMCandidateID, int numOfDist,Citizen& partyLeader);
 		Party( LoadElectionSystem& loader, Citizen& partyLeader,int numOfDist);
 
 		~Party();
@@ -46,7 +46,7 @@ namespace elec
 
 		bool addToRepByDists(CitizenList& reps, int district);
 
-		const char* getPartyName() const;
+		const string getPartyName() const;
 		const int getPartyID() const;
 		int getPartyPMCandidateID() const;
 		const CitizenList& getPartyMembers() const;
@@ -55,7 +55,7 @@ namespace elec
 		bool addToMembers( Citizen& citizen) ;
 
 		bool updateDistricts();
-		void printPartyRepsFromDistrictByAmount(int num, int districtID) const;
+		string printPartyRepsFromDistrictByAmount(int num, int districtID) const;
 		bool addToRepresentativesByDis(Citizen& citizen, int distIndex) ;
 		Citizen& getPartyLeader() const;
 		double getVotingPercentagesByDistcritIdx(int index) const;

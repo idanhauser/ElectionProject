@@ -123,22 +123,46 @@ namespace elec {
 	}
 
 
-	bool ElectionRound::addNewCitizen(const char* name, int id, int birthYear, int districtId)
+	void ElectionRound::addNewCitizen(string& name, int id, int birthYear, int districtId) noexcept(false)
 	{
 		int saveDis;
-		bool citizenAdded = false;
-		if (!_districts.isCitizenExist(id, saveDis))
+		bool citizenExist = true;
+		int lenofId = checkLen(id);
+		if (_dateYear - birthYear >= 18)
 		{
-			if (_districts.isDistcritExist(districtId))
-			{
-				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
-				citizenAdded = _districts.getDistcritById(districtId).addCitizen(citiz);
-			}
+			throw AgeException(birthYear,_dateYear);
 		}
-		return citizenAdded;
+		if (lenofId != 9)
+		{
+			throw IdException(lenofId);
+		}
+		if ((name != "") && (name.size() > 1))
+		{
+			throw nameException(name);
+		}
+		try
+		{
+			//is dist exist on vector.
+			_districts.isCitizenExist(id, saveDis);
+		}
+		catch (CitizenNotExistException& e)
+		{//citizen doesn't exist, its good lets add him:
+			citizenExist = false;
+			_districts.isDistcritExist(districtId);//need to do on vector if the dist exist.
+			Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
+			_districts.getDistcritById(districtId).addCitizen(citiz);//need to check if added susccessfuly.
+
+		}
+		if (citizenExist)
+		{//citizen already exist.
+			throw CitizenExistException(id,saveDis);
+		}
+
 	}
 
-	bool ElectionRound::addNewParty(const char* name, int pdId, int& partyId)
+
+
+	bool ElectionRound::addNewParty(string& name, int pdId, int& partyId)
 	{
 		int distIndex;
 

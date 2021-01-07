@@ -2,7 +2,7 @@
 #include "Party.h"
 #include <algorithm>
 #include <fstream>
-
+#include <iostream>
 #include "Citizen.h"
 #include "CitizenList.h"
 
@@ -12,13 +12,12 @@ namespace elec {
 	int Party::pdGenerator = PARTY_ID_INIT;
 
 
-	Party::Party(const char* partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
-		_name(new char[strlen(partyName) + 1]),
+	Party::Party(const string& partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
+		_name(partyName),
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
 		_partyLeader(partyLeader), _numOfDist(numOfDist),_VotingPercentagesDistrict(new double[MAX_SIZE]),_logicSize(0),_phySize(MAX_SIZE)
 	{
 		_partyMembers->addToList(partyLeader);
-		strcpy(this->_name, partyName);
 		for (int i = 0; i < numOfDist; i++)
 		{
 			_VotingPercentagesDistrict[i] = 0;
@@ -30,15 +29,11 @@ namespace elec {
 		_representativesByDist(new CitizenList[numOfDist]), _partyLeader(partyLeader)
 	{
 		ifstream& reader = loader.getReader();
-		int nameLen;
 		//Reading serial num of party _partyID:
 		reader.read(rcastc(&_partyID), sizeof(int));
 		pdGenerator = _partyID;
-		//Reading len of name:
-		reader.read(rcastc(&nameLen), sizeof(int));
-		_name = new char[nameLen];
 		//Reading name:
-		reader.read(rcastc(_name), sizeof(char) * nameLen);
+		reader.read(rcastc(&_name), sizeof(string));
 		//Reading _PMCandidateID//
 		reader.read(rcastc(&_PMCandidateID), sizeof(int));
 		//Reading _numOfDist
@@ -57,7 +52,6 @@ namespace elec {
 	Party::~Party()
 	{
 		delete[] _VotingPercentagesDistrict;
-		delete[] _name;
 	}
 
 
@@ -77,7 +71,7 @@ namespace elec {
 		return true;
 	}
 
-	const char* Party::getPartyName() const
+	const string Party::getPartyName() const
 	{
 		return _name;
 	}
@@ -129,13 +123,14 @@ namespace elec {
 	}
 
 
-	void Party::printPartyRepsFromDistrictByAmount(int num, int districtID) const
+	string Party::printPartyRepsFromDistrictByAmount(int num, int districtID) const
 	{
+		string output;
 		CitizenList& represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];
 		int amountToPrint = min(num, represnts.getLogicSize());
 		if(amountToPrint==0)
 		{
-			cout << endl << "The are no any representatives.(user didn't add any representatives)." << endl;
+			output.append("\n The are no any representatives.(user didn't add any representatives). \n");
 		}
 		else
 		{
@@ -145,7 +140,8 @@ namespace elec {
 				cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
 			}
 		}
-		cout << "**********************************" << endl;
+		output += "**********************************\n";
+		return output;
 	}
 
 
@@ -168,15 +164,11 @@ namespace elec {
 
 	void Party::save(ofstream& outFile) const
 	{
-		int numOfObj=0;
-		int nameLen = strlen(_name) + 1;
+
 		//save serialNumOfParty:
 		outFile.write(rcastcc(&_partyID), sizeof(int));
-		//save name of dist:
-			//saving name len
-		outFile.write(rcastcc(&nameLen), sizeof(int));
 		//saving name
-		outFile.write(rcastcc(_name), sizeof(char) * nameLen);
+		outFile.write(rcastcc(&_name), sizeof(string));
 		//saving _PMCandidateID
 		outFile.write(rcastcc(&_PMCandidateID), sizeof(int));
 		//saving _numOfDist

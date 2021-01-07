@@ -1,7 +1,7 @@
 ﻿//code verison 3.0
 #pragma once
 #include "resultsArr.h"
-
+#include <string>
 
 #include "DistrictList.h"
 #include "PartyList.h"
@@ -52,7 +52,7 @@ namespace elec {
 		/// <param name="name">the name of the dist</param>
 		/// <param name="numberRepresentatives">number of reps in dists</param>
 		/// <param name="districtId">the id of dist</param>
-		virtual	bool addNewDistrict(const char str[MAX_SIZE], int number_representatives, int& districtId, DistcritType districtType) = 0;
+		virtual	bool addNewDistrict(string& name, int numbeRepresentatives, int& districtId, DistcritType districtType) = 0;
 
 		/// <summary>
 		/// returns the date
@@ -75,8 +75,17 @@ namespace elec {
 		/// <param name="id">the ID of the citizen</param>
 		/// <param name="birthYear">the birth year of the citizen</param>
 		/// <param name="districtId">the Id of the district</param>
-		/// <returns>returns true if citizen was added, else false</returns>
-		bool addNewCitizen(const char* name, int id, int birthYear, int districtId);
+
+		constexpr  int checkLen(int id)
+		{
+			int count = 0;
+			do {
+				++count;
+				id/= 10;
+			} while (id);
+			return count;
+		}
+		void addNewCitizen(string& name, int id, int birthYear, int districtId) noexcept(false);
 		/// <summary>
 		///Adding a new party to the election system.
 		/// </summary>
@@ -84,7 +93,7 @@ namespace elec {
 		/// <param name="pdId">the id of the party leader</param>
 		/// <param name="partyId">the id of the party</param>
 		/// <returns>returns true if party was added, else false</returns>
-		bool addNewParty(const char* name, int pdId, int& partyId);
+		bool addNewParty(string& name, int pdId, int& partyId);
 		/// <summary>
 		///Adding a new party representatives to a party.
 		/// </summary>

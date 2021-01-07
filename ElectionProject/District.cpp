@@ -2,10 +2,11 @@
 #include "District.h"
 
 #include <fstream>
-
+#include <string>
 #include "Citizen.h"
 #include <iostream>
 #include "CitizenList.h"
+#include "Exceptions.h"
 #include "LoadElectionSystem.h"
 using namespace std;
 
@@ -20,11 +21,8 @@ namespace elec {
 		//Reading serial num:
 		reader.read(rcastc(&_serialNum), sizeof(int));
 		snGenerator = _serialNum;
-		//Reading len of name:
-		reader.read(rcastc(&nameLen), sizeof(int));
-		_name = new char[nameLen];
 		//Reading name:
-		reader.read(rcastc(_name), sizeof(char) * nameLen);
+		reader.read(rcastc(&_name), sizeof(string));
 		//Reading _votersPercentage
 		reader.read(rcastc(&_votersPercentage), sizeof(double));
 		//Reading _electionResult
@@ -51,11 +49,11 @@ namespace elec {
 		}
 	}
 
-	District::District(const char* name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(new char[strlen(name) + 1]),
+	District::District(string& name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(name),
 		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _numOfParties(numOfParties), _repsByPartyLogicSize(numOfParties),
 		 _repsByPartyPhySize(MAX_SIZE), _numOfReps(numOfReps), _electionResult(0),_numberOfVotesinDist(0)
 	{
-		strcpy(this->_name, name);
+
 		for (int i = 0; i < numOfParties; i++)
 		{
 			_repsByPartyID[i] = 0;
@@ -65,10 +63,10 @@ namespace elec {
 	District::~District()
 	{
 		delete[] _repsByPartyID;
-		delete[] _name;
+
 	}
 
-	const char* District::getName() const
+	const string& District::getName() const
 	{
 		return _name;
 	}
@@ -107,10 +105,17 @@ namespace elec {
 		return _Citizens.getLogicSize();
 	}
 
-	bool District::addCitizen(Citizen* citz)
+	void District::addCitizen(Citizen* citz) noexcept(false)
 	{
-		_Citizens.addToList(*citz);
-		return true;
+		if (citz != nullptr)
+		{
+			_Citizens.addToList(*citz);
+		}
+		else
+		{
+			string msg = "Add Citizen";
+			throw NullObjectException(msg);
+		}
 	}
 	
 	bool District::addRepToArr()
@@ -204,14 +209,11 @@ namespace elec {
 	void District::save(ofstream& outFile) const
 	{
 		int numOfCitizens;
-		int nameLen = strlen(_name) + 1;
 		//save serialNumOfDist:
 		outFile.write(rcastcc(&_serialNum), sizeof(int));
-		//save name of dist:
-			//saving name len
-		outFile.write(rcastcc(&nameLen), sizeof(int));
+
 		//saving name
-		outFile.write(rcastcc(_name), sizeof(char) * nameLen);
+		outFile.write(rcastcc(&_name), sizeof(string));
 		//saving _votersPercentage
 		outFile.write(rcastcc(&_votersPercentage), sizeof(double));
 		//saving _electionResult
