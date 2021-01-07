@@ -151,6 +151,7 @@ namespace elec {
 			partyId = par->getPartyID();
 			leader->setParty(par);
 			partyAdded = _parties.addToList(*par);
+			_results.addParty(_parties.getLogicSize(),_districts.getLogicSize());
 			for (int j = 0; j < _districts.getLogicSize(); ++j)
 			{
 				_districts.getDistcritByIndex(j).updateRepsArr();

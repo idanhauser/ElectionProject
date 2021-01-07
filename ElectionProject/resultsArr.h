@@ -75,6 +75,8 @@ namespace elec {
 		/// <returns>retuns true if everything is good else false.</returns>
 		bool AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
 
+		bool addParty(int partiesAmount, int districtsAmount);
+		bool addDistrict(int districtAmount);
 		/// <summary>
 		/// get the amount of all the reps party leader got
 		/// </summary>

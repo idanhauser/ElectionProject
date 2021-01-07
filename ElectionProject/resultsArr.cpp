@@ -7,7 +7,7 @@
 using namespace std;
 namespace elec
 {
-
+	
 	resultsArr::resultsArr(LoadElectionSystem& loader)
 	{
 		ifstream& reader = loader.getReader();
@@ -40,7 +40,7 @@ namespace elec
 	void resultsArr::AddSingleVoteToArr(int party_id, int district_id)
 	{
 
-		_votesByIDs[party_id + PARTY_ID_INIT][district_id - DISTRICT_ID_INIT];
+		_votesByIDs[party_id + PARTY_ID_INIT].at(district_id - DISTRICT_ID_INIT)++;
 
 
 	}
@@ -152,7 +152,42 @@ namespace elec
 		return *this;
 	}
 
+	bool resultsArr::addParty(int paretiesAmount, int districtsAmount)
+	{
+		vector<int> districts(districtsAmount);
+		_votesByIDs.push_back(districts);
 
+		vector<int> districtsForRepsVec(districtsAmount);
+		_repsPartiesByID.push_back(districtsForRepsVec);
+
+		 _PMsRepsTotalByPartyID.resize(_PMsRepsTotalByPartyID.size() + 1);
+		
+		return true;
+
+	}
+
+
+
+
+
+	bool resultsArr::addDistrict(int districtsAmount)
+	{
+
+		for (int i = 0; i < _votesByIDs.size(); i++)
+		{
+			_votesByIDs[i].resize(districtsAmount);
+		}
+
+
+
+		for (int i = 0; i < _votesByIDs.size(); i++)
+		{
+			_repsPartiesByID[i].resize(districtsAmount);
+		}
+		return true;
+
+	}
+	
 	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) {
 		int leftReps;
 		double amountOfElectedFromDistrict;
