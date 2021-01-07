@@ -1,12 +1,4 @@
-﻿#pragma once
-
-//class DynamicArray
-//{
-//public:
-//	DynamicArray(int size = 2) : _logicalSize(0), _physicalSize(size), _arr(new T[size]) {}
-//};
-
-#include <iostream>
+﻿#include <iostream>
 using namespace std;
 
 template <class T>
@@ -49,75 +41,73 @@ public:
 	bool     empty()    const { return _logicalSize == 0; }
 	void     clear() { _logicalSize = 0; }
 
-	// standard STL iterator implementation:
-	// (no duplication for const)
-	template <bool is_const>
-	class base_iterator
+	// example iterator implementation:
+	// (causes code duplication)
+	class iterator
 	{
+	private:
+		DynamicArray* _da;
+		int				_i;
 	public:
-		using ds_type = std::conditional_t<is_const, const DynamicArray, DynamicArray>;
-
 		using iterator_category = std::bidirectional_iterator_tag;
 		// other options exist, e.g., std::forward_iterator_tag
 		using different_type = std::ptrdiff_t;
-		using value_type = std::conditional_t<is_const, const T, T>;
-		using pointer = value_type*;
-		using reference = value_type&;
+		using value_type = T;
+		using pointer = T*;
+		using reference = T&;
 
-		base_iterator(ds_type& arr, int i) : _da(&arr), _i(i) {}
+		iterator(DynamicArray& arr, int i) : _da(&arr), _i(i) {}
+		iterator(const iterator& other) : _da(other._da), _i(other._i) {}
 
-		// we want to use the default constructor
-		base_iterator(const base_iterator&) = default;
+		// in const_iterator:	const_iterator(const iterator& other)
+		//     					operator=(const iterator& other)
 
-		// and the default assignment operator
-		constexpr base_iterator& operator=(const base_iterator&) = default;
+		// const_iterator should also be constructible from regular iterator
+		friend class const_iterator;
 
-		// we want to allow construction of const_iterator from iterator
-		friend class base_iterator<true>;
-		template <bool _is_const = is_const, class = std::enable_if_t<_is_const>>
-		base_iterator(const base_iterator<false>& other) : _da(other._da), _i(other._i) {}
+		const iterator& operator=(const iterator& other) {
+			_da = other._da;
+			_i = other._i;
+			return *this;
+		}
 
 		// comparison with another iterator
-		bool operator==(const base_iterator& other) const {
+		bool operator==(const iterator& other) const {
 			return (_da == other._da) && (_i == other._i);
 		}
-		bool operator!=(const base_iterator& other) const {
+		bool operator!=(const iterator& other) const {
 			return !(*this == other);
 		}
 
 		// smart-pointer iterator methods
-		reference operator*() {
+		T& operator*() {
 			return _da->_arr[_i];
 		}
-		pointer operator->() {
+		T* operator->() {
 			return &_da->_arr[_i];
 		}
 
 		// increment-decrement iterator methods
-		base_iterator& operator++() {
+		iterator& operator++() {
 			++_i;
 			return *this;
 		}
-		base_iterator operator++(int) {
-			base_iterator temp(*this);
+		iterator operator++(int) {
+			iterator temp(*this);
 			++_i;
 			return temp;
 		}
-		base_iterator& operator--() {
+		iterator& operator--() {
 			--_i;
 			return *this;
 		}
-		base_iterator operator--(int) {
-			base_iterator temp(*this);
+		iterator operator--(int) {
+			iterator temp(*this);
 			--_i;
 			return temp;
 		}
-	private:
-		ds_type* _da;
-		int			_i;
 	};
-	using iterator = base_iterator<false>;
-	using const_iterator = base_iterator<true>;
+	// and here we duplicate the 'iterator' class to 'const_iterator' 
 
 	void insert(const iterator& pos, const T& val) {
 		if (_logicalSize == _physicalSize)
@@ -136,6 +126,7 @@ public:
 		++_logicalSize;
 	}
 
+	const iterator& erase(const iterator& iter);
 	const iterator& erase(const iterator& first, const iterator& last);
 
 	iterator begin() {
@@ -150,9 +141,9 @@ public:
 	const_iterator end() const {
 		return const_iterator(*this, _logicalSize);
 	}*/
-	/*
-		cbegin()/cend()		- for const iterator
-		rbegin()/rend()		- for reverse iterator (end to start)
+	/* other iterator methods to implement for collection:
+		- cbegin()/cend()		- const iterators
+		- rbegin()/rend()		- reverse iterators (end to start)
 	*/
 
 	void print() const {
@@ -176,3 +167,40 @@ private:
 	int _logicalSize;
 	int _physicalSize;
 };
+
+//int main()
+//{
+//	DynamicArray<int> v1;
+//
+//	cout << "Is array empty? " << v1.empty() << endl;
+//
+//	cout << "size=" << v1.size() << " capacity=" << v1.capacity() << endl; 
+//	v1.push_back(3);
+//	cout << "size=" << v1.size() << " capacity=" << v1.capacity() << endl; 
+//	v1.push_back(1);
+//	cout << "size=" << v1.size() << " capacity=" << v1.capacity() << endl; 
+//	v1.push_back(2);
+//	v1.insert(v1.begin(), 8);
+//	v1.print();
+//	v1.insert(v1.end(), 9);
+//	v1.print();
+//	cout << "size=" << v1.size() << " capacity=" << v1.capacity() << endl; 
+//	cout << "Is array empty? " << v1.empty() << endl;
+//	cout << "There are " << v1.size() << " elements, the first is " << v1.front() << endl;
+//
+//	cout << "The values in the array: ";
+//	DynamicArray<int>::iterator itr    = v1.begin();
+//	DynamicArray<int>::iterator itrEnd = v1.end();
+//	for ( ; itr != itrEnd ; ++itr)
+//		cout << *itr << " ";
+//	cout << endl;
+//
+//	for (int x : v1) {
+//		cout << x << " ";
+//	}
+//	cout << endl;
+//
+//	v1.clear();
+//	cout << "Is array empty? " << v1.empty() << endl;
+//	cout << "size=" << v1.size() << " capacity=" << v1.capacity() << endl;
+//}
