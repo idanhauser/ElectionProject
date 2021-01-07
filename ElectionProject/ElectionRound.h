@@ -7,7 +7,7 @@
 #include "PartyList.h"
 #include "Citizen.h"
 #include "District.h"
-
+#include <algorithm>
 using namespace std;
 
 
@@ -25,7 +25,7 @@ namespace elec {
 		DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
-		int NoChangeSinceLastCalc;
+		int NoChangeSinceLastCalc; //flag to check if current and last calculation of results is the same
 
 		const ElectionRound& operator=(const ElectionRound&);
 
@@ -35,9 +35,13 @@ namespace elec {
 		struct pair {
 			int index;
 			double repsAmount;
+			bool operator>(const pair& other) const
+			{
+				return (repsAmount > other.repsAmount);
+			}	
 		};
 		ElectionRound() = delete;
-		ElectionRound(int date[DATE_SIZE]);	
+		ElectionRound(int date[DATE_SIZE]) throw(const char*);
 		virtual ~ElectionRound() = default;
 				
 	explicit ElectionRound(LoadElectionSystem& loader);
@@ -118,10 +122,10 @@ namespace elec {
 		/// <returns>returns true if vote was added, else false</returns>
 		bool votingAction(int citizenId, int partyId);
 		/// <summary>
-		/// Calculate and view the election results.
+		/// Calculate the election results.
 		/// </summary>
 		/// <returns>returns true if can calculate, else false</returns>
-		bool theResults();
+		void theResults() throw(const string);
 		/// <summary>
 		/// Saving election to file
 		/// </summary>
@@ -155,10 +159,10 @@ namespace elec {
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount);
 		bool checkElectionsWinner(int* partiesIndexes);
 		bool sortDistrictWinners(int districtID, int* partiesIndexes);
-		bool isResultsAllowed() const;
 
-		bool calcReps();
 
+		void calcReps() throw(const string);
+		void isResultsAllowed() const throw (const string);
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 
 

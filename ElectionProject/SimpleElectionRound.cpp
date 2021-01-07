@@ -16,8 +16,6 @@ namespace elec
 		string name("simple_Election_Round");
 		DividedDistrict* dist = new DividedDistrict(name ,_numOfReps,0);
 		_districts.addToList(*dist);
-		_results.addDistrict();
-		_results.setDistrictsAmount();
 	}
 
 	int SimpleElectionRound::getNumOfReps() const

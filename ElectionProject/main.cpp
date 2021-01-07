@@ -409,7 +409,14 @@ void addPartyRepresentative()
 }
 void viewDistricts()
 {
-	election->viewAllDistricts();
+	try
+	{
+		election->viewAllDistricts();
+	}
+	catch (const string msg)
+	{
+		cout << "ERROR: " << msg << endl;
+	}
 }
 
 
@@ -441,8 +448,15 @@ void voting()
 
 void results()
 {
-	election->theResults();
-	cout << *election << endl;
+	try
+	{
+		election->theResults();
+		cout << *election << endl;
+	}
+	catch (const string msg)
+	{
+		cout << "ERROR: " << msg << endl;
+	}
 }
 
 void saveElections()

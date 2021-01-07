@@ -42,8 +42,8 @@ namespace elec
 		{
 			_parties.getPartyByIndex(i).updateDistricts();
 		}
-		_results.addDistrict();
-		_results.setDistrictsAmount();
+		_results.addDistrict(_districts.getLogicSize());
+
 		return districtAdded;
 
 

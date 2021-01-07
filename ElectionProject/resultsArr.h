@@ -1,6 +1,7 @@
 //code verison 3.0
 #pragma once
 #include <fstream>
+#include <vector>
 using namespace std;
 #include "District.h"
 namespace elec {
@@ -9,22 +10,20 @@ namespace elec {
 	class resultsArr
 	{
 	private:
-		int _partiesLogicSize;
-		int _parPhysSize;
-		int _districtsLogicSize;
-		int _disPhysSize;
-
-		int** _votesByIDs; //arr of parties holding in each cell all districts votes
-		int** _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
-		int* _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
+		vector<vector<int>> _votesByIDs; //arr of parties holding in each cell all districts votes
+		vector<vector<int>> _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
+		vector<int> _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
 		struct pair {
 			int index;
 			double repsAmount;
+			bool operator>(const pair& other) const
+			{
+				return (repsAmount > other.repsAmount);
+			}
 		};
-		resultsArr(int partiesAmount, int districtAmount);
-		resultsArr(LoadElectionSystem& loader, int partiesAmount, int districtAmount);
-		resultsArr() = delete;
+		resultsArr() = default;
+		resultsArr(LoadElectionSystem& loader);
 		~resultsArr();
 
 
@@ -41,29 +40,6 @@ namespace elec {
 		/// <param name="districtSN">the dist id</param>
 		/// <returns></returns>
 		int getDistrictNumberOfVotesInParty(int partyID, int districtSN)const;
-		/// <summary>
-		/// util function to manage the arr. this function dose realloc (like in c) to the array.
-		/// </summary>
-		/// <param name="newSize">the new size of the arr.</param>
-		void reallocVotesArr(int newSize);
-		/// <summary>
-		/// util function to manage the arr. this function dose realloc (like in c) to the array.
-		/// </summary>
-		/// <param name="newSize">the new size of the arr.</param>
-		void reallocVotesArrDistricts(int newSize);
-		/// <summary>
-		/// util function to manage the arr. this function dose realloc (like in c) to the array.
-		/// </summary>
-		/// <param name="newSize">the new size of the arr.</param>
-		void reallocRepsArr(int newSize);
-		/// <summary>
-		///this function initialize all the arrays.
-		/// </summary>
-		void initResults();
-		int getpartiesAmount()const;
-		int getdistrictsAmount() const;
-		bool addParty();
-		bool addDistrict();
 
 		/// <summary>
 		///returns how many reps party leader got in a party.
@@ -82,7 +58,7 @@ namespace elec {
 		/// </summary>
 		/// <param name="partyID">the id of the party</param>
 		/// <returns>amount of reps each dist gave to the party</returns>
-		int* getPMNRepsArrInDistrict(int partyID);
+		vector<int> getPMRepsVecInDistrict(int partyID);
 		/// <summary>
 		/// returns an arr with the amount of reps by a specific dist.
 		/// </summary>
@@ -99,6 +75,8 @@ namespace elec {
 		/// <returns>retuns true if everything is good else false.</returns>
 		bool AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
 
+		bool addParty(int partiesAmount, int districtsAmount);
+		bool addDistrict(int districtAmount);
 		/// <summary>
 		/// get the amount of all the reps party leader got
 		/// </summary>
@@ -108,9 +86,7 @@ namespace elec {
 		bool setPmsRepsTotalByPartyID(int partyID, int reps);
 		bool addToPmsRepsTotalByPartyID(int partyID, int reps);
 		bool setNewNumForPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps);
-	
-		bool setPartiesAmount();
-		bool setDistrictsAmount();
+
 		/// <summary>
 		/// saving this class to an array
 		/// </summary>
@@ -137,15 +113,22 @@ namespace elec {
 		/// <param name="xp">the first pair</param>
 		/// <param name="yp">the second pair</param>
 		void swap(pair* xp, pair* yp);
-				/// <summary>
-		/// bubble sorting
-		/// </summary>
-		/// <param name="arr">arr of pairs to be sorted</param>
-		/// <param name="n">number of element in the arr</param>
+		/// <summary>
+/// bubble sorting
+/// </summary>
+/// <param name="arr">arr of pairs to be sorted</param>
+/// <param name="n">number of element in the arr</param>
 		void bubbleSort(pair arr[], int n);
 
 
 		bool isResultsAllowed()const;
+
+
+
+
+
+
+
 	};
 
 }
