@@ -161,7 +161,6 @@
     <ClInclude Include="DistrictList.h" />
     <ClInclude Include="DividedDistrict.h" />
     <ClInclude Include="DynamicArray.h" />
-    <ClInclude Include="Exceptions.h" />
     <ClInclude Include="LoadElectionSystem.h" />
     <ClInclude Include="RegularElectionRound.h" />
     <ClInclude Include="SimpleElectionRound.h" />

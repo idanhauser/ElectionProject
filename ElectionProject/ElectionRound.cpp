@@ -5,7 +5,7 @@
 #include <fstream>
 
 #include "Party.h"
-#include "Exceptions.h"
+
 #include "DistrictList.h"
 #include "CitizenList.h"
 #include "LoadElectionSystem.h"
@@ -15,11 +15,15 @@
 using namespace std;
 
 namespace elec {
-
-	ElectionRound::ElectionRound(int date_d, int date_m, int date_y) noexcept(false) :
-		_districts(), _parties(), _results(_parties.getLogicSize(), _districts.getLogicSize()), NoChangeSinceLastCalc(0)
+	ElectionRound::ElectionRound(int date[DATE_SIZE]) :_districts(), _parties(),
+		_results(_parties.getLogicSize(), _districts.getLogicSize()), NoChangeSinceLastCalc(0)
 	{
-		setDate(date_d, date_m, date_y);
+
+
+		for (int i = 0; i < DATE_SIZE; ++i)
+		{
+			this->_date[i] = date[i];
+		}
 	}
 
 	ElectionRound::ElectionRound(LoadElectionSystem& loader) : _districts(), _parties(), _results(0, 0)
@@ -30,13 +34,7 @@ namespace elec {
 		DistcritType type;
 		ifstream& reader = loader.getReader();
 		//Reading Date:
-		//read date:
-		reader.read(rcastc(&_dateDay), sizeof(int));
-		//read month:
-		reader.read(rcastc(&_dateMonth), sizeof(int));
-		//read year:
-		reader.read(rcastc(&_dateYear), sizeof(int));
-
+		reader.read(rcastc(_date), sizeof(int) * DATE_SIZE);
 		//Read Dists:
 			//reading number of dists:
 		reader.read(rcastc(&numberOfdist), sizeof(int));
@@ -45,15 +43,15 @@ namespace elec {
 		{
 			District* dist;
 			reader.read(rcastc(&type), sizeof(DistcritType));
-			if (type == DistcritType::DividedDistrictType)
+			if(type==DistcritType::DividedDistrictType)
 			{
 				dist = new DividedDistrict(loader);
 			}
 			else
 			{
-				dist = new UnifiedDistrict(loader);
+				dist= new UnifiedDistrict(loader);
 			}
-
+			
 
 			_districts.addToList(*dist);
 
@@ -76,11 +74,11 @@ namespace elec {
 
 			}
 		}
-		//	cout << "read parties done" << endl;
+	//	cout << "read parties done" << endl;
 
-			//cout << "resultarr" << endl;
-			//Reading _votesByIDs:
-		_results = resultsArr(loader, numberOfparties, numberOfdist);
+		//cout << "resultarr" << endl;
+		//Reading _votesByIDs:
+		_results= resultsArr(loader, numberOfparties, numberOfdist);
 
 
 		//-------------------------------------------------------------------------
@@ -113,48 +111,16 @@ namespace elec {
 
 	void ElectionRound::printElectionDate(ostream& os) const
 	{
-
-		os << _dateDay << "." << _dateMonth << "." << _dateYear;
+		for (int i = 0; i < DATE_SIZE; ++i)
+		{
+			os << static_cast<char>(_date[i] + '0');
+			if (i == 1 || i == 3)
+			{
+				os << '/';
+			}
+		}
 		os << endl;
 
-	}
-	void ElectionRound::setDate(int date_d, int date_m, int date_y) noexcept(false)
-	{
-		if (date_d < 1 || date_d>31)
-		{
-			throw DayException(date_d);
-		}
-
-		if (date_m < 1 || date_m>12)
-		{
-			throw MonthException(date_m);
-		}
-		const Months month = static_cast<Months>(date_m);
-		if (month == Months::February)
-		{
-			if (date_d < 1 || date_d>28)
-			{
-				throw DayMonthException(date_d, date_m);
-			}
-		}
-		else if ((month == Months::January) || (month == Months::March) || (month == Months::May) || (month ==
-			Months::July) || (month == Months::August) || (month == Months::October) || (month == Months::December))
-		{
-			if (date_d < 1 || date_d>31)
-			{
-				throw DayMonthException(date_d, date_m);
-			}
-		}
-		else
-		{
-			if (date_d < 1 || date_d>30)
-			{
-				throw DayMonthException(date_d, date_m);
-			}
-		}
-		_dateDay = date_d;
-		_dateYear = date_y;
-		_dateMonth = date_m;
 	}
 
 
@@ -362,7 +328,7 @@ namespace elec {
 
 
 	bool ElectionRound::theResults()
-	{
+	{ 
 		if (!isResultsAllowed())
 			return false;
 		calcReps();
@@ -398,7 +364,7 @@ namespace elec {
 						os << electionRound._parties.getPartyByIndex(m);
 						os << "And the have ";
 						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m) << " representatives." << endl;
-						os << electionRound._parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
+						electionRound._parties.getPartyByIndex(m).printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, m), j + DISTRICT_ID_INIT);
 						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
 							electionRound._results.getDistrictNumberOfVotesInParty(m, j + DISTRICT_ID_INIT) << endl;
 						os << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
@@ -460,12 +426,7 @@ namespace elec {
 		int numOfDists;
 		DistcritType type;
 		//Saving Date:
-			//saving date:
-		outFile.write(rcastcc(&_dateDay), sizeof(int));
-		//saving month:
-		outFile.write(rcastcc(&_dateMonth), sizeof(int));
-		//saving year:
-		outFile.write(rcastcc(&_dateYear), sizeof(int));
+		outFile.write(rcastcc(_date), sizeof(int) * DATE_SIZE);
 		// the number of dists:		
 		numOfDists = _districts.getLogicSize();
 		//number of dists:
@@ -486,8 +447,8 @@ namespace elec {
 			outFile.write(rcastcc(&type), sizeof(DistcritType));
 			distTemp.save(outFile);
 		}
-		//	cout << "saving parties" << endl;
-			// the number of parties:
+	//	cout << "saving parties" << endl;
+		// the number of parties:
 		numOfParties = _parties.getLogicSize();
 		//Saving number of parties:
 		outFile.write(rcastcc(&numOfParties), sizeof(int));
@@ -502,7 +463,7 @@ namespace elec {
 		//Saving resultArr:
 		_results.save(outFile);
 
-		//		cout << "done" << endl;
+//		cout << "done" << endl;
 	}
 
 
@@ -527,6 +488,9 @@ namespace elec {
 			}
 		}
 	}
+
+
+
 
 
 

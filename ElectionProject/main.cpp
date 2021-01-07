@@ -3,9 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
 
-#include "Exceptions.h"
 #include "Utils.h"
 #include "ElectionRound.h"
 #include "LoadElectionSystem.h"
@@ -37,6 +35,7 @@ int main()
 	cout << "Election ";
 	cout << endl << "-------------" << endl;
 	StartMenu();
+
 
 }
 
@@ -101,60 +100,46 @@ void initElection()
 	int date_y;
 	int date_d;
 	int date_m;
-
+	int dateArr[DATE_SIZE];
 	short typeInput;
-	bool isDataValid = true;
 
-
+	cout << "Enter election's date (dd mm yyyy)" << endl;
+	cin >> date_d >> date_m >> date_y;
+	for (int i = DATE_SIZE - 1; i >= 0; --i)
+	{
+		if (i >= DATE_SIZE - 4)
+		{
+			dateArr[i] = date_y % 10;
+			date_y /= 10;
+		}
+		else if (i >= 2)
+		{
+			dateArr[i] = date_m % 10;
+			date_m /= 10;
+		}
+		else
+		{
+			dateArr[i] = date_d % 10;
+			date_d /= 10;
+		}
+	}
 	cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
 	cin >> typeInput;
-
-	while (typeInput != 1 && typeInput != 2)
-	{
-		cout << "There is no option: " << typeInput << ". please try again" << endl;
-		cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
-		cin >> typeInput;
-	}
 	ElectionType choice = static_cast<ElectionType>(typeInput);
-
-	while (isDataValid)
+	if (choice == ElectionType::RegularElectionRound)
 	{
-		cout << "Enter election's date (dd mm yyyy)" << endl;
-		cin >> date_d >> date_m >> date_y;
-
-		try
+		election = new RegularElectionRound(dateArr);
+	}
+	else
+	{
+		cout << "Enter number of reps" << endl;
+		cin >> numofreps;
+		while (numofreps <= 0)
 		{
-			if (choice == ElectionType::RegularElectionRound)
-			{
-				election = new RegularElectionRound(date_d, date_m, date_y);
-			}
-			else
-			{
-				cout << "Enter number of reps" << endl;
-				cin >> numofreps;
-				election = new SimpleElectionRound(date_d, date_m, date_y, numofreps);
-			}
-			isDataValid = false;
+			cout << "Number of reps can't be negative or zero, please insert netrual number" << endl;
+			cin >> numofreps;
 		}
-		catch (DayException& day)
-		{
-			day.Error();  
-			cout << day.getMessage();
-			cout << "\nPlease try again." << endl;
-		}
-		catch (MonthException& month)
-		{
-			month.Error();
-			cout << month.getMessage();
-			cout << "\nPlease try again." << endl;
-		}
-		catch (DayMonthException& e)
-		{
-			e.Error();
-			cout << e.getMessage();
-			cout << "\nPlease try again." << endl;
-		}
-		cout << endl;
+		election = new SimpleElectionRound(dateArr, numofreps);
 	}
 	showMainMenu();
 }
@@ -482,7 +467,7 @@ bool loadElection()
 {
 	bool loadedSuccessfully = true;
 	ifstream _inFile;
-
+	
 
 
 	char fileName[MAX_SIZE];
