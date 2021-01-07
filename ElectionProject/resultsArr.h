@@ -102,7 +102,7 @@ namespace elec {
 		/// <param name="repsAmount">the amount of reps from a dist</param>
 		/// <param name="district">pointer to the dist so we can setRepsArrByPartyID.</param>
 		/// <returns>return true if evryhirng is good</returns>
-		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) throw (const string));
+		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) throw (const string);
 
 
 
