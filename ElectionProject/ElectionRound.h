@@ -69,8 +69,17 @@ namespace elec {
 		/// <param name="id">the ID of the citizen</param>
 		/// <param name="birthYear">the birth year of the citizen</param>
 		/// <param name="districtId">the Id of the district</param>
-		/// <returns>returns true if citizen was added, else false</returns>
-		bool addNewCitizen(string& name, int id, int birthYear, int districtId);
+
+		constexpr  int checkLen(int id)
+		{
+			int count = 0;
+			do {
+				++count;
+				id/= 10;
+			} while (id);
+			return count;
+		}
+		void addNewCitizen(string& name, int id, int birthYear, int districtId) noexcept(false);
 		/// <summary>
 		///Adding a new party to the election system.
 		/// </summary>

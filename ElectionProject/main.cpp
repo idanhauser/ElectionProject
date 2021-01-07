@@ -326,8 +326,9 @@ void addDistrict()
 
 void addCitizen()
 {
-	int id, birtyear, districtId = DISTRICT_ID_INIT;
+	int birtyear, districtId = DISTRICT_ID_INIT;
 	string name;
+	int id;
 	const int currYear = election->getYear();
 
 	if (typeid(*election) == typeid(RegularElectionRound))
@@ -342,25 +343,36 @@ void addCitizen()
 	}
 	if (currYear - birtyear >= 18)
 	{
-		if (!election->addNewCitizen(name, id, birtyear, districtId))
+		try
 		{
-			if (typeid(*election) == typeid(RegularElectionRound)) {
-				cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
-			}
-			else
-			{
-				cout << "Error:Citizen with that id is already exist." << endl;
-			}
+			election->addNewCitizen(name, id, birtyear, districtId);
 		}
-		else
+		catch (InputException& e)
 		{
-			cout << "Citizen " << name << " added." << endl;
+			e.Error();
+			cout<<e.getMessage();
 		}
-	}
-	else
-	{
-		cout << "Error:" << name << " is too young to vote." << endl;
-	}
+		catch (ElectionSystemException& e)
+		{
+			e.Error();
+			cout << e.getMessage();
+		}
+
+		
+		
+			//if (typeid(*election) == typeid(RegularElectionRound)) {
+			//	cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
+			//}
+			//else
+			//{
+			//	cout << "Error:Citizen with that id is already exist." << endl;
+			//}
+		
+		cout << "Citizen " << name << " added." << endl;
+		
+
+
+	
 }
 
 void addParty()
