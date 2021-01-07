@@ -14,7 +14,7 @@ namespace elec
 
 	}
 
-	RegularElectionRound::RegularElectionRound(int date[MAX_SIZE]) : ElectionRound(date)
+	RegularElectionRound::RegularElectionRound(int date_d, int date_m, int date_y) : ElectionRound( date_d,  date_m,  date_y)
 	{
 	}
 

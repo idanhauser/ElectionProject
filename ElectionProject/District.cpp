@@ -6,6 +6,7 @@
 #include "Citizen.h"
 #include <iostream>
 #include "CitizenList.h"
+#include "Exceptions.h"
 #include "LoadElectionSystem.h"
 using namespace std;
 
@@ -104,10 +105,17 @@ namespace elec {
 		return _Citizens.getLogicSize();
 	}
 
-	bool District::addCitizen(Citizen* citz)
+	void District::addCitizen(Citizen* citz) noexcept(false)
 	{
-		_Citizens.addToList(*citz);
-		return true;
+		if (citz != nullptr)
+		{
+			_Citizens.addToList(*citz);
+		}
+		else
+		{
+			string msg = "Add Citizen";
+			throw NullObjectException(msg);
+		}
 	}
 	
 	bool District::addRepToArr()

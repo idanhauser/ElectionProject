@@ -59,7 +59,7 @@ namespace elec
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
 		
-		bool addCitizen(Citizen* citz);
+		void addCitizen(Citizen* citz) noexcept(false);
 		bool addRepToArr();
 		
 		const Citizen& getCitizenById(int id) const;

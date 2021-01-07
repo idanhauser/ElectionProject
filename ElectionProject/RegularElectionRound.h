@@ -6,12 +6,12 @@ namespace elec
 {
 	class LoadElectionSystem;
 
-	class RegularElectionRound :public elec::ElectionRound
+	class RegularElectionRound :public ElectionRound
 	{
 	public:
 		RegularElectionRound() = delete;
 		explicit RegularElectionRound(LoadElectionSystem& loader);
-		explicit RegularElectionRound(int date[DATE_SIZE]);
+		explicit RegularElectionRound(int date_d, int date_m, int date_y)noexcept(false);
 		virtual bool addNewDistrict(string& name, int numberRepresentatives, int& districtId,
 		                            DistcritType districtType) override;
 		virtual ~RegularElectionRound() override;

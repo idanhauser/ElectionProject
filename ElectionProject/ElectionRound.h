@@ -20,7 +20,9 @@ namespace elec {
 	class ElectionRound
 	{
 	protected:
-		int _date[DATE_SIZE];
+		int _dateDay;
+		int _dateMonth;
+		int _dateYear;
 
 		DistrictList _districts;
 		PartyList _parties;
@@ -37,7 +39,8 @@ namespace elec {
 			double repsAmount;
 		};
 		ElectionRound() = delete;
-		ElectionRound(int date[DATE_SIZE]);	
+		void setDate(int date_d, int date_m, int date_y) noexcept(false);
+		ElectionRound(int date_d, int date_m, int date_y) noexcept(false);
 		virtual ~ElectionRound() = default;
 				
 	explicit ElectionRound(LoadElectionSystem& loader);
@@ -56,12 +59,7 @@ namespace elec {
 		/// <returns>returns the date</returns>
 		constexpr int getYear() const
 		{
-			int year = _date[DATE_SIZE - 1];
-			year += _date[DATE_SIZE - 2] * 10;
-			year += _date[DATE_SIZE - 3] * 100;
-			year += _date[DATE_SIZE - 4] * 1000;
-			return year;
-
+			return _dateYear;
 		}
 
 		/// <summary>
@@ -71,8 +69,17 @@ namespace elec {
 		/// <param name="id">the ID of the citizen</param>
 		/// <param name="birthYear">the birth year of the citizen</param>
 		/// <param name="districtId">the Id of the district</param>
-		/// <returns>returns true if citizen was added, else false</returns>
-		bool addNewCitizen(string& name, int id, int birthYear, int districtId);
+
+		constexpr  int checkLen(int id)
+		{
+			int count = 0;
+			do {
+				++count;
+				id/= 10;
+			} while (id);
+			return count;
+		}
+		void addNewCitizen(string& name, int id, int birthYear, int districtId) noexcept(false);
 		/// <summary>
 		///Adding a new party to the election system.
 		/// </summary>
@@ -140,7 +147,7 @@ namespace elec {
 		/// <param name="n">number of element in the arr</param>
 		void bubbleSort(pair arr[], int n);
 
-
+		void setDate();
 
 
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount);
