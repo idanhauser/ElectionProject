@@ -102,7 +102,7 @@ namespace elec {
 		/// <param name="repsAmount">the amount of reps from a dist</param>
 		/// <param name="district">pointer to the dist so we can setRepsArrByPartyID.</param>
 		/// <returns>return true if evryhirng is good</returns>
-		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district);
+		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) throw (const string));
 
 
 
@@ -118,8 +118,8 @@ namespace elec {
 /// </summary>
 /// <param name="arr">arr of pairs to be sorted</param>
 /// <param name="n">number of element in the arr</param>
-		void bubbleSort(pair arr[], int n);
-
+		void bubbleSort(pair arr[], int n); 
+		//todo: change bubblesort to template
 
 		bool isResultsAllowed()const;
 

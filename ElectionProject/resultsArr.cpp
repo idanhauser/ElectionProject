@@ -188,11 +188,13 @@ namespace elec
 
 	}
 	
-	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) {
+	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) throw(const string) {
 		int leftReps;
 		double amountOfElectedFromDistrict;
 		int _partiesLogicSize = _votesByIDs.size();
 		pair* leftForPartyForElector = new pair[_partiesLogicSize];
+		if (!leftForPartyForElector)
+			throw "Bad Memory alloc";
 		int allVotesInDis = 0;
 		for (int n = 0; n < _partiesLogicSize; n++)
 		{
@@ -222,7 +224,7 @@ namespace elec
 			{
 				leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
 			}
-			bubbleSort(leftForPartyForElector, _partiesLogicSize);
+			bubbleSort(leftForPartyForElector, _partiesLogicSize); 
 			for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
 			{
 				AddToPMRepsCount(districtID, leftForPartyForElector[l].index, 1);
