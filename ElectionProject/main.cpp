@@ -138,7 +138,7 @@ void initElection()
 		}
 		catch (DayException& day)
 		{
-			day.Error();
+			day.Error();  
 			cout << day.getMessage();
 			cout << "\nPlease try again." << endl;
 		}
@@ -306,19 +306,20 @@ void addDistrict()
 		cout << "Press 2 for divided District" << endl;
 		cin >> userChoise;
 		DistcritType distType = static_cast<DistcritType>(userChoise);
-		try
+		if (numberRepresentatives >= 0)
 		{
-			election->addNewDistrict(name, numberRepresentatives, districtId, distType);
-			cout << "District " << name << " added. \n And its id is " << districtId << endl;
+			if (!election->addNewDistrict(name, numberRepresentatives, districtId, distType))
+			{
+				cout << "Error:District " << name << " wasn't added." << endl;
+			}
+			else
+			{
+				cout << "District " << name << " added. \n And its id is " << districtId << endl;
+			}
 		}
-		catch (exception& ex)
+		else
 		{
-			cout << "Error:" << ex.what() << endl;;
-		}
-		catch (ElectionSystemException& e)
-		{
-			e.Error();
-			cout << e.getMessage();
+			cout << "ERROR: Negative number of representatives is not allowed." << endl;
 		}
 	}
 }
@@ -340,40 +341,39 @@ void addCitizen()
 		cout << "Insert a citizen name,id ,birth year:" << endl;
 		cin >> name >> id >> birtyear;
 	}
-
-	try
+	if (currYear - birtyear >= 18)
 	{
-		election->addNewCitizen(name, id, birtyear, districtId);
+		try
+		{
+			election->addNewCitizen(name, id, birtyear, districtId);
+		}
+		catch (InputException& e)
+		{
+			e.Error();
+			cout<<e.getMessage();
+		}
+		catch (ElectionSystemException& e)
+		{
+			e.Error();
+			cout << e.getMessage();
+		}
+
+		
+		
+			//if (typeid(*election) == typeid(RegularElectionRound)) {
+			//	cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
+			//}
+			//else
+			//{
+			//	cout << "Error:Citizen with that id is already exist." << endl;
+			//}
+		
 		cout << "Citizen " << name << " added." << endl;
-	}
-	catch (exception& ex)
-	{
-		cout << "Error:" << ex.what() << endl;
-	}
-	catch (ElectionSystemException& e)
-	{
-		e.Error();
-		cout << e.getMessage();
-	}
+		
 
 
-
-
-	//if (typeid(*election) == typeid(RegularElectionRound)) {
-	//	cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
-	//}
-	//else
-	//{
-	//	cout << "Error:Citizen with that id is already exist." << endl;
-	//}
-
-
-
+	
 }
-
-
-
-
 
 void addParty()
 {
@@ -428,7 +428,7 @@ void viewDistricts()
 	{
 		election->viewAllDistricts();
 	}
-	catch (string& msg)
+	catch (string &msg)
 	{
 		cout << msg << endl;
 	}

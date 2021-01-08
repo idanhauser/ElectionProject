@@ -62,7 +62,7 @@ namespace elec {
 
 
 
-	bool DistrictList::isCitizenExist(int id,int & distIndex) const 
+	void DistrictList::isCitizenExist(int id,int & distIndex) const noexcept(false)
 	{
 		distIndex = -1;
 		
@@ -75,7 +75,10 @@ namespace elec {
 				found = true;
 			}
 		}
-		return found;
+		if(!found)
+		{
+			throw CitizenNotExistException(id);
+		}
 	}
 
 	int DistrictList::getLogicSize() const
@@ -83,7 +86,7 @@ namespace elec {
 		return _logicSize;
 	}
 
-	bool DistrictList::isDistcritExist(int id) const 
+	void DistrictList::isDistcritExist(int id) const noexcept(false)
 	{
 		bool found = false;
 		for (int i = 0; i < _logicSize && !found; ++i)
@@ -93,7 +96,10 @@ namespace elec {
 				found = true;
 			}
 		}
-		return found;
+		if(!found)
+		{
+			throw DistcritsNotExistException(id);
+		}
 	}
 
 	const District& DistrictList::getDistcritByIndex(int index) const

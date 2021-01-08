@@ -51,7 +51,7 @@ namespace elec {
 		/// <param name="name">the name of the dist</param>
 		/// <param name="numberRepresentatives">number of reps in dists</param>
 		/// <param name="districtId">the id of dist</param>
-		virtual	void addNewDistrict(string& name, int numbeRepresentatives, int& districtId, DistcritType districtType);
+		virtual	bool addNewDistrict(string& name, int numbeRepresentatives, int& districtId, DistcritType districtType) = 0;
 
 		/// <summary>
 		/// returns the date
