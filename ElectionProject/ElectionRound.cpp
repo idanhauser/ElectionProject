@@ -106,7 +106,19 @@ namespace elec {
 		}
 	}
 
-
+	void ElectionRound::addNewDistrict(string& name, int numbeRepresentatives, int& districtId,
+		DistcritType districtType)
+	{
+		if ((name.find_first_not_of(' ') == std::string::npos) || name.find_first_of("0123456789") != std::string::npos)
+		{
+			throw invalid_argument("Invalid name: empty name or name contains digits.");
+		}
+		if(numbeRepresentatives<0)
+		{
+			throw invalid_argument("Number of representatives cant be zero or negative.");
+		}
+		
+	}
 
 
 	void ElectionRound::printElectionDate(ostream& os) const
@@ -131,32 +143,33 @@ namespace elec {
 		int lenofId = checkLen(id);
 		if (_dateYear - birthYear >= 18)
 		{
-			throw AgeException(birthYear,_dateYear);
+			throw AgeException(birthYear, _dateYear);
 		}
 		if (lenofId != 9)
 		{
 			throw IdException(lenofId);
 		}
-		if ((name != "") && (name.size() > 1))
+		if ((name.find_first_not_of(' ')==std::string::npos)||name.find_first_of("0123456789")!=std::string::npos)
 		{
-			throw nameException(name);
+			throw invalid_argument("Invalid name: empty name or name contains digits.");
 		}
-		try
-		{
 			//is dist exist on vector.
-			_districts.isCitizenExist(id, saveDis);
+		if (!_districts.isCitizenExist(id, saveDis))
+		{
+			if (_districts.isDistcritExist(districtId))
+			{//need to do on vector if the dist exist.
+				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
+				_districts.getDistcritById(districtId).addCitizen(citiz);//need to check if added susccessfuly.
+			}
+			else
+			{
+				throw DistcritsNotExistException(id);
+			}
 		}
-		catch (CitizenNotExistException& e)
-		{//citizen doesn't exist, its good lets add him:
-			citizenExist = false;
-			_districts.isDistcritExist(districtId);//need to do on vector if the dist exist.
-			Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
-			_districts.getDistcritById(districtId).addCitizen(citiz);//need to check if added susccessfuly.
-
-		}
-		if (citizenExist)
-		{//citizen already exist.
-			throw CitizenExistException(id,saveDis);
+		else
+		{
+			//citizen already exist.
+			throw CitizenExistException(id, districtId);
 		}
 
 	}
@@ -257,7 +270,7 @@ namespace elec {
 
 	void ElectionRound::viewAllCitizens() const noexcept(false)
 	{
-		
+
 		int len = _districts.getLogicSize();
 		if (len > 0)
 		{
@@ -283,7 +296,7 @@ namespace elec {
 
 	void ElectionRound::viewAllParties() const noexcept(false)
 	{
-		
+
 		int len = _parties.getLogicSize();
 		if (len > 0)
 		{

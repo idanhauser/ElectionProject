@@ -13,11 +13,13 @@ namespace elec
 
 	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int numOfReps) :ElectionRound(date),_numOfReps(numOfReps)
 	{
+		int dist8;
 		string name("simple_Election_Round");
+		ElectionRound::addNewDistrict(name, _numOfReps, dist8, DistcritType::DividedDistrictType);
 		DividedDistrict* dist = new DividedDistrict(name ,_numOfReps,0);
 		if(numOfReps<0)
 		{
-			throw numOfReps;
+			throw invalid_argument("Number of representatives cant be zero or negative.");
 		}
 
 		_districts.addToList(*dist);
@@ -30,9 +32,9 @@ namespace elec
 		return _numOfReps;
 	}
 
-	bool SimpleElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId,DistcritType districtType)
+	void SimpleElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId,DistcritType districtType)
 	{
-		return false;
+		
 	}
 
 	SimpleElectionRound::~SimpleElectionRound()
