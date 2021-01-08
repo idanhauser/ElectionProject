@@ -11,7 +11,7 @@ namespace elec
 	{
 	}
 
-	SimpleElectionRound::SimpleElectionRound(int date_d, int date_m, int date_y, int numOfReps) noexcept(false) :ElectionRound(date_d, date_m, date_y),_numOfReps(numOfReps)
+	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int numOfReps) :ElectionRound(date),_numOfReps(numOfReps)
 	{
 		string name("simple_Election_Round");
 		DividedDistrict* dist = new DividedDistrict(name ,_numOfReps,0);
@@ -19,6 +19,7 @@ namespace elec
 		{
 			throw numOfReps;
 		}
+
 		_districts.addToList(*dist);
 		_results.addDistrict();
 		_results.setDistrictsAmount();

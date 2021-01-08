@@ -3,9 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
 
-#include "Exceptions.h"
 #include "Utils.h"
 #include "ElectionRound.h"
 #include "LoadElectionSystem.h"
@@ -37,6 +35,7 @@ int main()
 	cout << "Election ";
 	cout << endl << "-------------" << endl;
 	StartMenu();
+
 
 }
 
@@ -150,11 +149,10 @@ void initElection()
 		}
 		catch (DayMonthException& e)
 		{
-			e.Error();
-			cout << e.getMessage();
-			cout << "\nPlease try again." << endl;
+			cout << "Number of reps can't be negative or zero, please insert netrual number" << endl;
+			cin >> numofreps;
 		}
-		cout << endl;
+		election = new SimpleElectionRound(dateArr, numofreps);
 	}
 	showMainMenu();
 }
@@ -507,7 +505,7 @@ bool loadElection()
 {
 	bool loadedSuccessfully = true;
 	ifstream _inFile;
-
+	
 
 
 	char fileName[MAX_SIZE];
