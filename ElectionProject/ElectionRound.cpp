@@ -1,11 +1,11 @@
-﻿//code verison 3.0
+﻿//code verison 3.1
 #include "ElectionRound.h"
 #include <iostream>
 #include <algorithm>
 #include <fstream>
 
 #include "Party.h"
-
+#include "Exceptions.h"
 #include "DistrictList.h"
 #include "CitizenList.h"
 #include "LoadElectionSystem.h"
@@ -15,14 +15,11 @@
 using namespace std;
 
 namespace elec {
-	ElectionRound::ElectionRound(int date[DATE_SIZE]) : NoChangeSinceLastCalc(0)
+
+	ElectionRound::ElectionRound(int date_d, int date_m, int date_y) noexcept(false) :
+		_districts(), _parties(), _results(), NoChangeSinceLastCalc(0)
 	{
-
-
-		for (int i = 0; i < DATE_SIZE; ++i)
-		{
-			this->_date[i] = date[i];
-		}
+		setDate(date_d, date_m, date_y);
 	}
 
 	ElectionRound::ElectionRound(LoadElectionSystem& loader)
@@ -33,7 +30,13 @@ namespace elec {
 		DistcritType type;
 		ifstream& reader = loader.getReader();
 		//Reading Date:
-		reader.read(rcastc(_date), sizeof(int) * DATE_SIZE);
+		//read date:
+		reader.read(rcastc(&_dateDay), sizeof(int));
+		//read month:
+		reader.read(rcastc(&_dateMonth), sizeof(int));
+		//read year:
+		reader.read(rcastc(&_dateYear), sizeof(int));
+
 		//Read Dists:
 			//reading number of dists:
 		reader.read(rcastc(&numberOfdist), sizeof(int));
@@ -42,15 +45,15 @@ namespace elec {
 		{
 			District* dist;
 			reader.read(rcastc(&type), sizeof(DistcritType));
-			if(type==DistcritType::DividedDistrictType)
+			if (type == DistcritType::DividedDistrictType)
 			{
 				dist = new DividedDistrict(loader);
 			}
 			else
 			{
-				dist= new UnifiedDistrict(loader);
+				dist = new UnifiedDistrict(loader);
 			}
-			
+
 
 			_districts.addToList(*dist);
 
@@ -73,7 +76,7 @@ namespace elec {
 
 			}
 		}
-	//	cout << "read parties done" << endl;
+		//	cout << "read parties done" << endl;
 
 		//cout << "resultarr" << endl;
 		//Reading _votesByIDs:
@@ -105,21 +108,65 @@ namespace elec {
 		}
 	}
 
+	void ElectionRound::addNewDistrict(string& name, int numbeRepresentatives, int& districtId,
+		DistcritType districtType)
+	{
+		if ((name.find_first_not_of(' ') == std::string::npos) || name.find_first_of("0123456789") != std::string::npos)
+		{
+			throw invalid_argument("Invalid name: empty name or name contains digits.");
+		}
+		if (numbeRepresentatives < 0)
+		{
+			throw invalid_argument("Number of representatives cant be zero or negative.");
+		}
 
+	}
 
 
 	void ElectionRound::printElectionDate(ostream& os) const
 	{
-		for (int i = 0; i < DATE_SIZE; ++i)
-		{
-			os << static_cast<char>(_date[i] + '0');
-			if (i == 1 || i == 3)
-			{
-				os << '/';
-			}
-		}
+
+		os << _dateDay << "." << _dateMonth << "." << _dateYear;
 		os << endl;
 
+	}
+	void ElectionRound::setDate(int date_d, int date_m, int date_y) noexcept(false)
+	{
+		if (date_d < 1 || date_d>31)
+		{
+			throw DayException(date_d);
+		}
+
+		if (date_m < 1 || date_m>12)
+		{
+			throw MonthException(date_m);
+		}
+		const Months month = static_cast<Months>(date_m);
+		if (month == Months::February)
+		{
+			if (date_d < 1 || date_d>28)
+			{
+				throw DayMonthException(date_d, date_m);
+			}
+		}
+		else if ((month == Months::January) || (month == Months::March) || (month == Months::May) || (month ==
+			Months::July) || (month == Months::August) || (month == Months::October) || (month == Months::December))
+		{
+			if (date_d < 1 || date_d>31)
+			{
+				throw DayMonthException(date_d, date_m);
+			}
+		}
+		else
+		{
+			if (date_d < 1 || date_d>30)
+			{
+				throw DayMonthException(date_d, date_m);
+			}
+		}
+		_dateDay = date_d;
+		_dateYear = date_y;
+		_dateMonth = date_m;
 	}
 
 
@@ -130,32 +177,33 @@ namespace elec {
 		int lenofId = checkLen(id);
 		if (_dateYear - birthYear >= 18)
 		{
-			throw AgeException(birthYear,_dateYear);
+			throw AgeException(birthYear, _dateYear);
 		}
 		if (lenofId != 9)
 		{
 			throw IdException(lenofId);
 		}
-		if ((name != "") && (name.size() > 1))
+		if ((name.find_first_not_of(' ') == std::string::npos) || name.find_first_of("0123456789") != std::string::npos)
 		{
-			throw nameException(name);
+			throw invalid_argument("Invalid name: empty name or name contains digits.");
 		}
-		try
+		//is dist exist on vector.
+		if (!_districts.isCitizenExist(id, saveDis))
 		{
-			//is dist exist on vector.
-			_districts.isCitizenExist(id, saveDis);
+			if (_districts.isDistcritExist(districtId))
+			{//need to do on vector if the dist exist.
+				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
+				_districts.getDistcritById(districtId).addCitizen(citiz);//need to check if added susccessfuly.
+			}
+			else
+			{
+				throw DistcritsNotExistException(id);
+			}
 		}
-		catch (CitizenNotExistException& e)
-		{//citizen doesn't exist, its good lets add him:
-			citizenExist = false;
-			_districts.isDistcritExist(districtId);//need to do on vector if the dist exist.
-			Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
-			_districts.getDistcritById(districtId).addCitizen(citiz);//need to check if added susccessfuly.
-
-		}
-		if (citizenExist)
-		{//citizen already exist.
-			throw CitizenExistException(id,saveDis);
+		else
+		{
+			//citizen already exist.
+			throw CitizenExistException(id, districtId);
 		}
 
 	}
@@ -202,7 +250,7 @@ namespace elec {
 
 	}
 
-	void ElectionRound::viewAllDistricts()
+	void ElectionRound::viewAllDistricts()  noexcept(false)
 	{
 		
 		calcReps();
@@ -246,8 +294,9 @@ namespace elec {
 		}
 	}
 
-	void ElectionRound::viewAllCitizens() const
+	void ElectionRound::viewAllCitizens() const noexcept(false)
 	{
+
 		int len = _districts.getLogicSize();
 		if (len > 0)
 		{
@@ -266,12 +315,14 @@ namespace elec {
 		}
 		else
 		{
-			cout << "There are no citizens to show." << endl;
+			const string msg = "There are no citizens to show.";
+			throw msg;
 		}
 	}
 
-	void ElectionRound::viewAllParties() const
+	void ElectionRound::viewAllParties() const noexcept(false)
 	{
+
 		int len = _parties.getLogicSize();
 		if (len > 0)
 		{
@@ -407,7 +458,12 @@ namespace elec {
 		int numOfDists;
 		DistcritType type;
 		//Saving Date:
-		outFile.write(rcastcc(_date), sizeof(int) * DATE_SIZE);
+			//saving date:
+		outFile.write(rcastcc(&_dateDay), sizeof(int));
+		//saving month:
+		outFile.write(rcastcc(&_dateMonth), sizeof(int));
+		//saving year:
+		outFile.write(rcastcc(&_dateYear), sizeof(int));
 		// the number of dists:		
 		numOfDists = _districts.getLogicSize();
 		//number of dists:
@@ -428,8 +484,8 @@ namespace elec {
 			outFile.write(rcastcc(&type), sizeof(DistcritType));
 			distTemp.save(outFile);
 		}
-	//	cout << "saving parties" << endl;
-		// the number of parties:
+		//	cout << "saving parties" << endl;
+			// the number of parties:
 		numOfParties = _parties.getLogicSize();
 		//Saving number of parties:
 		outFile.write(rcastcc(&numOfParties), sizeof(int));
@@ -444,7 +500,7 @@ namespace elec {
 		//Saving resultArr:
 		_results.save(outFile);
 
-//		cout << "done" << endl;
+		//		cout << "done" << endl;
 	}
 
 
@@ -469,9 +525,6 @@ namespace elec {
 			}
 		}
 	}
-
-
-
 
 
 
