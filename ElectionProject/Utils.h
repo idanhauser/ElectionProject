@@ -78,6 +78,7 @@ namespace elec
 		October ,//has 31 days
 		November,//has 30 days
 		December,
+		xxxx,
 	};
 	const vector<string> MONTHS_NAME = {
 		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
