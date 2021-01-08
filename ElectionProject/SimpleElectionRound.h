@@ -15,7 +15,8 @@ namespace elec
 		explicit SimpleElectionRound(LoadElectionSystem& loader);
 		explicit SimpleElectionRound(int date_d, int date_m, int date_y,int numOfReps) noexcept(false);
 		int getNumOfReps() const;
-		virtual bool addNewDistrict(string& str, int number_representatives, int& districtId, DistcritType districtType)override ;
+		virtual void addNewDistrict(string& str, int number_representatives, int& districtId,
+		                            DistcritType districtType) override;
 		virtual ~SimpleElectionRound() override;
 		virtual void save(ofstream& outFile) const override;
 	};

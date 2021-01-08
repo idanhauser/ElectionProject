@@ -21,8 +21,9 @@ namespace elec
 
 
 
-	bool RegularElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId, DistcritType districtType)
+	void RegularElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId, DistcritType districtType)
 	{
+		ElectionRound::addNewDistrict(name, numberRepresentatives, districtId, districtType);
 		bool districtAdded;
 		if (districtType == DistcritType::UnifiedDistrict)
 		{
@@ -44,7 +45,7 @@ namespace elec
 		}
 		_results.addDistrict();
 		_results.setDistrictsAmount();
-		return districtAdded;
+		//return districtAdded;
 
 
 		
