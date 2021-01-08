@@ -9,20 +9,21 @@
 namespace elec
 {
 
-	RegularElectionRound::RegularElectionRound(LoadElectionSystem& loader):ElectionRound(loader)
+	RegularElectionRound::RegularElectionRound(LoadElectionSystem& loader) :ElectionRound(loader)
 	{
 
 	}
 
-	RegularElectionRound::RegularElectionRound(int date[MAX_SIZE]) : ElectionRound(date)
+	RegularElectionRound::RegularElectionRound(int date_d, int date_m, int date_y) : ElectionRound(date_d, date_m, date_y)
 	{
 	}
 
 
 
 
-	bool RegularElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId, DistcritType districtType)
+	void RegularElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId, DistcritType districtType)
 	{
+		ElectionRound::addNewDistrict(name, numberRepresentatives, districtId, districtType);
 		bool districtAdded;
 		if (districtType == DistcritType::UnifiedDistrict)
 		{
@@ -33,7 +34,7 @@ namespace elec
 
 		else
 		{
-			DividedDistrict* dist = new DividedDistrict(name,  numberRepresentatives, _parties.getLogicSize());
+			DividedDistrict* dist = new DividedDistrict(name, numberRepresentatives, _parties.getLogicSize());
 
 			districtId = static_cast<DividedDistrict*>(dist)->getSerialNum();
 			districtAdded = _districts.addToList(*dist);
@@ -47,7 +48,7 @@ namespace elec
 		return districtAdded;
 
 
-		
+
 	}
 
 	RegularElectionRound::~RegularElectionRound()
@@ -56,7 +57,7 @@ namespace elec
 
 	void RegularElectionRound::save(ofstream& outFile) const
 	{
-		int type= static_cast<int>(ElectionType::RegularElectionRound);
+		int type = static_cast<int>(ElectionType::RegularElectionRound);
 		outFile.write(rcastcc(&type), sizeof(int));
 		ElectionRound::save(outFile);
 	}

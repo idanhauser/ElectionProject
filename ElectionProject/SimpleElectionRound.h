@@ -1,4 +1,4 @@
-﻿//code verison 3.0
+﻿//code verison 3.1
 #pragma once
 #include "ElectionRound.h"
 #include <string>
@@ -13,9 +13,10 @@ namespace elec
 		int _numOfReps;
 	public:
 		explicit SimpleElectionRound(LoadElectionSystem& loader);
-		explicit SimpleElectionRound(int date[DATE_SIZE],int numOfReps);
+		explicit SimpleElectionRound(int date_d, int date_m, int date_y, int numOfReps) noexcept(false);
 		int getNumOfReps() const;
-		virtual bool addNewDistrict(string& str, int number_representatives, int& districtId, DistcritType districtType)override ;
+		virtual void addNewDistrict(string& str, int number_representatives, int& districtId,
+			DistcritType districtType) override;
 		virtual ~SimpleElectionRound() override;
 		virtual void save(ofstream& outFile) const override;
 	};

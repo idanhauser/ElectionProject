@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//code verison 3.1
+#pragma once
 #include <string>
 using namespace std;
 #include "Utils.h"
@@ -127,49 +128,6 @@ namespace elec
 		}
 	};
 
-
-	class numOfRepException :InputException
-	{
-
-	public:
-		explicit numOfRepException(int num_of_reps)
-			: _numOfReps(num_of_reps)
-		{
-		}
-
-		virtual ~numOfRepException() = default;
-
-		virtual void Error() override
-		{
-			InputException::Error();
-			_output.append(" You entered " + to_string(_numOfReps) + "which is iilegal: \n");
-			_output.append("Number of representative can't be negative or zero, please insert netrual number\n");
-		}
-	private:
-		int _numOfReps;
-	};
-
-
-
-	class nameException :InputException
-	{
-
-	public:
-		explicit nameException(string& name)
-			: _name(name)
-		{
-		}
-
-		virtual ~nameException() = default;
-
-		virtual void Error() override
-		{
-			InputException::Error();
-			_output.append("Illegal name entered.");
-		}
-	private:
-		string _name;
-	};
 
 
 

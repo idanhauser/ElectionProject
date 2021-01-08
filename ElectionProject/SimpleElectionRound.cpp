@@ -1,4 +1,4 @@
-﻿//code verison 3.0
+﻿//code verison 3.1
 #include "SimpleElectionRound.h"
 
 #include <fstream>
@@ -7,14 +7,20 @@
 
 namespace elec
 {
-	SimpleElectionRound::SimpleElectionRound(LoadElectionSystem& loader):ElectionRound(loader)
+	SimpleElectionRound::SimpleElectionRound(LoadElectionSystem& loader) :ElectionRound(loader)
 	{
 	}
 
-	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int numOfReps) :ElectionRound(date),_numOfReps(numOfReps)
+	SimpleElectionRound::SimpleElectionRound(int date_d, int date_m, int date_y, int numOfReps) noexcept(false) :ElectionRound(date_d, date_m, date_y), _numOfReps(numOfReps)
 	{
+		int dist8;
 		string name("simple_Election_Round");
-		DividedDistrict* dist = new DividedDistrict(name ,_numOfReps,0);
+		ElectionRound::addNewDistrict(name, _numOfReps, dist8, DistcritType::DividedDistrictType);
+		DividedDistrict* dist = new DividedDistrict(name, _numOfReps, 0);
+		if (numOfReps < 0)
+		{
+			throw invalid_argument("Number of representatives cant be zero or negative.");
+		}
 		_districts.addToList(*dist);
 	}
 
@@ -23,14 +29,14 @@ namespace elec
 		return _numOfReps;
 	}
 
-	bool SimpleElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId,DistcritType districtType)
+	void SimpleElectionRound::addNewDistrict(string& name, int numberRepresentatives, int& districtId, DistcritType districtType)
 	{
-		return false;
+
 	}
 
 	SimpleElectionRound::~SimpleElectionRound()
 	{
-		
+
 	}
 
 
@@ -38,9 +44,9 @@ namespace elec
 	{
 		int type = static_cast<int>(ElectionType::SimpleElectionRound);
 		outFile.write(rcastcc(&type), sizeof(int));
-		ElectionRound::save( outFile);
+		ElectionRound::save(outFile);
 		outFile.close();
 	}
 
-	
+
 }
