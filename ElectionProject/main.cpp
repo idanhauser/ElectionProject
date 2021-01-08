@@ -422,7 +422,7 @@ void addPartyRepresentative()
 
 
 }
-void viewDistricts()
+void viewDistricts() noexcept(false)
 {
 	try
 	{

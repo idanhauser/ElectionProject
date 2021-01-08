@@ -103,7 +103,7 @@ namespace elec {
 		/// <summary>
 		/// prints all the Districts
 		/// </summary>
-		void viewAllDistricts() noexcept(false);
+		void viewAllDistricts() noexcept(false) ;
 		/// <summary>
 		/// prints all the citizens
 		/// </summary>
@@ -155,12 +155,12 @@ namespace elec {
 
 
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount);
-		bool checkElectionsWinner(int* partiesIndexes);
-		bool sortDistrictWinners(int districtID, int* partiesIndexes);
+		bool checkElectionsWinner(vector<int>& partiesIndexes);
+		bool sortDistrictWinners(int districtID, vector<int>& partiesIndexes);
 
 
 		void calcReps() throw(const string);
-		void isResultsAllowed() const throw (const string);
+		void isResultsAllowed() const noexcept(false);
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 
 

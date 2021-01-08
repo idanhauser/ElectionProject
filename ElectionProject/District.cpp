@@ -40,30 +40,18 @@ namespace elec {
 			Citizen* dist = new Citizen(loader,*this);
 			_Citizens.addToList(*dist);
 		}
-		//reading numOfParties:
-		reader.read(rcastc(&_numOfParties), sizeof(int));
-		_repsByPartyID = new int[MAX_SIZE];
-		for (int i = 0; i < _numOfParties; i++)
-		{
-			_repsByPartyID[i] = 0;
-		}
 	}
 
 	District::District(string& name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(name),
-		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _numOfParties(numOfParties), _repsByPartyLogicSize(numOfParties),
-		 _repsByPartyPhySize(MAX_SIZE), _numOfReps(numOfReps), _electionResult(0),_numberOfVotesinDist(0)
+		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(numOfParties),
+		_numOfReps(numOfReps), _electionResult(0),_numberOfVotesinDist(0)
 	{
 
-		for (int i = 0; i < numOfParties; i++)
-		{
-			_repsByPartyID[i] = 0;
-		}
 	}
 
 	District::~District()
 	{
-		delete[] _repsByPartyID;
-
+		
 	}
 
 	const string& District::getName() const
@@ -118,16 +106,6 @@ namespace elec {
 		}
 	}
 	
-	bool District::addRepToArr()
-	{
-		if (_repsByPartyLogicSize == _repsByPartyPhySize)
-		{
-			reallocRepsByPartyID(_repsByPartyPhySize * 2);
-
-		}
-		_repsByPartyID[_numOfParties] = 0;
-		return true;
-	}
 	
 	//use only if you know that citizen exist
 	const Citizen& District::getCitizenById(int id) const
@@ -231,8 +209,6 @@ namespace elec {
 		{
 			_Citizens.getCitizenByIndex(i).save(outFile);
 		}
-		//saving numofParties:
-		outFile.write(rcastcc(&_numOfParties), sizeof(int));
 	}
 	int District::getRepsByPartyID(int partyID) const
 	{
@@ -245,55 +221,14 @@ namespace elec {
 			_repsByPartyID[partyID - PARTY_ID_INIT] = repsAmount;
 			return true;
 	}
-	int District::getRepsByPartyLogicSize() const
-	{
-		return _repsByPartyLogicSize;
-	}
-	void District::reallocRepsByPartyID(int new_size)
-	{
-		int* new_memory = new int[new_size];
 
-		for (int i = 0; i < min(new_size, _repsByPartyPhySize); ++i)
-		{
-			new_memory[i] = _repsByPartyID[i];
-		}
-		if (_repsByPartyLogicSize >= 1)
-		{
-			delete[] _repsByPartyID;
-		}
-
-		_repsByPartyPhySize = new_size;
-		_repsByPartyID = new_memory;
-	}
 	bool District::updateRepsArr()
 	{
-		_numOfParties++;
-		return AddAnotherColumn() && addDistToArr();
-	}
-
-	bool District::AddAnotherColumn()
-	{
-		int* new_memory = new int[_numOfParties];
-		for (int i = 0; i < min(_numOfParties, _repsByPartyPhySize); ++i)
-		{
-			new_memory[i] = (_repsByPartyID[i]);
-		}
-		_repsByPartyID = new_memory;
-
+		_repsByPartyID.resize(_repsByPartyID.size() + 1);
 		return true;
 	}
 
-	bool District::addDistToArr()
-	{
-		if (_repsByPartyLogicSize == _repsByPartyPhySize)
-		{
-			reallocRepsByPartyID(_repsByPartyPhySize * 2);
 
-		}
-		_repsByPartyID[_repsByPartyLogicSize++] = 0;
-		
-		return true;
-	}
 
 	ostream& operator<<(ostream& os, const District& district)
 	{

@@ -40,7 +40,7 @@ namespace elec
 
 	void UnifiedDistrict::toOs(ostream& os) const
 	{
-		int repSize = District::getRepsByPartyLogicSize();
+		int repSize = _repsByPartyID.size();
 		for (int i = 0; i < repSize; i++)
 		{
 			int repByParty = District::getRepsByPartyID(i + PARTY_ID_INIT);
