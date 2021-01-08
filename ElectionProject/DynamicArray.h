@@ -1,4 +1,6 @@
-﻿#include <iostream>
+﻿//code verison 3.1
+#pragma once
+#include <iostream>
 using namespace std;
 
 template <class T>

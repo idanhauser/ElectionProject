@@ -1,4 +1,4 @@
-﻿//code verison 3.0
+﻿//code verison 3.1
 #pragma once
 #include "resultsArr.h"
 #include <string>
@@ -20,7 +20,9 @@ namespace elec {
 	class ElectionRound
 	{
 	protected:
-		int _date[DATE_SIZE];
+		int _dateDay;
+		int _dateMonth;
+		int _dateYear;
 
 		DistrictList _districts;
 		PartyList _parties;
@@ -37,11 +39,12 @@ namespace elec {
 			double repsAmount;
 		};
 		ElectionRound() = delete;
-		ElectionRound(int date[DATE_SIZE]);	
+		void setDate(int date_d, int date_m, int date_y) noexcept(false);
+		ElectionRound(int date_d, int date_m, int date_y) noexcept(false);
 		virtual ~ElectionRound() = default;
-				
-	explicit ElectionRound(LoadElectionSystem& loader);
-	
+
+		explicit ElectionRound(LoadElectionSystem& loader);
+
 		/// <summary>
 		/// virtual function for adding a districts.
 		/// </summary>
@@ -56,12 +59,7 @@ namespace elec {
 		/// <returns>returns the date</returns>
 		constexpr int getYear() const
 		{
-			int year = _date[DATE_SIZE - 1];
-			year += _date[DATE_SIZE - 2] * 10;
-			year += _date[DATE_SIZE - 3] * 100;
-			year += _date[DATE_SIZE - 4] * 1000;
-			return year;
-
+			return _dateYear;
 		}
 
 		/// <summary>
@@ -77,7 +75,7 @@ namespace elec {
 			int count = 0;
 			do {
 				++count;
-				id/= 10;
+				id /= 10;
 			} while (id);
 			return count;
 		}
@@ -126,7 +124,7 @@ namespace elec {
 		/// Saving election to file
 		/// </summary>
 		/// <param name="fileName">the name of the file we want to </param>
-		virtual void save(ofstream& outFile) const =0;
+		virtual void save(ofstream& outFile) const = 0;
 
 		///utils:
 		/// <summary>
@@ -149,7 +147,7 @@ namespace elec {
 		/// <param name="n">number of element in the arr</param>
 		void bubbleSort(pair arr[], int n);
 
-
+		void setDate();
 
 
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount);
@@ -162,7 +160,7 @@ namespace elec {
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 
 
-		
+
 	};
 
 
