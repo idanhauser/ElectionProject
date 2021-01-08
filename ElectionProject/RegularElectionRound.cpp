@@ -45,7 +45,7 @@ namespace elec
 		}
 		_results.addDistrict(_districts.getLogicSize());
 
-		return districtAdded;
+		//return districtAdded;
 
 
 

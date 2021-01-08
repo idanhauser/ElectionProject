@@ -17,7 +17,7 @@ using namespace std;
 namespace elec {
 
 	ElectionRound::ElectionRound(int date_d, int date_m, int date_y) noexcept(false) :
-		_districts(), _parties(), _results(_parties.getLogicSize(), _districts.getLogicSize()), NoChangeSinceLastCalc(0)
+		_districts(), _parties(), _results(), NoChangeSinceLastCalc(0)
 	{
 		setDate(date_d, date_m, date_y);
 	}
