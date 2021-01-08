@@ -1,9 +1,11 @@
 
-//code verison 3.0
+//code verison 3.1
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 
+#include "Exceptions.h"
 #include "Utils.h"
 #include "ElectionRound.h"
 #include "LoadElectionSystem.h"
@@ -35,7 +37,6 @@ int main()
 	cout << "Election ";
 	cout << endl << "-------------" << endl;
 	StartMenu();
-
 
 }
 
@@ -100,8 +101,10 @@ void initElection()
 	int date_y;
 	int date_d;
 	int date_m;
-	int dateArr[DATE_SIZE];
+
 	short typeInput;
+	bool isDataValid = true;
+
 
 	cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
 	cin >> typeInput;
@@ -147,10 +150,11 @@ void initElection()
 		}
 		catch (DayMonthException& e)
 		{
-			cout << "Number of reps can't be negative or zero, please insert netrual number" << endl;
-			cin >> numofreps;
+			e.Error();
+			cout << e.getMessage();
+			cout << "\nPlease try again." << endl;
 		}
-		election = new SimpleElectionRound(dateArr, numofreps);
+		cout << endl;
 	}
 	showMainMenu();
 }
@@ -503,7 +507,7 @@ bool loadElection()
 {
 	bool loadedSuccessfully = true;
 	ifstream _inFile;
-	
+
 
 
 	char fileName[MAX_SIZE];
