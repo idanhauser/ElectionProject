@@ -11,7 +11,7 @@ namespace elec
 	{
 	}
 
-	SimpleElectionRound::SimpleElectionRound(int date_d, int date_m, int date_y, int numOfReps) noexcept(false) :ElectionRound(date_d, date_m, date_y),_numOfReps(numOfReps)
+	SimpleElectionRound::SimpleElectionRound(int date[DATE_SIZE], int numOfReps) :ElectionRound(date),_numOfReps(numOfReps)
 	{
 		int dist8;
 		string name("simple_Election_Round");
@@ -21,6 +21,7 @@ namespace elec
 		{
 			throw invalid_argument("Number of representatives cant be zero or negative.");
 		}
+
 		_districts.addToList(*dist);
 		_results.addDistrict();
 		_results.setDistrictsAmount();

@@ -2,7 +2,6 @@
 #pragma once
 #pragma  warning(disable:4996)
 #include <ostream>
-#include <vector>
 
 
 using namespace std;
@@ -63,28 +62,5 @@ namespace elec
 	};
 
 
-	enum class Months
-	{
-
-		January = 1,
-		February,// has 28 days(29 days in leap yers)
-		March,// has 31 days
-		April,// has 30 days
-		May,// has 31 days
-		June,// has 30 days
-		July,// has 31 days
-		August,// has 31 days
-		September, //has 30 days
-		October ,//has 31 days
-		November,//has 30 days
-		December,
-	};
-	const vector<string> MONTHS_NAME = {
-		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-		"December"
-	};
-
-
-	
 }
 
