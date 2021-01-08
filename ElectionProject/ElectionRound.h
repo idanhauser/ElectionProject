@@ -48,7 +48,7 @@ namespace elec {
 		/// <param name="name">the name of the dist</param>
 		/// <param name="numberRepresentatives">number of reps in dists</param>
 		/// <param name="districtId">the id of dist</param>
-		virtual	bool addNewDistrict(string& name, int numbeRepresentatives, int& districtId, DistcritType districtType) = 0;
+		virtual	void addNewDistrict(string& name, int numbeRepresentatives, int& districtId, DistcritType districtType);
 
 		/// <summary>
 		/// returns the date
@@ -101,15 +101,15 @@ namespace elec {
 		/// <summary>
 		/// prints all the Districts
 		/// </summary>
-		void viewAllDistricts();
+		void viewAllDistricts() noexcept(false);
 		/// <summary>
 		/// prints all the citizens
 		/// </summary>
-		void viewAllCitizens() const;
+		void viewAllCitizens() const noexcept(false);
 		/// <summary>
 		/// prints all the parties
 		/// </summary>
-		void viewAllParties() const;
+		void viewAllParties() const noexcept(false);
 		/// <summary>
 		/// adding a vote of a person to the party
 		/// </summary>

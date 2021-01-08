@@ -103,38 +103,49 @@ void initElection()
 	int dateArr[DATE_SIZE];
 	short typeInput;
 
-	cout << "Enter election's date (dd mm yyyy)" << endl;
-	cin >> date_d >> date_m >> date_y;
-	for (int i = DATE_SIZE - 1; i >= 0; --i)
-	{
-		if (i >= DATE_SIZE - 4)
-		{
-			dateArr[i] = date_y % 10;
-			date_y /= 10;
-		}
-		else if (i >= 2)
-		{
-			dateArr[i] = date_m % 10;
-			date_m /= 10;
-		}
-		else
-		{
-			dateArr[i] = date_d % 10;
-			date_d /= 10;
-		}
-	}
 	cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
 	cin >> typeInput;
-	ElectionType choice = static_cast<ElectionType>(typeInput);
-	if (choice == ElectionType::RegularElectionRound)
+
+	while (typeInput != 1 && typeInput != 2)
 	{
-		election = new RegularElectionRound(dateArr);
+		cout << "There is no option: " << typeInput << ". please try again" << endl;
+		cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
+		cin >> typeInput;
 	}
-	else
+	ElectionType choice = static_cast<ElectionType>(typeInput);
+
+	while (isDataValid)
 	{
-		cout << "Enter number of reps" << endl;
-		cin >> numofreps;
-		while (numofreps <= 0)
+		cout << "Enter election's date (dd mm yyyy)" << endl;
+		cin >> date_d >> date_m >> date_y;
+
+		try
+		{
+			if (choice == ElectionType::RegularElectionRound)
+			{
+				election = new RegularElectionRound(date_d, date_m, date_y);
+			}
+			else
+			{
+				cout << "Enter number of reps" << endl;
+				cin >> numofreps;
+				election = new SimpleElectionRound(date_d, date_m, date_y, numofreps);
+			}
+			isDataValid = false;
+		}
+		catch (DayException& day)
+		{
+			day.Error();
+			cout << day.getMessage();
+			cout << "\nPlease try again." << endl;
+		}
+		catch (MonthException& month)
+		{
+			month.Error();
+			cout << month.getMessage();
+			cout << "\nPlease try again." << endl;
+		}
+		catch (DayMonthException& e)
 		{
 			cout << "Number of reps can't be negative or zero, please insert netrual number" << endl;
 			cin >> numofreps;
@@ -291,20 +302,19 @@ void addDistrict()
 		cout << "Press 2 for divided District" << endl;
 		cin >> userChoise;
 		DistcritType distType = static_cast<DistcritType>(userChoise);
-		if (numberRepresentatives >= 0)
+		try
 		{
-			if (!election->addNewDistrict(name, numberRepresentatives, districtId, distType))
-			{
-				cout << "Error:District " << name << " wasn't added." << endl;
-			}
-			else
-			{
-				cout << "District " << name << " added. \n And its id is " << districtId << endl;
-			}
+			election->addNewDistrict(name, numberRepresentatives, districtId, distType);
+			cout << "District " << name << " added. \n And its id is " << districtId << endl;
 		}
-		else
+		catch (exception& ex)
 		{
-			cout << "ERROR: Negative number of representatives is not allowed." << endl;
+			cout << "Error:" << ex.what() << endl;;
+		}
+		catch (ElectionSystemException& e)
+		{
+			e.Error();
+			cout << e.getMessage();
 		}
 	}
 }
@@ -326,39 +336,40 @@ void addCitizen()
 		cout << "Insert a citizen name,id ,birth year:" << endl;
 		cin >> name >> id >> birtyear;
 	}
-	if (currYear - birtyear >= 18)
+
+	try
 	{
-		try
-		{
-			election->addNewCitizen(name, id, birtyear, districtId);
-		}
-		catch (InputException& e)
-		{
-			e.Error();
-			cout<<e.getMessage();
-		}
-		catch (ElectionSystemException& e)
-		{
-			e.Error();
-			cout << e.getMessage();
-		}
-
-		
-		
-			//if (typeid(*election) == typeid(RegularElectionRound)) {
-			//	cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
-			//}
-			//else
-			//{
-			//	cout << "Error:Citizen with that id is already exist." << endl;
-			//}
-		
+		election->addNewCitizen(name, id, birtyear, districtId);
 		cout << "Citizen " << name << " added." << endl;
-		
+	}
+	catch (exception& ex)
+	{
+		cout << "Error:" << ex.what() << endl;
+	}
+	catch (ElectionSystemException& e)
+	{
+		e.Error();
+		cout << e.getMessage();
+	}
 
 
-	
+
+
+	//if (typeid(*election) == typeid(RegularElectionRound)) {
+	//	cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
+	//}
+	//else
+	//{
+	//	cout << "Error:Citizen with that id is already exist." << endl;
+	//}
+
+
+
 }
+
+
+
+
 
 void addParty()
 {
@@ -409,18 +420,43 @@ void addPartyRepresentative()
 }
 void viewDistricts()
 {
-	election->viewAllDistricts();
+	try
+	{
+		election->viewAllDistricts();
+	}
+	catch (string& msg)
+	{
+		cout << msg << endl;
+	}
+
 }
 
 
 void viewCitizens()
 {
-	election->viewAllCitizens();
+	try
+	{
+		election->viewAllCitizens();
+
+	}
+	catch (string& msg)
+	{
+		cout << msg << endl;
+	}
 }
 
 void viewParties()
 {
-	election->viewAllParties();
+	try
+	{
+		election->viewAllParties();
+
+	}
+	catch (string& msg)
+	{
+		cout << msg << endl;
+	}
+
 }
 
 void voting()
