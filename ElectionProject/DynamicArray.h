@@ -279,17 +279,18 @@ private:
 		_physicalSize *= 2;
 		try {
 		T* temp = new T[_physicalSize];
+		for (int i = 0; i < _logicalSize; i++)
+			temp[i] = _arr[i];
+
+		delete[] _arr;
+		_arr = temp;
+
 		}
 		catch (bad_alloc& ex) {
 			throw ex;
 		}
 
 		
-		for (int i = 0; i < _logicalSize; i++)
-			temp[i] = _arr[i];
-
-		delete[] _arr;
-		_arr = temp;
 	}
 
 	T* _arr;

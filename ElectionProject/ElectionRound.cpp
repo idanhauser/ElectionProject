@@ -72,7 +72,7 @@ namespace elec {
 			reader.read(rcastc(&partyLeaderId), sizeof(int));
 			if (_districts.isCitizenExist(partyLeaderId, indexOfDist)) {
 				Party* party = new Party(loader, _districts.getDistcritByIndex(indexOfDist).getCitizenById(partyLeaderId), numberOfdist);
-				_parties.addToList(*party);
+				_parties.addToList(party);
 
 			}
 		}
@@ -222,7 +222,7 @@ namespace elec {
 			Party* par = new Party(name, pdId, _districts.getLogicSize(), *leader);
 			partyId = par->getPartyID();
 			leader->setParty(par);
-			partyAdded = _parties.addToList(*par);
+			partyAdded = _parties.addToList(par);
 			_results.addParty(_parties.getLogicSize(),_districts.getLogicSize());
 			for (int j = 0; j < _districts.getLogicSize(); ++j)
 			{
