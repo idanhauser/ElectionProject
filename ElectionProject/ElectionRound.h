@@ -1,4 +1,4 @@
-﻿//code verison 3.0
+﻿//code verison 3.1
 #pragma once
 #include "resultsArr.h"
 #include <string>
@@ -20,7 +20,9 @@ namespace elec {
 	class ElectionRound
 	{
 	protected:
-		int _date[DATE_SIZE];
+		int _dateDay;
+		int _dateMonth;
+		int _dateYear;
 
 		DistrictList _districts;
 		PartyList _parties;
@@ -41,18 +43,19 @@ namespace elec {
 			}	
 		};
 		ElectionRound() = delete;
-		ElectionRound(int date[DATE_SIZE]) throw(const char*);
+		void setDate(int date_d, int date_m, int date_y) noexcept(false);
+		ElectionRound(int date_d, int date_m, int date_y) noexcept(false);
 		virtual ~ElectionRound() = default;
-				
-	explicit ElectionRound(LoadElectionSystem& loader);
-	
+
+		explicit ElectionRound(LoadElectionSystem& loader);
+
 		/// <summary>
 		/// virtual function for adding a districts.
 		/// </summary>
 		/// <param name="name">the name of the dist</param>
 		/// <param name="numberRepresentatives">number of reps in dists</param>
 		/// <param name="districtId">the id of dist</param>
-		virtual	bool addNewDistrict(string& name, int numbeRepresentatives, int& districtId, DistcritType districtType) = 0;
+		virtual	void addNewDistrict(string& name, int numbeRepresentatives, int& districtId, DistcritType districtType);
 
 		/// <summary>
 		/// returns the date
@@ -60,12 +63,7 @@ namespace elec {
 		/// <returns>returns the date</returns>
 		constexpr int getYear() const
 		{
-			int year = _date[DATE_SIZE - 1];
-			year += _date[DATE_SIZE - 2] * 10;
-			year += _date[DATE_SIZE - 3] * 100;
-			year += _date[DATE_SIZE - 4] * 1000;
-			return year;
-
+			return _dateYear;
 		}
 
 		/// <summary>
@@ -76,15 +74,7 @@ namespace elec {
 		/// <param name="birthYear">the birth year of the citizen</param>
 		/// <param name="districtId">the Id of the district</param>
 
-		constexpr  int checkLen(int id)
-		{
-			int count = 0;
-			do {
-				++count;
-				id/= 10;
-			} while (id);
-			return count;
-		}
+
 		void addNewCitizen(string& name, int id, int birthYear, int districtId) noexcept(false);
 		/// <summary>
 		///Adding a new party to the election system.
@@ -93,7 +83,7 @@ namespace elec {
 		/// <param name="pdId">the id of the party leader</param>
 		/// <param name="partyId">the id of the party</param>
 		/// <returns>returns true if party was added, else false</returns>
-		bool addNewParty(string& name, int pdId, int& partyId);
+		void addNewParty(string& name, int pdId, int& partyId) noexcept(false);
 		/// <summary>
 		///Adding a new party representatives to a party.
 		/// </summary>
@@ -105,15 +95,15 @@ namespace elec {
 		/// <summary>
 		/// prints all the Districts
 		/// </summary>
-		void viewAllDistricts();
+		void viewAllDistricts() noexcept(false);
 		/// <summary>
 		/// prints all the citizens
 		/// </summary>
-		void viewAllCitizens() const;
+		void viewAllCitizens() const noexcept(false);
 		/// <summary>
 		/// prints all the parties
 		/// </summary>
-		void viewAllParties() const;
+		void viewAllParties() const noexcept(false);
 		/// <summary>
 		/// adding a vote of a person to the party
 		/// </summary>
@@ -130,7 +120,7 @@ namespace elec {
 		/// Saving election to file
 		/// </summary>
 		/// <param name="fileName">the name of the file we want to </param>
-		virtual void save(ofstream& outFile) const =0;
+		virtual void save(ofstream& outFile) const = 0;
 
 		///utils:
 		/// <summary>
@@ -153,7 +143,7 @@ namespace elec {
 		/// <param name="n">number of element in the arr</param>
 		void bubbleSort(pair arr[], int n);
 
-
+		void setDate();
 
 
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount);
@@ -166,7 +156,7 @@ namespace elec {
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 
 
-		
+
 	};
 
 

@@ -1,9 +1,11 @@
 
-//code verison 3.0
+//code verison 3.1
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 
+#include "Exceptions.h"
 #include "Utils.h"
 #include "ElectionRound.h"
 #include "LoadElectionSystem.h"
@@ -35,7 +37,6 @@ int main()
 	cout << "Election ";
 	cout << endl << "-------------" << endl;
 	StartMenu();
-
 
 }
 
@@ -100,46 +101,60 @@ void initElection()
 	int date_y;
 	int date_d;
 	int date_m;
-	int dateArr[DATE_SIZE];
-	short typeInput;
 
-	cout << "Enter election's date (dd mm yyyy)" << endl;
-	cin >> date_d >> date_m >> date_y;
-	for (int i = DATE_SIZE - 1; i >= 0; --i)
-	{
-		if (i >= DATE_SIZE - 4)
-		{
-			dateArr[i] = date_y % 10;
-			date_y /= 10;
-		}
-		else if (i >= 2)
-		{
-			dateArr[i] = date_m % 10;
-			date_m /= 10;
-		}
-		else
-		{
-			dateArr[i] = date_d % 10;
-			date_d /= 10;
-		}
-	}
+	short typeInput;
+	bool isDataValid = true;
+
+
 	cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
 	cin >> typeInput;
-	ElectionType choice = static_cast<ElectionType>(typeInput);
-	if (choice == ElectionType::RegularElectionRound)
+
+	while (typeInput != 1 && typeInput != 2)
 	{
-		election = new RegularElectionRound(dateArr);
+		cout << "There is no option: " << typeInput << ". please try again" << endl;
+		cout << "\nChoose type of Election:\n 1 - Regular Election.\n 2 - Simple Election." << endl;
+		cin >> typeInput;
 	}
-	else
+	ElectionType choice = static_cast<ElectionType>(typeInput);
+
+	while (isDataValid)
 	{
-		cout << "Enter number of reps" << endl;
-		cin >> numofreps;
-		while (numofreps <= 0)
+		cout << "Enter election's date (dd mm yyyy)" << endl;
+		cin >> date_d >> date_m >> date_y;
+
+		try
 		{
-			cout << "Number of reps can't be negative or zero, please insert netrual number" << endl;
-			cin >> numofreps;
+			if (choice == ElectionType::RegularElectionRound)
+			{
+				election = new RegularElectionRound(date_d, date_m, date_y);
+			}
+			else
+			{
+				cout << "Enter number of reps" << endl;
+				cin >> numofreps;
+				election = new SimpleElectionRound(date_d, date_m, date_y, numofreps);
+			}
+			isDataValid = false;
 		}
-		election = new SimpleElectionRound(dateArr, numofreps);
+		catch (DayException& day)
+		{
+			day.Error();
+			cout << day.getMessage();
+			cout << "\nPlease try again." << endl;
+		}
+		catch (MonthException& month)
+		{
+			month.Error();
+			cout << month.getMessage();
+			cout << "\nPlease try again." << endl;
+		}
+		catch (DayMonthException& e)
+		{
+			e.Error();
+			cout << e.getMessage();
+			cout << "\nPlease try again." << endl;
+		}
+		cout << endl;
 	}
 	showMainMenu();
 }
@@ -291,24 +306,31 @@ void addDistrict()
 		cout << "Press 2 for divided District" << endl;
 		cin >> userChoise;
 		DistcritType distType = static_cast<DistcritType>(userChoise);
-		if (numberRepresentatives >= 0)
+		try
 		{
-			if (!election->addNewDistrict(name, numberRepresentatives, districtId, distType))
-			{
-				cout << "Error:District " << name << " wasn't added." << endl;
-			}
-			else
-			{
-				cout << "District " << name << " added. \n And its id is " << districtId << endl;
-			}
+			election->addNewDistrict(name, numberRepresentatives, districtId, distType);
+			cout << "District " << name << " added. \n And its id is " << districtId << endl;
 		}
-		else
+		catch (exception& ex)
 		{
-			cout << "ERROR: Negative number of representatives is not allowed." << endl;
+			cout << "Error:" << ex.what() << endl;;
+		}
+		catch (ElectionSystemException& e)
+		{
+			e.Error();
+			cout << e.getMessage();
 		}
 	}
 }
-
+constexpr  int checkLen(int id)
+{
+	int count = 0;
+	do {
+		++count;
+		id /= 10;
+	} while (id);
+	return count;
+}
 void addCitizen()
 {
 	int birtyear, districtId = DISTRICT_ID_INIT;
@@ -326,39 +348,91 @@ void addCitizen()
 		cout << "Insert a citizen name,id ,birth year:" << endl;
 		cin >> name >> id >> birtyear;
 	}
-	if (currYear - birtyear >= 18)
-	{
-		try
-		{
-			election->addNewCitizen(name, id, birtyear, districtId);
+
+
+		try {
+			if (election->getYear() - birtyear < 18)
+			{
+				throw AgeException(birtyear, election->getYear());
+
+			}
+
 		}
-		catch (InputException& e)
-		{
-			e.Error();
-			cout<<e.getMessage();
-		}
-		catch (ElectionSystemException& e)
+		catch (AgeException& e)
 		{
 			e.Error();
 			cout << e.getMessage();
 		}
+		try {
+			const int lenofId = checkLen(id);
+			if (lenofId != 9)
+			{
+				throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+			}
+		}
+		catch (exception& ex)
+		{
+			cout <<"Error : " <<ex.what();
+			cout << "Citizen wasn't added";
+			return;
+		}
+		try {
+			if (name.find_first_not_of(' ') == std::string::npos)
+			{
+				throw invalid_argument("Invalid name: empty name.");
+			}
+		}
+		catch (exception& ex)
+		{
+			cout << "Error:" << ex.what() << endl;
+			cout << "Citizen wasn't added";
+			return;
+		}
+		try {
+			if (name.find_first_of("0123456789") != std::string::npos)
+			{
+				throw invalid_argument("Name contains digits");
 
-		
-		
-			//if (typeid(*election) == typeid(RegularElectionRound)) {
-			//	cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
-			//}
-			//else
-			//{
-			//	cout << "Error:Citizen with that id is already exist." << endl;
-			//}
-		
-		cout << "Citizen " << name << " added." << endl;
-		
+			}
+		}
+		catch (exception& ex)
+		{
+			cout << "Error:" << ex.what() << endl;
+			cout << "Citizen wasn't added";
+			return;
+		}
+		try {
+			election->addNewCitizen(name, id, birtyear, districtId);
+			cout << "Citizen " << name << " added." << endl;
+		}
+	catch(ElectionSystemException& ex)
+	{
+		ex.Error();
+		cout << "ERROR :" << ex.getMessage();
+		cout << "Citizen wasn't added";
+		return;
+	}
 
 
-	
+
+
+
+
+	//if (typeid(*election) == typeid(RegularElectionRound)) {
+	//	cout << "Error:Citizen with that id is already exist or/and district doesn't exist." << endl;
+	//}
+	//else
+	//{
+	//	cout << "Error:Citizen with that id is already exist." << endl;
+	//}
+
+
+
 }
+
+
+
+
 
 void addParty()
 {
@@ -367,13 +441,28 @@ void addParty()
 	int partyId;
 	cout << "Insert a party name,id of PD of party:" << endl;
 	cin >> name >> idPd;
-	if (!election->addNewParty(name, idPd, partyId))
-	{
-		cout << "Error:Party leader doesn't exist" << endl;
+	try {
+		const int lenofId = checkLen(idPd);
+		if (lenofId != 9)
+		{
+			throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+		}
 	}
-	else
+	catch (exception& ex)
 	{
+		cout << "Error : " << ex.what();
+		cout << "Citizen wasn't added";
+		return;
+	}
+	try {
+		election->addNewParty(name, idPd, partyId);
 		cout << "Party " << name << " added.\nAnd its id is " << partyId << endl;
+	}
+	catch(ElectionSystemException&ex)
+	{
+		ex.Error();
+		cout<<ex.getMessage()<<endl;
+		cout << "Error:Party leader doesn't exist" << endl;
 	}
 }
 
@@ -419,15 +508,34 @@ void viewDistricts()
 	}
 }
 
+}
+
 
 void viewCitizens()
 {
-	election->viewAllCitizens();
+	try
+	{
+		election->viewAllCitizens();
+
+	}
+	catch (string& msg)
+	{
+		cout << msg << endl;
+	}
 }
 
 void viewParties()
 {
-	election->viewAllParties();
+	try
+	{
+		election->viewAllParties();
+
+	}
+	catch (string& msg)
+	{
+		cout << msg << endl;
+	}
+
 }
 
 void voting()
@@ -481,7 +589,7 @@ bool loadElection()
 {
 	bool loadedSuccessfully = true;
 	ifstream _inFile;
-	
+
 
 
 	char fileName[MAX_SIZE];
