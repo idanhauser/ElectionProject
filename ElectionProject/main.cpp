@@ -322,7 +322,15 @@ void addDistrict()
 		}
 	}
 }
-
+constexpr  int checkLen(int id)
+{
+	int count = 0;
+	do {
+		++count;
+		id /= 10;
+	} while (id);
+	return count;
+}
 void addCitizen()
 {
 	int birtyear, districtId = DISTRICT_ID_INIT;
@@ -341,20 +349,71 @@ void addCitizen()
 		cin >> name >> id >> birtyear;
 	}
 
-	try
+
+		try {
+			if (election->getYear() - birtyear < 18)
+			{
+				throw AgeException(birtyear, election->getYear());
+
+			}
+
+		}
+		catch (AgeException& e)
+		{
+			e.Error();
+			cout << e.getMessage();
+		}
+		try {
+			const int lenofId = checkLen(id);
+			if (lenofId != 9)
+			{
+				throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+			}
+		}
+		catch (exception& ex)
+		{
+			cout <<"Error : " <<ex.what();
+			cout << "Citizen wasn't added";
+			return;
+		}
+		try {
+			if (name.find_first_not_of(' ') == std::string::npos)
+			{
+				throw invalid_argument("Invalid name: empty name.");
+			}
+		}
+		catch (exception& ex)
+		{
+			cout << "Error:" << ex.what() << endl;
+			cout << "Citizen wasn't added";
+			return;
+		}
+		try {
+			if (name.find_first_of("0123456789") != std::string::npos)
+			{
+				throw invalid_argument("Name contains digits");
+
+			}
+		}
+		catch (exception& ex)
+		{
+			cout << "Error:" << ex.what() << endl;
+			cout << "Citizen wasn't added";
+			return;
+		}
+		try {
+			election->addNewCitizen(name, id, birtyear, districtId);
+			cout << "Citizen " << name << " added." << endl;
+		}
+	catch(ElectionSystemException& ex)
 	{
-		election->addNewCitizen(name, id, birtyear, districtId);
-		cout << "Citizen " << name << " added." << endl;
+		ex.Error();
+		cout << "ERROR :" << ex.getMessage();
+		cout << "Citizen wasn't added";
+		return;
 	}
-	catch (exception& ex)
-	{
-		cout << "Error:" << ex.what() << endl;
-	}
-	catch (ElectionSystemException& e)
-	{
-		e.Error();
-		cout << e.getMessage();
-	}
+
+
 
 
 
@@ -382,13 +441,28 @@ void addParty()
 	int partyId;
 	cout << "Insert a party name,id of PD of party:" << endl;
 	cin >> name >> idPd;
-	if (!election->addNewParty(name, idPd, partyId))
-	{
-		cout << "Error:Party leader doesn't exist" << endl;
+	try {
+		const int lenofId = checkLen(idPd);
+		if (lenofId != 9)
+		{
+			throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+		}
 	}
-	else
+	catch (exception& ex)
 	{
+		cout << "Error : " << ex.what();
+		cout << "Citizen wasn't added";
+		return;
+	}
+	try {
+		election->addNewParty(name, idPd, partyId);
 		cout << "Party " << name << " added.\nAnd its id is " << partyId << endl;
+	}
+	catch(ElectionSystemException&ex)
+	{
+		ex.Error();
+		cout<<ex.getMessage()<<endl;
+		cout << "Error:Party leader doesn't exist" << endl;
 	}
 }
 

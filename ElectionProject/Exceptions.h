@@ -45,6 +45,25 @@ namespace elec
 		int _day;
 	};
 
+	class YearException : public DateException
+	{
+	public:
+		explicit YearException(int year)
+			: _year(year)
+		{
+		}
+		virtual void Error() override
+		{
+			DateException::Error();
+			_output.append("year can't be negative: ");
+			_output.append(to_string(_year));
+			_output.append(".\n");
+		}
+
+	private:
+		int _year;
+	};
+
 	
 	class DayMonthException : public DateException
 	{
