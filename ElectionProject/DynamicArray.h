@@ -9,13 +9,13 @@ class DynamicArray
 public:
 	DynamicArray(int size = 2) : _logicalSize(0), _physicalSize(size)
 	{
-		try {
-			_arr=new T[size];
-		}
-		catch(bad_alloc&ex)
-		{
-			throw ex;
-		}
+		//try {
+		_arr = new T[size];
+		//}
+		//catch(bad_alloc&ex)
+		//{
+		//	throw ex;
+		//}
 	}
 
 	DynamicArray(const DynamicArray& other) : _arr(nullptr) {
@@ -27,7 +27,7 @@ public:
 
 
 
-	
+
 	const DynamicArray& operator=(const DynamicArray& other) {
 		if (this != &other) {
 			_logicalSize = other._logicalSize;
@@ -83,13 +83,13 @@ public:
 		iterator(DynamicArray& arr, int i) : _da(&arr), _i(i) {}
 		iterator(const iterator& other) : _da(other._da), _i(other._i) {}
 
-		
+
 		// in const_iterator:	const_iterator(const iterator& other)
 		//     					operator=(const iterator& other)
 
 		// const_iterator should also be constructible from regular iterator
 		friend class const_iterator;
-		
+
 		const iterator& operator=(const iterator& other) {
 			_da = other._da;
 			_i = other._i;
@@ -157,7 +157,7 @@ public:
 				_da = other._da;
 				_i = other._i;
 			}
-				return *this;
+			return *this;
 		}
 
 		// comparison with another iterator
@@ -195,7 +195,7 @@ public:
 	};
 
 
-	
+
 	void insert(const iterator& pos, const T& val) {
 		if (_logicalSize == _physicalSize)
 		{
@@ -214,25 +214,44 @@ public:
 		++_logicalSize;
 	}
 
-	const iterator& erase(const iterator& other_iter)
+	const iterator& erase(iterator& iter)
 	{
-		iterator temp = other_iter;
-		iterator iter_temp = other_iter;
+		iterator curr_iter = iter;
+		++iter;
+		iterator next_temp = iter;
+		iterator endFlag = end();
 
-		while (iter_temp !=--end())
+		while (next_temp != endFlag)
 		{
-			temp = iter_temp;
-			++iter_temp;
-			*temp = *iter_temp;
+			*curr_iter = *next_temp;
+			++curr_iter;
+			++next_temp++;
 		}
 		_logicalSize--;
-		return other_iter;
-		
+		return iter;
+
 	}
 	const iterator& erase(const iterator& first, const iterator& last)
 	{
+		iterator tempFirst = first;
+		iterator tempLast = last;
+		int count = 0;
+		while (tempFirst != tempLast)
+		{
+			++tempFirst;
+			count++;
+		}
+		tempFirst = first;
+		while (tempFirst != end())
+		{
+			*tempFirst = *tempLast;
+			++tempFirst;
+			++tempLast;
+		}
+		_logicalSize -= count;
 
-		
+		return (tempFirst--);
+
 	}
 
 	iterator begin() {
@@ -259,7 +278,7 @@ public:
 
 
 
-	
+
 	/* other iterator methods to implement for collection:
 		- cbegin()/cend()		- const iterators
 		- rbegin()/rend()		- reverse iterators (end to start)
@@ -270,21 +289,21 @@ public:
 		{
 			cout << _arr[i] << " ";
 		}
-			cout << endl;
+		cout << endl;
 	}
 
 private:
 	void resize() {
-		T* temp;
-		_physicalSize *= 2;
-		try {
-		T* temp = new T[_physicalSize];
-		}
-		catch (bad_alloc& ex) {
-			throw ex;
-		}
 
-		
+		_physicalSize *= 2;
+		//try {
+		T* temp = new T[_physicalSize];
+		//}
+		//catch (bad_alloc& ex) {
+			//throw ex;
+	//	}
+
+
 		for (int i = 0; i < _logicalSize; i++)
 			temp[i] = _arr[i];
 
