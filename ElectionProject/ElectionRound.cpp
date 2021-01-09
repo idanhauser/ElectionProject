@@ -132,6 +132,10 @@ namespace elec {
 	}
 	void ElectionRound::setDate(int date_d, int date_m, int date_y) noexcept(false)
 	{
+		if(date_y<=0)
+		{
+			throw YearException(date_y);
+		}
 		if (date_d < 1 || date_d>31)
 		{
 			throw DayException(date_d);
@@ -172,32 +176,22 @@ namespace elec {
 
 	void ElectionRound::addNewCitizen(string& name, int id, int birthYear, int districtId) noexcept(false)
 	{
+		bool validData = true;
 		int saveDis;
 		bool citizenExist = true;
-		int lenofId = checkLen(id);
-		if (_dateYear - birthYear >= 18)
-		{
-			throw AgeException(birthYear, _dateYear);
-		}
-		if (lenofId != 9)
-		{
-			throw IdException(lenofId);
-		}
-		if ((name.find_first_not_of(' ') == std::string::npos) || name.find_first_of("0123456789") != std::string::npos)
-		{
-			throw invalid_argument("Invalid name: empty name or name contains digits.");
-		}
-		//is dist exist on vector.
+	
+
+	
 		if (!_districts.isCitizenExist(id, saveDis))
 		{
 			if (_districts.isDistcritExist(districtId))
-			{//need to do on vector if the dist exist.
+			{
 				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, _districts.getDistcritById(districtId));
 				_districts.getDistcritById(districtId).addCitizen(citiz);//need to check if added susccessfuly.
 			}
 			else
 			{
-				throw DistcritsNotExistException(id);
+				throw DistcritsNotExistException(districtId);
 			}
 		}
 		else
@@ -210,7 +204,7 @@ namespace elec {
 
 
 
-	bool ElectionRound::addNewParty(string& name, int pdId, int& partyId)
+	void ElectionRound::addNewParty(string& name, int pdId, int& partyId) noexcept(false)
 	{
 		int distIndex;
 
@@ -229,7 +223,10 @@ namespace elec {
 				_districts.getDistcritByIndex(j).updateRepsArr();
 			}
 		}
-		return partyAdded;
+		else
+		{
+			throw CitizenNotExistException(pdId);
+		}
 	}
 
 	bool ElectionRound::addNewPartyRepresentative(int representId, int partyId, int districtId)

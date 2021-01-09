@@ -70,15 +70,7 @@ namespace elec {
 		/// <param name="birthYear">the birth year of the citizen</param>
 		/// <param name="districtId">the Id of the district</param>
 
-		constexpr  int checkLen(int id)
-		{
-			int count = 0;
-			do {
-				++count;
-				id /= 10;
-			} while (id);
-			return count;
-		}
+
 		void addNewCitizen(string& name, int id, int birthYear, int districtId) noexcept(false);
 		/// <summary>
 		///Adding a new party to the election system.
@@ -87,7 +79,7 @@ namespace elec {
 		/// <param name="pdId">the id of the party leader</param>
 		/// <param name="partyId">the id of the party</param>
 		/// <returns>returns true if party was added, else false</returns>
-		bool addNewParty(string& name, int pdId, int& partyId);
+		void addNewParty(string& name, int pdId, int& partyId) noexcept(false);
 		/// <summary>
 		///Adding a new party representatives to a party.
 		/// </summary>
