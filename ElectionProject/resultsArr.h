@@ -4,14 +4,15 @@
 #include <vector>
 using namespace std;
 #include "District.h"
+#include "DynamicArray.h"
 namespace elec {
 	class LoadElectionSystem;
 
 	class resultsArr
 	{
 	private:
-		vector<vector<int>> _votesByIDs; //arr of parties holding in each cell all districts votes
-		vector<vector<int>> _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
+		DynamicArray<vector<int>> _votesByIDs; //arr of parties holding in each cell all districts votes
+		DynamicArray<vector<int>> _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
 		vector<int> _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
 		struct pair {

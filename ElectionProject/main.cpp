@@ -428,9 +428,9 @@ void viewDistricts() noexcept(false)
 	{
 		election->viewAllDistricts();
 	}
-	catch (const string msg)
+	catch (ResultsException msg)
 	{
-		cout << "ERROR: " << msg << endl;
+		cout << "ERROR: " << msg.getMessage() << endl;
 	}
 }
 
@@ -442,10 +442,11 @@ void viewCitizens()
 		election->viewAllCitizens();
 
 	}
-	catch (string& msg)
+	catch (ResultsException msg)
 	{
-		cout << msg << endl;
+		cout << msg.getMessage() << endl;
 	}
+
 }
 
 void viewParties()
@@ -485,9 +486,9 @@ void results()
 		election->theResults();
 		cout << *election << endl;
 	}
-	catch (const string msg)
+	catch (ResultsException msg)
 	{
-		cout << "ERROR: " << msg << endl;
+		cout <<  msg.getMessage() << endl;
 	}
 }
 

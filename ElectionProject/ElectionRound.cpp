@@ -263,7 +263,7 @@ namespace elec {
 				cout << _districts.getDistcritByIndex(i) << endl;
 			}
 		}
-		catch(const string msg)
+		catch(ResultsException msg)
 		{
 			throw msg;
 		}
@@ -605,18 +605,17 @@ namespace elec {
 
 	void ElectionRound::isResultsAllowed()const noexcept(false)
 	{
+		
 		if (_districts.getLogicSize() == 0)
 		{
-			const string msg = "Insert at least 1 district";
+			
+			throw DistrictsException();
 
-			throw msg;
 		}
 		else
 			if (_parties.getLogicSize() == 0)
 			{
-				const string msg = "Insert at least 1 party";
-
-				throw msg;
+				throw PartiesException();
 			}
 	}
 
