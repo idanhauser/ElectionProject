@@ -15,8 +15,8 @@ namespace elec
 		int _partyID;
 		string _name;
 		int _PMCandidateID;
-		CitizenList*_partyMembers;
-		CitizenList* _representativesByDist;
+		vector<Citizen*>_partyMembers;
+		vector<vector<Citizen*>> _representativesByDist;
 		Citizen& _partyLeader;
 		vector<double> _VotingPercentagesDistrict;
 
@@ -38,15 +38,15 @@ namespace elec
 		bool setPMCandidateID(int idNums);
 		bool setVotingPercentagesDistrict(double num, int districtID);
 
-		bool addToRepByDists(CitizenList& reps, int district);
+		bool addToRepByDists(Citizen* reps, int district);
 
 		const string getPartyName() const;
 		const int getPartyID() const;
 		int getPartyPMCandidateID() const;
-		const CitizenList& getPartyMembers() const;
-		CitizenList* getRepresentativesByDis() const;
+		const vector<Citizen*> getPartyMembers() const;
+		vector<vector<Citizen*>> getRepresentativesByDis() const;
 		bool addPartyMember( Citizen& citizen,int distIndex);
-		bool addToMembers( Citizen& citizen) ;
+		bool addToMembers(Citizen* citizen);
 
 		bool updateDistricts();
 		string printPartyRepsFromDistrictByAmount(int num, int districtID) const;
