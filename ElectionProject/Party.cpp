@@ -15,13 +15,9 @@ namespace elec {
 	Party::Party(const string& partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
 		_name(partyName),
 		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
-		_partyLeader(partyLeader), _numOfDist(numOfDist),_VotingPercentagesDistrict(new double[MAX_SIZE]),_logicSize(0),_phySize(MAX_SIZE)
+		_partyLeader(partyLeader), _VotingPercentagesDistrict(numOfDist)
 	{
 		_partyMembers->addToList(partyLeader);
-		for (int i = 0; i < numOfDist; i++)
-		{
-			_VotingPercentagesDistrict[i] = 0;
-		}
 
 	}
 
@@ -36,22 +32,14 @@ namespace elec {
 		reader.read(rcastc(&_name), sizeof(string));
 		//Reading _PMCandidateID//
 		reader.read(rcastc(&_PMCandidateID), sizeof(int));
-		//Reading _numOfDist
-		reader.read(rcastc(&_numOfDist), sizeof(int));
-		//Reading _phySize
-		reader.read(rcastc(&_phySize), sizeof(int));
-		_VotingPercentagesDistrict = new double[_phySize];
-		//Reading _logicSize
-		reader.read(rcastc(&_logicSize), sizeof(int));
 		//Reading double arr:
-		for (int i = 0; i < _logicSize; ++i)
+		for (int i = 0; i < _VotingPercentagesDistrict.size(); ++i)
 		{
 			reader.read(rcastc(&_VotingPercentagesDistrict[i]), sizeof(double));
 		}
 	}
 	Party::~Party()
 	{
-		delete[] _VotingPercentagesDistrict;
 	}
 
 
@@ -92,34 +80,12 @@ namespace elec {
 		return _partyMembers->addToList(citizen);
 	}
 
-	bool Party::AddAnotherColumn()
-	{
-		CitizenList* new_memory = new CitizenList[_numOfDist ];
-		for (int i = 0; i < min(_numOfDist , _numOfDist); ++i)
-		{
-			new_memory[i] = (_representativesByDist[i]);
-		}
-		_representativesByDist = new_memory;
 
-		return true;
-	}
-
-	bool Party::addDistToArr()
-	{
-		if (_logicSize == _phySize)
-		{
-			realloc(_phySize * 2);
-
-		}
-		_VotingPercentagesDistrict[_numOfDist] = 0;
-		_logicSize++;
-		return true;
-	}
 
 	bool Party::updateDistricts()
 	{
-		_numOfDist++;
-		return AddAnotherColumn() && addDistToArr();
+		_VotingPercentagesDistrict.resize(_VotingPercentagesDistrict.size() + 1);
+		return true;
 	}
 
 
@@ -171,14 +137,8 @@ namespace elec {
 		outFile.write(rcastcc(&_name), sizeof(string));
 		//saving _PMCandidateID
 		outFile.write(rcastcc(&_PMCandidateID), sizeof(int));
-		//saving _numOfDist
-		outFile.write(rcastcc(&_numOfDist), sizeof(int));
-		//saving _phySize
-		outFile.write(rcastcc(&_phySize), sizeof(int));
-		//saving _logicSize
-		outFile.write(rcastcc(&_numOfDist), sizeof(int));
 		//saving double arr:
-		for (int i = 0; i < _numOfDist; ++i)
+		for (int i = 0; i < _VotingPercentagesDistrict.size(); ++i)
 		{
 			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
 		}
@@ -207,22 +167,6 @@ namespace elec {
 		return addtomembers && addtodis;
 	}
 
-	void Party::realloc(int new_size)
-	{
-		double* new_memory = new double[new_size];
-
-		for (int i = 0; i < min(new_size, _phySize); ++i)
-		{
-			new_memory[i] = _VotingPercentagesDistrict[i];
-		}
-		if (_logicSize >= 1)
-		{
-			delete[] _VotingPercentagesDistrict;
-		}
-
-		_phySize = new_size;
-		_VotingPercentagesDistrict = new_memory;
-	}
 
 	bool  Party::setVotingPercentagesDistrict(double num, int districtID)
 	{

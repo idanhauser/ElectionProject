@@ -18,17 +18,11 @@ namespace elec
 		CitizenList*_partyMembers;
 		CitizenList* _representativesByDist;
 		Citizen& _partyLeader;
-		int _numOfDist;
-		double* _VotingPercentagesDistrict;
-		int _logicSize;
-		int _phySize;
+		vector<double> _VotingPercentagesDistrict;
 
-		void realloc(int new_size);
 		Party(const Party& other);
 		const Party& operator=(const Party&);
 
-		bool AddAnotherColumn();
-		bool addDistToArr();
 		
 		
 	public:

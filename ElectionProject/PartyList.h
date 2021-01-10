@@ -8,9 +8,7 @@ namespace elec {
 	class PartyList
 	{
 	private:
-		int _logicSize;
-		int _phySize;
-		Party** _parties;
+		 vector<Party*> _parties;
 
 
 		const PartyList& operator=(const PartyList&);
@@ -20,7 +18,7 @@ namespace elec {
 		PartyList();
 		~PartyList();
 		void realloc(int new_size);
-		bool addToList(Party& Party);
+		bool addToList(Party *Party);
 		int getLogicSize() const;
 		const Party& getPartyByIndex(int index) const;
 		Party& getPartyByIndex(int index);

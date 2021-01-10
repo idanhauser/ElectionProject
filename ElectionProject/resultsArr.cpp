@@ -188,54 +188,62 @@ namespace elec
 
 	}
 	
-	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) {
-		int leftReps;
-		double amountOfElectedFromDistrict;
-		int _partiesLogicSize = _votesByIDs.size();
-		pair* leftForPartyForElector = new pair[_partiesLogicSize];
-		int allVotesInDis = 0;
-		for (int n = 0; n < _partiesLogicSize; n++)
+	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) noexcept(false) {
+		try
 		{
-			allVotesInDis = allVotesInDis + getDistrictNumberOfVotesInParty(n + PARTY_ID_INIT, districtID);
-		}
+			int _partiesLogicSize = _votesByIDs.size();
+			pair* leftForPartyForElector = new pair[_partiesLogicSize];
+			int allVotesInDis = 0;
+			for (int n = 0; n < _partiesLogicSize; n++)
+			{
+				allVotesInDis = allVotesInDis + getDistrictNumberOfVotesInParty(n + PARTY_ID_INIT, districtID);
+			}
 
-		//CALCULATING NUMBER OF REPS FROM EACH PARTY
-		if (allVotesInDis)
-		{
-			double minVotesForRep = double(allVotesInDis) / repsAmount;
-			for (int i = 0; i < _partiesLogicSize; i++)
+			//CALCULATING NUMBER OF REPS FROM EACH PARTY
+			double amountOfElectedFromDistrict;
+
+			if (allVotesInDis)
 			{
-				if (minVotesForRep)
-					amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
-				else
-					amountOfElectedFromDistrict = 0;
-				AddToPMRepsCount(districtID, i, amountOfElectedFromDistrict);
-				if (amountOfElectedFromDistrict == repsAmount)
-					leftForPartyForElector[i].repsAmount = 0;
-				else
-					leftForPartyForElector[i].repsAmount = getDistrictNumberOfVotesInParty(i, districtID) -
-					double(amountOfElectedFromDistrict * minVotesForRep);
-				leftForPartyForElector[i].index = i;
+				double minVotesForRep = double(allVotesInDis) / repsAmount;
+				for (int i = 0; i < _partiesLogicSize; i++)
+				{
+					if (minVotesForRep)
+						amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
+					else
+						amountOfElectedFromDistrict = 0;
+					AddToPMRepsCount(districtID, i, amountOfElectedFromDistrict);
+					if (amountOfElectedFromDistrict == repsAmount)
+						leftForPartyForElector[i].repsAmount = 0;
+					else
+						leftForPartyForElector[i].repsAmount = getDistrictNumberOfVotesInParty(i, districtID) -
+						double(amountOfElectedFromDistrict * minVotesForRep);
+					leftForPartyForElector[i].index = i;
+				}
+				int leftReps = repsAmount;
+				for (int k = 0; k < _partiesLogicSize; k++)
+				{
+					leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
+				}
+				bubbleSort(leftForPartyForElector, _partiesLogicSize);
+				for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
+				{
+					AddToPMRepsCount(districtID, leftForPartyForElector[l].index, 1);
+				}
+				// copy all values from _repsPartiesByID[districtID] to parameter "district" reps member
+				for (int i = 0; i < _partiesLogicSize; i++)
+				{
+					district->setRepsArrByPartyID(i, getPMNumberOfRepsInDistrict(districtID, i));
+				}
+				delete[] leftForPartyForElector;
 			}
-			leftReps = repsAmount;
-			for (int k = 0; k < _partiesLogicSize; k++)
-			{
-				leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
-			}
-			bubbleSort(leftForPartyForElector, _partiesLogicSize);
-			for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
-			{
-				AddToPMRepsCount(districtID, leftForPartyForElector[l].index, 1);
-			}
-			// copy all values from _repsPartiesByID[districtID] to parameter "district" reps member
-			for (int i = 0; i < _partiesLogicSize; i++)
-			{
-				district->setRepsArrByPartyID(i, getPMNumberOfRepsInDistrict(districtID, i));
-			}
-			delete[] leftForPartyForElector;
+			return true;
 		}
-		return true;
+		catch(bad_alloc& ex)
+		{
+			throw ex;
+		}
 	}
+	
 
 
 	void resultsArr::swap(pair* xp, pair* yp)

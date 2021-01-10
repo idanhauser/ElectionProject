@@ -17,7 +17,7 @@ using namespace std;
 namespace elec {
 
 	ElectionRound::ElectionRound(int date_d, int date_m, int date_y) noexcept(false) :
-		_districts(), _parties(), _results(_parties.getLogicSize(), _districts.getLogicSize()), NoChangeSinceLastCalc(0)
+		_districts(), _parties(), _results(), NoChangeSinceLastCalc(0)
 	{
 		setDate(date_d, date_m, date_y);
 	}
@@ -72,7 +72,7 @@ namespace elec {
 			reader.read(rcastc(&partyLeaderId), sizeof(int));
 			if (_districts.isCitizenExist(partyLeaderId, indexOfDist)) {
 				Party* party = new Party(loader, _districts.getDistcritByIndex(indexOfDist).getCitizenById(partyLeaderId), numberOfdist);
-				_parties.addToList(*party);
+				_parties.addToList(party);
 
 			}
 		}
@@ -179,9 +179,20 @@ namespace elec {
 		bool validData = true;
 		int saveDis;
 		bool citizenExist = true;
-	
-
-	
+		int lenofId = checkLen(id);
+		/*if (_dateYear - birthYear <= 18)
+		{
+			throw AgeException(birthYear, _dateYear);
+		}
+		if (lenofId != 9)
+		{
+			throw IdException(lenofId);
+		}*/
+		/*if ((name.find_first_not_of(' ') == std::string::npos) || name.find_first_of("0123456789") != std::string::npos)
+		{
+			throw invalid_argument("Invalid name: empty name or name contains digits.");
+		}*/
+		//is dist exist on vector.
 		if (!_districts.isCitizenExist(id, saveDis))
 		{
 			if (_districts.isDistcritExist(districtId))
@@ -216,7 +227,7 @@ namespace elec {
 			Party* par = new Party(name, pdId, _districts.getLogicSize(), *leader);
 			partyId = par->getPartyID();
 			leader->setParty(par);
-			partyAdded = _parties.addToList(*par);
+			partyAdded = _parties.addToList(par);
 			_results.addParty(_parties.getLogicSize(),_districts.getLogicSize());
 			for (int j = 0; j < _districts.getLogicSize(); ++j)
 			{
@@ -247,17 +258,23 @@ namespace elec {
 
 	}
 
-	void ElectionRound::viewAllDistricts()  noexcept(false)
+	void ElectionRound::viewAllDistricts()  noexcept(false) 
 	{
 		
-		calcReps();
-		int len = _districts.getLogicSize();
-		this->NoChangeSinceLastCalc = 1;
-		for (int i = 0; i < len; i++)
+		try
 		{
-			cout << _districts.getDistcritByIndex(i) << endl;
+			calcReps();
+			int len = _districts.getLogicSize();
+			this->NoChangeSinceLastCalc = 1;
+			for (int i = 0; i < len; i++)
+			{
+				cout << _districts.getDistcritByIndex(i) << endl;
+			}
 		}
-	
+		catch(ResultsException msg)
+		{
+			throw msg;
+		}
 	
 
 	}
@@ -412,7 +429,7 @@ namespace elec {
 				// = its a divided district - Only needed to present reps in max to min order
 				for (int m = 0; m < partiesAmount; m++)
 				{
-					int* partyIndexesSotedByReps = new int[partiesAmount];
+					vector<int> partyIndexesSotedByReps(partiesAmount);
 					for (int w = 0; w < districtAmount; w++)
 					{
 						electionRound.sortDistrictWinners(w + DISTRICT_ID_INIT, partyIndexesSotedByReps);
@@ -432,7 +449,7 @@ namespace elec {
 		}
 
 		//elections winner
-		int* partiesIndexs = new int[partiesAmount];
+		vector<int> partiesIndexs(partiesAmount);
 		electionRound.checkElectionsWinner(partiesIndexs);
 		for (int p = 0; p < partiesAmount; p++)
 		{
@@ -442,7 +459,6 @@ namespace elec {
 			os << "his party got total amount of " << electionRound._results.getTotalPartyNumberOfVotes(partiesIndexs[p]) << " votes" << endl;
 
 		}
-		delete[] partiesIndexs;
 		return os;
 
 
@@ -553,7 +569,7 @@ namespace elec {
 
 
 
-	bool ElectionRound::checkElectionsWinner(int* partiesIndexes) {
+	bool ElectionRound::checkElectionsWinner(vector<int>& partiesIndexes) {
 		//check elections winner
 		pair* totalRepsForPmByID = new pair[_parties.getLogicSize()];
 
@@ -574,7 +590,7 @@ namespace elec {
 	}
 
 
-	bool ElectionRound::sortDistrictWinners(int districtID, int* partiesIndexes) {
+	bool ElectionRound::sortDistrictWinners(int districtID, vector<int>& partiesIndexes) {
 
 		pair* totalRepsForPmByID = new pair[_parties.getLogicSize()];
 
@@ -595,16 +611,19 @@ namespace elec {
 	}
 
 
-	void ElectionRound::isResultsAllowed()const throw (const string)
+	void ElectionRound::isResultsAllowed()const noexcept(false)
 	{
+		
 		if (_districts.getLogicSize() == 0)
 		{
-			throw "Insert at least 1 district";
+			
+			throw DistrictsException();
+
 		}
 		else
 			if (_parties.getLogicSize() == 0)
 			{
-				throw "Insert at least 1 party";
+				throw PartiesException();
 			}
 	}
 

@@ -330,4 +330,66 @@ namespace elec
 
 	};
 
+
+	class ResultsException
+	{
+	protected:
+		string _output;
+
+	public:
+		ResultsException()
+		{
+			_output.append("Error Calculating Results: ");
+		};
+		~ResultsException() = default;
+
+		virtual const string& getMessage() const
+		{
+			return _output;
+		}
+
+
+
+
+
+	};
+
+	class PartiesException : public ResultsException
+	{
+	public:
+		PartiesException()
+		{
+			Error();
+		}
+		virtual ~PartiesException() = default;
+
+		virtual void Error()
+		{
+			_output.append("There aren't parties inserted. You must have at least 1.");
+
+
+		}
+
+	};
+	class DistrictsException : public ResultsException
+	{
+	public:
+		DistrictsException()
+		{
+			Error();
+		}
+		virtual ~DistrictsException() = default;
+		virtual void Error()
+		{
+			_output.append("There aren't districts inserted. You must have at least 1.");
+
+		}
+
+
+
+	};
+
+	
+	
+
 }

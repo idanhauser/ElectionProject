@@ -24,7 +24,7 @@ namespace elec {
 	}
 	void DividedDistrict::toOs(ostream& os) const
 	{
-		int repSize = getRepsByPartyLogicSize();
+		int repSize = _repsByPartyID.size();
 		int reps;
 		for (int i = 0; i < repSize; i++)
 		{

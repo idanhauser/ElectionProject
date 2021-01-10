@@ -4,14 +4,15 @@
 #include <vector>
 using namespace std;
 #include "District.h"
+#include "DynamicArray.h"
 namespace elec {
 	class LoadElectionSystem;
 
 	class resultsArr
 	{
 	private:
-		vector<vector<int>> _votesByIDs; //arr of parties holding in each cell all districts votes
-		vector<vector<int>> _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
+		DynamicArray<vector<int>> _votesByIDs; //arr of parties holding in each cell all districts votes
+		DynamicArray<vector<int>> _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
 		vector<int> _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
 		struct pair {
@@ -102,7 +103,7 @@ namespace elec {
 		/// <param name="repsAmount">the amount of reps from a dist</param>
 		/// <param name="district">pointer to the dist so we can setRepsArrByPartyID.</param>
 		/// <returns>return true if evryhirng is good</returns>
-		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district);
+		bool VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) noexcept(false);
 
 
 
@@ -118,8 +119,8 @@ namespace elec {
 /// </summary>
 /// <param name="arr">arr of pairs to be sorted</param>
 /// <param name="n">number of element in the arr</param>
-		void bubbleSort(pair arr[], int n);
-
+		void bubbleSort(pair arr[], int n); 
+		//todo: change bubblesort to template
 
 		bool isResultsAllowed()const;
 
