@@ -117,6 +117,7 @@ namespace elec {
 		/// </summary>
 		/// <returns>returns true if can calculate, else false</returns>
 		void theResults() throw(const string);
+		bool isCitizenExist(int id, int& distIndex) const;
 		/// <summary>
 		/// Saving election to file
 		/// </summary>

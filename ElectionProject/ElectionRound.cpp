@@ -73,7 +73,7 @@ namespace elec {
 			reader.read(rcastc(&partyLeaderId), sizeof(int));
 			if (isCitizenExist(partyLeaderId, indexOfDist)) {
 				Party* party = new Party(loader, _districts.at(indexOfDist)->getCitizenById(partyLeaderId), numberOfdist);
-				_parties.addToList(*party);
+				_parties.addToList(party);
 
 			}
 		}
@@ -219,7 +219,7 @@ namespace elec {
 			partyId = par->getPartyID();
 			leader->setParty(par);
 			partyAdded = _parties.addToList(par);
-			_results.addParty(_parties.getLogicSize(), _districts.getLogicSize());
+			_results.addParty(_parties.getLogicSize(), _districts.size());
 			for (auto j = _districts.begin(); j != _districts.end(); ++j)
 			{
 				(*j)->updateRepsArr();
@@ -267,19 +267,17 @@ namespace elec {
 
 	void ElectionRound::viewAllDistricts()  noexcept(false)
 	{
-		string output;
-		int len = _districts.size();
-
-		if (!_districts.empty())
-		{
-			calcReps();
-			int len = _districts.getLogicSize();
-			this->NoChangeSinceLastCalc = 1;
-			for (auto i = _districts.begin(); i != _districts.end(); ++i)
+		try {
+			if (!_districts.empty())
 			{
-				cout << *(*i)<<endl;
-			}
+				calcReps();
+				this->NoChangeSinceLastCalc = 1;
+				for (auto i = _districts.begin(); i != _districts.end(); ++i)
+				{
+					cout << *(*i) << endl;
+				}
 
+			}
 		}
 		catch(ResultsException msg)
 		{
@@ -296,7 +294,7 @@ namespace elec {
 			return;
 		this->NoChangeSinceLastCalc = 1;
 
-		int districtAmount = _districts.getLogicSize();
+	
 		int partiesAmount = _parties.getLogicSize();
 		for (auto j = _districts.begin(); j != _districts.end(); ++j)
 		{
@@ -404,19 +402,20 @@ namespace elec {
 		cout << "Election Round" << endl;
 		electionRound.printElectionDate(os);
 
-		int districtAmount = electionRound._districts.getLogicSize();
 		int partiesAmount = electionRound._parties.getLogicSize();
-
 		for (auto j = electionRound._districts.begin(); j != electionRound._districts.end(); ++j)
 		{
-				os << (*j) << endl;
-				os << "each party got:" << endl;
-				os << electionRound._districts.getDistcritByIndex(j) << endl;
-				//print results:
-				if (typeid((*j)) == typeid(UnifiedDistrict))
+
+			os << (*j) << endl;
+			os << "each party got:" << endl;
+
+
+			//print results:
+			if (typeid((*j)) == typeid(UnifiedDistrict))
+			{
+				for (int m = 0; m < partiesAmount; m++)
 				{
-					for (int m = 0; m < partiesAmount; m++)
-					{
+					
 						os << electionRound._parties.getPartyByIndex(m);
 						os << "And the have ";
 						os << electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), m) << " representatives." << endl;
@@ -424,53 +423,44 @@ namespace elec {
 						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
 							electionRound._results.getDistrictNumberOfVotesInParty(m, (*j)->getSerialNum()) << endl;
 						os << "Percentages of votes For The Party from Voting Citizens In The District is: " <<
-							electionRound._parties.getPartyByIndex(m).getVotingPercentagesByDistcritIdx((*j)->getSerialNum()-DISTRICT_ID_INIT) <<
+							electionRound._parties.getPartyByIndex(m).getVotingPercentagesByDistcritIdx((*j)->getSerialNum() - DISTRICT_ID_INIT) <<
 							"%" << endl;
-						os << "And the have ";
-					}
-					os << endl;
-					os << "The district belongs to: " << (*j)->getPartyLeader()->getCitizenName() << endl;
-					os << endl;
+
 				}
-				else
+				os << endl;
+				os << "The district belongs to: " << (*j)->getPartyLeader()->getCitizenName() << endl;
+				os << endl;
+			}
+			else
+			{
+				// = its a divided district - Only needed to present reps in max to min order
+				for (int m = 0; m < partiesAmount; m++)
 				{
-					// = its a divided district - Only needed to present reps in max to min order
-					for (int m = 0; m < partiesAmount; m++)
+					vector<int> partyIndexesSotedByReps(partiesAmount);
+					for (auto w = electionRound._districts.begin(); w != electionRound._districts.end(); ++w) 
 					{
-						int* partyIndexesSotedByReps = new int[partiesAmount];
-						for (int w = 0; w < electionRound._districts.size(); w++)
-						{
-							electionRound.sortDistrictWinners(w + DISTRICT_ID_INIT, partyIndexesSotedByReps);
-						}
-						os << electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]) << endl;
-						os << electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), partyIndexesSotedByReps[m]) << " Reps" << endl;
-						electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).
-							printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), partyIndexesSotedByReps[m]), (*j)->getSerialNum());
-						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
-							electionRound._results.getDistrictNumberOfVotesInParty(partyIndexesSotedByReps[m], (*j)->getSerialNum()) << endl;
-						os << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
-							electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).getVotingPercentagesByDistcritIdx((*j)->getSerialNum()-DISTRICT_ID_INIT) << "%" << endl;
-						os << electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]) << endl;
-						os << electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, partyIndexesSotedByReps[m]) << " Reps" << endl;
-						electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).
-							printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict(j + DISTRICT_ID_INIT, partyIndexesSotedByReps[m]), j + DISTRICT_ID_INIT);
-						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
-							electionRound._results.getDistrictNumberOfVotesInParty(partyIndexesSotedByReps[m], j + DISTRICT_ID_INIT) << endl;
-						os << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
-							electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).getVotingPercentagesByDistcritIdx(j) << "%" << endl;
+						electionRound.sortDistrictWinners((*w)->getSerialNum(), partyIndexesSotedByReps);
+					}
+					os << electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]) << endl;
+					os << electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), partyIndexesSotedByReps[m]) << " Reps" << endl;
+					electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).
+						printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), partyIndexesSotedByReps[m]), (*j)->getSerialNum());
+					os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
+						electionRound._results.getDistrictNumberOfVotesInParty(partyIndexesSotedByReps[m], (*j)->getSerialNum()) << endl;
+					os << "Precentage of votes For The Party from Voting Citizens In The District is: " <<
+						electionRound._parties.getPartyByIndex(partyIndexesSotedByReps[m]).getVotingPercentagesByDistcritIdx((*j)->getSerialNum() - DISTRICT_ID_INIT) << "%" << endl;
 
 				}//no need to check for winner, printing sorted is enough
 			}
 
 		}
-
 		//elections winner
 		vector<int> partiesIndexs(partiesAmount);
 		electionRound.checkElectionsWinner(partiesIndexs);
 		for (int p = 0; p < partiesAmount; p++)
 		{
 
-		}
+			os << electionRound._parties.getPartyByIndex(partiesIndexs[p]).getPartyLeader().getCitizenName()
 				<< " got " << electionRound._results.getPmsRepsTotalByPartyID(partiesIndexs[p]) << " reps ";
 			os << "his party got total amount of " << electionRound._results.getTotalPartyNumberOfVotes(partiesIndexs[p]) << " votes" << endl;
 
@@ -478,8 +468,7 @@ namespace elec {
 		return os;
 
 
-		}
-
+	}
 
 	bool ElectionRound::isCitizenExist(int id, int& distIndex) const
 	{
@@ -637,29 +626,29 @@ namespace elec {
 		bubbleSort(totalRepsForPmByID, _parties.getLogicSize());
 
 		for (int p = 0; p < _parties.getLogicSize(); p++)
-
-	void ElectionRound::isResultsAllowed()const noexcept(false)
-	{
-		
-		if (_districts.getLogicSize() == 0)
 		{
-			
-			throw DistrictsException();
+			partiesIndexes[p] = totalRepsForPmByID[p].index;
 
 		}
+		delete[] totalRepsForPmByID;
 		return true;
 	}
 
-
-	bool ElectionRound::isResultsAllowed()const
+	void ElectionRound::isResultsAllowed()const noexcept(false)
 	{
-		if ((_parties.getLogicSize() != 0) && (_districts.getLogicSize() != 0))
-			return true;
+
+		if (_districts.empty())
+		{
+
+			throw DistrictsException();
+
+		}
 		else
 			if (_parties.getLogicSize() == 0)
 			{
 				throw PartiesException();
 			}
 	}
+
 
 }

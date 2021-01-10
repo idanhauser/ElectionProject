@@ -86,7 +86,7 @@ namespace elec
 		bool setRepsArrByPartyID(int partyID, int repsAmount);
 		int getRepsByPartyID(int partyID) const;
 		bool updateRepsArr();
-				
+		const vector<Citizen*>& getCitizens() const;
 		/// <summary>
 		/// saving the citizens in the list
 		/// </summary>

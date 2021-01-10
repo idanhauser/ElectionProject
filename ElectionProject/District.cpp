@@ -43,8 +43,7 @@ namespace elec {
 	}
 
 	District::District(string& name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(name),
-		_citizens(), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _numOfParties(numOfParties), _repsByPartyLogicSize(numOfParties),
-		 _repsByPartyPhySize(MAX_SIZE), _numOfReps(numOfReps), _electionResult(0),_numberOfVotesinDist(0)
+		_citizens(), _votersPercentage(0), _repsByPartyID(numOfParties),  _numOfReps(numOfReps), _electionResult(0),_numberOfVotesinDist(0)
 	{
 
 	}
@@ -238,11 +237,11 @@ namespace elec {
 		return true;
 	}
 
+	const vector<Citizen*>& District::getCitizens() const
+	{
+		return _citizens;
+	}
 
-
-
-
-	
 	ostream& operator<<(ostream& os, const District& district)
 	{
 		os << "**********************************" << endl;

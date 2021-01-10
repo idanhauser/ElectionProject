@@ -43,7 +43,7 @@ namespace elec
 		{
 			_parties.getPartyByIndex(i).updateDistricts();
 		}
-		_results.addDistrict(_districts.getLogicSize());
+		_results.addDistrict(_districts.size());
 
 		//return districtAdded;
 
