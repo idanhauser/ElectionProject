@@ -6,7 +6,7 @@
 #include "CitizenList.h"
 using namespace std;
 #include <string>
-
+#include <vector>
 
 namespace elec
 {
@@ -23,10 +23,7 @@ namespace elec
 		string _name;
 		vector<Citizen*> _citizens;
 		double _votersPercentage;
-		int* _repsByPartyID;
-		int _numOfParties;
-		int _repsByPartyLogicSize;
-		int _repsByPartyPhySize;
+		vector<int> _repsByPartyID;
 		int _numOfReps;
 		int _electionResult;
 		int _numberOfVotesinDist;
@@ -64,7 +61,6 @@ namespace elec
 		int getNumberOfCitizens() const;
 		
 		void addCitizen(Citizen& citz) noexcept(false);
-		bool addRepToArr();
 		//todo: to any getCitizenById i need to handle an error.
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
@@ -84,27 +80,13 @@ namespace elec
 		/// <param name="">int</param>
 		void operator++(int);
 		/// <summary>
-		/// this function is utils to manage the arr RepsByPartyID
-		/// this function does like realloc from c
-		/// </summary>
-		/// <param name="new_size">the new size of the arr</param>
-		void reallocRepsByPartyID(int new_size);
-		/// <summary>
 		/// the logic count of reps of a party in this dist.
 		/// </summary>
 		/// <returns>returns the ammount</returns>
-		int getRepsByPartyLogicSize() const;
 		bool setRepsArrByPartyID(int partyID, int repsAmount);
 		int getRepsByPartyID(int partyID) const;
 		bool updateRepsArr();
-		/// <summary>
-		///this is utils function to manage the reps arr by party.
-		/// we are adding a col to the arr when we have new party.
-		/// </summary>
-		/// <returns>true if rvreything is good.</returns>
-		bool AddAnotherColumn();
-		const vector<Citizen*>& getCitizens() const;
-		bool addDistToArr();
+				
 		/// <summary>
 		/// saving the citizens in the list
 		/// </summary>

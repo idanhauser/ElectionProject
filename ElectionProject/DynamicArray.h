@@ -309,6 +309,13 @@ private:
 
 		delete[] _arr;
 		_arr = temp;
+
+		}
+		catch (bad_alloc& ex) {
+			throw ex;
+		}
+
+		
 	}
 
 	T* _arr;

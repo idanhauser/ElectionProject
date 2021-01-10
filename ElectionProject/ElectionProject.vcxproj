@@ -165,6 +165,7 @@
     <ClInclude Include="LoadElectionSystem.h" />
     <ClInclude Include="RegularElectionRound.h" />
     <ClInclude Include="SimpleElectionRound.h" />
+    <ClInclude Include="Templates.h" />
     <ClInclude Include="UnifiedDistrict.h" />
     <ClInclude Include="resultsArr.h" />
     <ClInclude Include="Utils.h" />

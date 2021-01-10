@@ -7,7 +7,7 @@
 #include "PartyList.h"
 #include "Citizen.h"
 #include "District.h"
-
+#include <algorithm>
 using namespace std;
 
 
@@ -27,7 +27,7 @@ namespace elec {
 		//DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
-		int NoChangeSinceLastCalc;
+		int NoChangeSinceLastCalc; //flag to check if current and last calculation of results is the same
 
 		const ElectionRound& operator=(const ElectionRound&);
 
@@ -37,6 +37,10 @@ namespace elec {
 		struct pair {
 			int index;
 			double repsAmount;
+			bool operator>(const pair& other) const
+			{
+				return (repsAmount > other.repsAmount);
+			}	
 		};
 		ElectionRound() = delete;
 		void setDate(int date_d, int date_m, int date_y) noexcept(false);
@@ -92,7 +96,7 @@ namespace elec {
 		/// <summary>
 		/// prints all the Districts
 		/// </summary>
-		void viewAllDistricts() noexcept(false);
+		void viewAllDistricts() noexcept(false) ;
 		/// <summary>
 		/// prints all the citizens
 		/// </summary>
@@ -109,11 +113,10 @@ namespace elec {
 		/// <returns>returns true if vote was added, else false</returns>
 		bool votingAction(int citizenId, int partyId);
 		/// <summary>
-		/// Calculate and view the election results.
+		/// Calculate the election results.
 		/// </summary>
 		/// <returns>returns true if can calculate, else false</returns>
-		bool theResults();
-		bool isCitizenExist(int id, int& distIndex) const;
+		void theResults() throw(const string);
 		/// <summary>
 		/// Saving election to file
 		/// </summary>
@@ -145,12 +148,12 @@ namespace elec {
 
 
 		bool setWinnerInUnifiedDistrictByDistrictID(int districtID, int repsAmount);
-		bool checkElectionsWinner(int* partiesIndexes);
-		bool sortDistrictWinners(int districtID, int* partiesIndexes);
-		bool isResultsAllowed() const;
+		bool checkElectionsWinner(vector<int>& partiesIndexes);
+		bool sortDistrictWinners(int districtID, vector<int>& partiesIndexes);
 
-		bool calcReps();
 
+		void calcReps() throw(const string);
+		void isResultsAllowed() const noexcept(false);
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 
 

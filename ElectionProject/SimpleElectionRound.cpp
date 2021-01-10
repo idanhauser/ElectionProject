@@ -22,8 +22,6 @@ namespace elec
 			throw invalid_argument("Number of representatives cant be zero or negative.");
 		}
 		_districts.push_back(dist);
-		_results.addDistrict();
-		_results.setDistrictsAmount();
 	}
 
 	int SimpleElectionRound::getNumOfReps() const

@@ -495,17 +495,16 @@ void addPartyRepresentative()
 
 
 }
-void viewDistricts()
+void viewDistricts() noexcept(false)
 {
 	try
 	{
 		election->viewAllDistricts();
 	}
-	catch (string& msg)
+	catch (ResultsException msg)
 	{
-		cout << msg << endl;
+		cout << "ERROR: " << msg.getMessage() << endl;
 	}
-
 }
 
 
@@ -516,10 +515,11 @@ void viewCitizens()
 		election->viewAllCitizens();
 
 	}
-	catch (string& msg)
+	catch (ResultsException msg)
 	{
-		cout << msg << endl;
+		cout << msg.getMessage() << endl;
 	}
+
 }
 
 void viewParties()
@@ -554,8 +554,15 @@ void voting()
 
 void results()
 {
-	election->theResults();
-	cout << *election << endl;
+	try
+	{
+		election->theResults();
+		cout << *election << endl;
+	}
+	catch (ResultsException msg)
+	{
+		cout <<  msg.getMessage() << endl;
+	}
 }
 
 void saveElections()
