@@ -39,7 +39,7 @@ namespace elec
 		/// </summary>
 		/// <param name="party">pointer to the party</param>
 		/// <returns>true for check</returns>
-		bool setParty(const Party* party);
+		void setParty(const Party* party) noexcept(false);
 		/// <summary>
 		/// sets if the citizen has voted.
 		/// </summary>

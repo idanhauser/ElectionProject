@@ -23,9 +23,8 @@ namespace elec {
 		bool addToList(District& district);
 		District& getDistcritById(int id);
 		const District & getDistcritById (int id) const;
-		bool isCitizenExist(int id, int& distIndex) const;
+
 		int getLogicSize() const;
-		bool isDistcritExist(int id) const;
 		const District& getDistcritByIndex(int index) const;
 		District& getDistcritByIndex(int index);
 

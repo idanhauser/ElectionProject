@@ -1,15 +1,25 @@
 ﻿//code verison 3.1
 #include "LoadElectionSystem.h"
 
+#include <iostream>
+using namespace std;
 namespace elec
 {
 
-	LoadElectionSystem::LoadElectionSystem(string fileName) :_inFile(fileName, ios::binary), _isFileNotOk(false)
+	LoadElectionSystem::LoadElectionSystem(string fileName) noexcept(false): _isFileNotOk(false)
 	{
-
-		if (!_inFile) {
-			_isFileNotOk = true;
+		
+		try {
+			_inFile.close();
+			_inFile.exceptions(ifstream::badbit);
+			_inFile.open(fileName, ios::binary);
 		}
+		catch(const ifstream::failure&ex)
+		{
+			cout << "Error while opening the file" << endl;
+			throw;
+		}
+		_isFileNotOk = false;
 	}
 
 	LoadElectionSystem::~LoadElectionSystem()

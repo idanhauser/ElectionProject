@@ -9,13 +9,13 @@ class DynamicArray
 public:
 	DynamicArray(int size = 2) : _logicalSize(0), _physicalSize(size)
 	{
-		//try {
-		_arr = new T[size];
-		//}
-		//catch(bad_alloc&ex)
-		//{
-		//	throw ex;
-		//}
+		try {
+			_arr = new T[size];
+		}
+		catch (bad_alloc& ex)
+		{
+			throw ex;
+		}
 	}
 
 	DynamicArray(const DynamicArray& other) : _arr(nullptr) {
@@ -294,22 +294,21 @@ public:
 
 private:
 	void resize() {
-
+		T* temp = nullptr;
 		_physicalSize *= 2;
-		//try {
-		T* temp = new T[_physicalSize];
-		for (int i = 0; i < _logicalSize; i++)
-			temp[i] = _arr[i];
-
-		delete[] _arr;
-		_arr = temp;
-
+		try {
+			temp = new T[_physicalSize];
 		}
 		catch (bad_alloc& ex) {
 			throw ex;
 		}
 
-		
+
+		for (int i = 0; i < _logicalSize; i++)
+			temp[i] = _arr[i];
+
+		delete[] _arr;
+		_arr = temp;
 	}
 
 	T* _arr;

@@ -23,8 +23,8 @@ namespace elec {
 		int _dateDay;
 		int _dateMonth;
 		int _dateYear;
-
-		DistrictList _districts;
+		vector<District*> _districts;
+		//DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
 		int NoChangeSinceLastCalc; //flag to check if current and last calculation of results is the same
@@ -92,6 +92,7 @@ namespace elec {
 		/// <param name="districtId">the district id of the dist the citizen live in</param>
 		/// <returns>returns true if party's rep was added, else false</returns>
 		bool addNewPartyRepresentative(int representId, int partyId, int districtId);
+		bool isDistcritExist(int id) const;
 		/// <summary>
 		/// prints all the Districts
 		/// </summary>
@@ -116,6 +117,7 @@ namespace elec {
 		/// </summary>
 		/// <returns>returns true if can calculate, else false</returns>
 		void theResults() throw(const string);
+		bool isCitizenExist(int id, int& distIndex) const;
 		/// <summary>
 		/// Saving election to file
 		/// </summary>
