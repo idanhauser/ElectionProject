@@ -62,39 +62,13 @@ namespace elec {
 
 
 
-	bool DistrictList::isCitizenExist(int id,int & distIndex) const 
-	{
-		distIndex = -1;
-		
-		bool found = false;
-		for (int i = 0; i < _logicSize && !found; ++i)
-		{
-			if (_districts[i]->isCitizenExist(id))
-			{
-				distIndex = i;
-				found = true;
-			}
-		}
-		return found;
-	}
+
 
 	int DistrictList::getLogicSize() const
 	{
 		return _logicSize;
 	}
 
-	bool DistrictList::isDistcritExist(int id) const 
-	{
-		bool found = false;
-		for (int i = 0; i < _logicSize && !found; ++i)
-		{
-			if (i == abs(id - DISTRICT_ID_INIT))
-			{
-				found = true;
-			}
-		}
-		return found;
-	}
 
 	const District& DistrictList::getDistcritByIndex(int index) const
 	{

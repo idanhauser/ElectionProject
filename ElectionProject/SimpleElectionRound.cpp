@@ -21,7 +21,7 @@ namespace elec
 		{
 			throw invalid_argument("Number of representatives cant be zero or negative.");
 		}
-		_districts.addToList(*dist);
+		_districts.push_back(dist);
 		_results.addDistrict();
 		_results.setDistrictsAmount();
 	}

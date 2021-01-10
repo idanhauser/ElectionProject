@@ -12,8 +12,8 @@ namespace elec
 		 ifstream _inFile;
 		 bool _isFileNotOk;
 	public:
-		LoadElectionSystem() = delete;
-		LoadElectionSystem(string fileName);
+		LoadElectionSystem()=default;
+		LoadElectionSystem(string fileName) noexcept(false);
 
 
 		///closing the file.

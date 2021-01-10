@@ -37,8 +37,8 @@ namespace elec {
 		//reading citizens:
  		for (int i = 0; i < numOfCitizens; ++i)
 		{
-			Citizen* dist = new Citizen(loader,*this);
-			_Citizens.addToList(*dist);
+			Citizen* citiz = new Citizen(loader,*this);
+			_citizens.push_back(citiz);
 		}
 		//reading numOfParties:
 		reader.read(rcastc(&_numOfParties), sizeof(int));
@@ -50,7 +50,7 @@ namespace elec {
 	}
 
 	District::District(string& name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(name),
-		_Citizens(CitizenList()), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _numOfParties(numOfParties), _repsByPartyLogicSize(numOfParties),
+		_citizens(), _votersPercentage(0), _repsByPartyID(new int[MAX_SIZE]), _numOfParties(numOfParties), _repsByPartyLogicSize(numOfParties),
 		 _repsByPartyPhySize(MAX_SIZE), _numOfReps(numOfReps), _electionResult(0),_numberOfVotesinDist(0)
 	{
 
@@ -81,14 +81,20 @@ namespace elec {
 		return false;
 	}
 
-	Citizen& District::getCitizenByIndex(int idx) 
+
+
+	const Citizen& District::getCitizenByIndex(int index) const
 	{
-		return _Citizens.getCitizenByIndex(idx);
+		if (index < _citizens.size())
+			return *_citizens.at(index);
 	}
-	const CitizenList& District::getEligibleCitizens() const
+
+	Citizen& District::getCitizenByIndex(int index)
 	{
-		return _Citizens;
+		if (index < _citizens.size())
+			return *_citizens.at(index);
 	}
+
 
 	const double District::getVotersPrecentage() const
 	{
@@ -102,20 +108,19 @@ namespace elec {
 
 	int District::getNumberOfCitizens() const
 	{
-		return _Citizens.getLogicSize();
+		return _citizens.size();
 	}
 
-	void District::addCitizen(Citizen* citz) noexcept(false)
+	void District::addCitizen(Citizen& citz) noexcept(false)
 	{
-		if (citz != nullptr)
-		{
-			_Citizens.addToList(*citz);
-		}
-		else
+	
+			_citizens.push_back(&citz);
+		
+	/*	else
 		{
 			string msg = "Add Citizen";
 			throw NullObjectException(msg);
-		}
+		}*/
 	}
 	
 	bool District::addRepToArr()
@@ -132,30 +137,33 @@ namespace elec {
 	//use only if you know that citizen exist
 	const Citizen& District::getCitizenById(int id) const
 	{
-		int savePlace = -1;
-		for (int j = 0; j < _Citizens.getLogicSize(); ++j)
+		
+		auto j = _citizens.begin();
+		bool found = false;
+		for (; j !=_citizens.end() && !found; ++j)
 		{
-			if (_Citizens.getCitizenByIndex(j).getCitizenID() == id)
+			if ((*j)->getCitizenID() == id)
 			{
-				savePlace = j;
+				found=true;
 
 			}
-		}
-		return _Citizens.getCitizenByIndex(savePlace);
+		}//todo: to check if works
+		return (**j);
 	}
 
 	Citizen& District::getCitizenById(int id)
 	{
-		int savePlace = -1;
-		int len = _Citizens.getLogicSize();
-		for (int j = 0; j < len && savePlace == -1; ++j)
+		auto j = _citizens.begin();
+		bool found = false;
+		for (; j != _citizens.end() && !found; ++j)
 		{
-			if (_Citizens.getCitizenByIndex(j).getCitizenID() == id)
+			if ((*j)->getCitizenID() == id)
 			{
-				savePlace = j;
+				found = true;
+
 			}
-		}
-		return _Citizens.getCitizenByIndex(savePlace);
+		}//todo: to check if works
+		return (**j);
 	}
 
 	int District::getNumOfReps() const
@@ -167,10 +175,10 @@ namespace elec {
 	bool District::isCitizenExist(int id) const
 	{
 		bool found = false;
-		int len = _Citizens.getLogicSize();
-		for (int i = 0; i < len && !found; ++i)
+
+		for (auto i = _citizens.begin(); i != _citizens.end() && !found; ++i)
 		{
-			if (_Citizens.getCitizenByIndex(i).getCitizenID() == id)
+			if ((*i)->getCitizenID() == id)
 			{
 				found = true;
 			}
@@ -185,9 +193,11 @@ namespace elec {
 	int District::getVotingCitizensAmountInDistrict() const
 	{
 		int counter = 0;
-		for (int i = 0; i < _Citizens.getLogicSize(); ++i)
+
+
+		for (auto i = _citizens.begin(); i!=_citizens.end(); ++i)
 		{
-			if (_Citizens.getCitizenByIndex(i).hasVoted())
+			if((*i)->hasVoted())
 			{
 				counter++;
 			}
@@ -223,13 +233,13 @@ namespace elec {
 		//saving _numberOfVotesinDist
 		outFile.write(rcastcc(&_numberOfVotesinDist), sizeof(int));
 		//save citizens list:
-		numOfCitizens = _Citizens.getLogicSize();
+		numOfCitizens = _citizens.size();
 		//saving citizens list's len
 		outFile.write(rcastcc(&numOfCitizens), sizeof(int));
 		//saving citizens:
-		for (int i = 0; i < numOfCitizens; ++i)
+		for (auto i = _citizens.begin(); i !=_citizens.end(); ++i)
 		{
-			_Citizens.getCitizenByIndex(i).save(outFile);
+			(*i)->save(outFile);
 		}
 		//saving numofParties:
 		outFile.write(rcastcc(&_numOfParties), sizeof(int));
@@ -283,6 +293,11 @@ namespace elec {
 		return true;
 	}
 
+	const vector<Citizen*>& District::getCitizens() const
+	{
+		return _citizens;
+	}
+
 	bool District::addDistToArr()
 	{
 		if (_repsByPartyLogicSize == _repsByPartyPhySize)
@@ -295,6 +310,9 @@ namespace elec {
 		return true;
 	}
 
+
+
+	
 	ostream& operator<<(ostream& os, const District& district)
 	{
 		os << "**********************************" << endl;

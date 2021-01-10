@@ -336,7 +336,6 @@ void addCitizen()
 	int birtyear, districtId = DISTRICT_ID_INIT;
 	string name;
 	int id;
-	const int currYear = election->getYear();
 
 	if (typeid(*election) == typeid(RegularElectionRound))
 	{
@@ -579,23 +578,19 @@ void saveElections()
 
 bool loadElection()
 {
-	bool loadedSuccessfully = true;
-	ifstream _inFile;
 
+	ifstream _inFile;
 
 
 	char fileName[MAX_SIZE];
 	cout << "Enter name of the file you want to load" << endl;
 	cin >> fileName;
+	try {
 
-	LoadElectionSystem loader(fileName);
-	if (!loader.CheckFile())
-	{
-		cout << "error infile" << endl;
-		loadedSuccessfully = false;
-	}
-	else
-	{
+		LoadElectionSystem loader(fileName);
+
+
+
 		delete election;
 		ElectionType type = loader.getElectionType();
 
@@ -607,9 +602,13 @@ bool loadElection()
 		{
 			election = new SimpleElectionRound(loader);
 		}
-
 	}
-	return loadedSuccessfully;
+		catch (const ifstream::failure& ex)
+		{
+			return false;
+		}
+		return true;
+
 
 }
 

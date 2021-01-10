@@ -29,7 +29,7 @@ namespace elec
 		{
 			UnifiedDistrict* dist = new UnifiedDistrict(name, numberRepresentatives, _parties.getLogicSize());
 			districtId = static_cast<UnifiedDistrict*>(dist)->getSerialNum();
-			districtAdded = _districts.addToList(*dist);
+			 _districts.push_back(dist);
 		}
 
 		else
@@ -37,7 +37,7 @@ namespace elec
 			DividedDistrict* dist = new DividedDistrict(name, numberRepresentatives, _parties.getLogicSize());
 
 			districtId = static_cast<DividedDistrict*>(dist)->getSerialNum();
-			districtAdded = _districts.addToList(*dist);
+			_districts.push_back(dist);
 		}
 		for (int i = 0; i < _parties.getLogicSize(); ++i)
 		{
