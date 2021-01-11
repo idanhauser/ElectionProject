@@ -247,7 +247,7 @@ namespace elec {
 		}
 	}
 
-	void ElectionRound::addNewPartyRepresentative(int representId, int partyId, int districtId)
+	void ElectionRound::addNewPartyRepresentative(int representId, int partyId, int districtId) noexcept(false)
 	{
 		int distIndex;
 		if (isCitizenExist(representId, distIndex))
@@ -259,7 +259,7 @@ namespace elec {
 				if (distExist && partyExist)
 				{
 					Party& currParty = *_parties[partyId];
-					represntAdded = currParty.addPartyMember(citizenReprenst, abs(DISTRICT_ID_INIT - districtId));
+					currParty.addPartyMember(citizenReprenst, abs(DISTRICT_ID_INIT - districtId));
 					citizenReprenst.setParty(&currParty);
 				}
 				else
@@ -458,7 +458,7 @@ namespace elec {
 		for (auto j = electionRound._districts.begin(); j != electionRound._districts.end(); ++j)
 		{
 
-			os << (*j) << endl;
+			os << (**j) << endl;
 			os << "each party got:" << endl;
 
 

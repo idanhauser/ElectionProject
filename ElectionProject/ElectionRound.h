@@ -86,7 +86,7 @@ namespace elec {
 		/// <param name="partyId">the ID of the party</param>
 		/// <param name="districtId">the district id of the dist the citizen live in</param>
 		/// <returns>returns true if party's rep was added, else false</returns>
-		bool addNewPartyRepresentative(int representId, int partyId, int districtId)noexcept(false);
+		void addNewPartyRepresentative(int representId, int partyId, int districtId)noexcept(false);
 		bool IsPartyExist(int partyId) const;
 		bool isDistcritExist(int id) const;
 		/// <summary>
