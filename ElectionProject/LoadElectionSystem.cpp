@@ -6,20 +6,22 @@ using namespace std;
 namespace elec
 {
 
-	LoadElectionSystem::LoadElectionSystem(string fileName) noexcept(false): _isFileNotOk(false)
+	LoadElectionSystem::LoadElectionSystem(string fileName) noexcept(false) : _isFileNotOk(false)
 	{
-		
+
 		try {
-			_inFile.close();
-			_inFile.exceptions(ifstream::badbit);
 			_inFile.open(fileName, ios::binary);
+			if (!_inFile.good())
+			{
+				throw "Error while opening the file";
+			}
 		}
-		catch(const ifstream::failure&ex)
+		catch (...)
 		{
-			cout << "Error while opening the file" << endl;
+			_isFileNotOk = false;
+			_inFile.close();
 			throw;
 		}
-		_isFileNotOk = false;
 	}
 
 	LoadElectionSystem::~LoadElectionSystem()

@@ -27,7 +27,7 @@ void viewParties();
 void voting();
 void results();
 void saveElections();
-bool loadElection();
+void loadElection();
 void StartMenu();
 
 bool isExit = false;
@@ -71,15 +71,16 @@ void StartMenu()
 			cout << "-------------" << endl;
 			cout << "Load election round from file" << endl;
 			cout << "-------------" << endl;
-			if (loadElection())
-			{
+			try {
+				loadElection();
 				cout << "Election was loaded successfully." << endl;
 				showMainMenu();
 			}
-			else
+			catch (const char* ex)
 			{
 				cout << "Election was not loaded successfully." << endl;
 			}
+
 			cout << endl;
 			break;
 		case Start_MenuChoices::exit_menu:
@@ -266,14 +267,16 @@ void showMainMenu()
 			cout << "-------------" << endl;
 			cout << "Load Election" << endl;
 			cout << "-------------" << endl;
-			if (loadElection())
-			{
+			try {
+				loadElection();
 				cout << "Election was loaded successfully." << endl;
 			}
-			else
+			catch (...)
 			{
 				cout << "Election was not loaded successfully." << endl;
+				return;
 			}
+		
 			cout << endl;
 			break;
 		default:
@@ -349,62 +352,62 @@ void addCitizen()
 	}
 
 
-		try {
-			if (election->getYear() - birtyear < 18)
-			{
-				throw AgeException(birtyear, election->getYear());
-
-			}
+	try {
+		if (election->getYear() - birtyear < 18)
+		{
+			throw AgeException(birtyear, election->getYear());
 
 		}
-		catch (AgeException& e)
-		{
-			e.Error();
-			cout << e.getMessage();
-		}
-		try {
-			const int lenofId = checkLen(id);
-			if (lenofId != 9)
-			{
-				throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
-			}
-		}
-		catch (exception& ex)
-		{
-			cout <<"Error : " <<ex.what();
-			cout << "Citizen wasn't added";
-			return;
-		}
-		try {
-			if (name.find_first_not_of(' ') == std::string::npos)
-			{
-				throw invalid_argument("Invalid name: empty name.");
-			}
-		}
-		catch (exception& ex)
-		{
-			cout << "Error:" << ex.what() << endl;
-			cout << "Citizen wasn't added";
-			return;
-		}
-		try {
-			if (name.find_first_of("0123456789") != std::string::npos)
-			{
-				throw invalid_argument("Name contains digits");
 
-			}
-		}
-		catch (exception& ex)
+	}
+	catch (AgeException& e)
+	{
+		e.Error();
+		cout << e.getMessage();
+	}
+	try {
+		const int lenofId = checkLen(id);
+		if (lenofId != 9)
 		{
-			cout << "Error:" << ex.what() << endl;
-			cout << "Citizen wasn't added";
-			return;
+			throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
 		}
-		try {
-			election->addNewCitizen(name, id, birtyear, districtId);
-			cout << "Citizen " << name << " added." << endl;
+	}
+	catch (exception& ex)
+	{
+		cout << "Error : " << ex.what();
+		cout << "Citizen wasn't added";
+		return;
+	}
+	try {
+		if (name.find_first_not_of(' ') == std::string::npos)
+		{
+			throw invalid_argument("Invalid name: empty name.");
 		}
-	catch(ElectionSystemException& ex)
+	}
+	catch (exception& ex)
+	{
+		cout << "Error:" << ex.what() << endl;
+		cout << "Citizen wasn't added";
+		return;
+	}
+	try {
+		if (name.find_first_of("0123456789") != std::string::npos)
+		{
+			throw invalid_argument("Name contains digits");
+
+		}
+	}
+	catch (exception& ex)
+	{
+		cout << "Error:" << ex.what() << endl;
+		cout << "Citizen wasn't added";
+		return;
+	}
+	try {
+		election->addNewCitizen(name, id, birtyear, districtId);
+		cout << "Citizen " << name << " added." << endl;
+	}
+	catch (ElectionSystemException& ex)
 	{
 		ex.Error();
 		cout << "ERROR :" << ex.getMessage();
@@ -457,10 +460,10 @@ void addParty()
 		election->addNewParty(name, idPd, partyId);
 		cout << "Party " << name << " added.\nAnd its id is " << partyId << endl;
 	}
-	catch(ElectionSystemException&ex)
+	catch (ElectionSystemException& ex)
 	{
 		ex.Error();
-		cout<<ex.getMessage()<<endl;
+		cout << ex.getMessage() << endl;
 		cout << "Error:Party leader doesn't exist" << endl;
 	}
 }
@@ -478,20 +481,28 @@ void addPartyRepresentative()
 		cout << "Insert a representative citizen's id, party's id:" << endl;
 		cin >> representId >> partyId;
 	}
-	if (!election->addNewPartyRepresentative(representId, partyId, districtId))
-	{
-		if (typeid(*election) == typeid(RegularElectionRound)) {
-			cout << "Error:Citizen and/or district and/or party doesn't exist." << endl;
-		}
-		else
-		{
-			cout << "Error:Citizen and/or party doesn't exist." << endl;
-		}
+	try {
+		election->addNewPartyRepresentative(representId, partyId, districtId);
 	}
-	else
+	catch(ElectionSystemException&ex)
 	{
-		cout << "Party's representative added." << endl;
+		ex.Error();
+		cout << ex.getMessage() << endl;
+		cout << "Party's representative wasn't added." << endl;
+		return;
 	}
+	cout << "Party's representative added." << endl;
+
+	//{
+	//	if (typeid(*election) == typeid(RegularElectionRound)) {
+	//		cout << "Error:Citizen and/or district and/or party doesn't exist." << endl;
+	//	}
+	//	else
+	//	{
+	//		cout << "Error:Citizen and/or party doesn't exist." << endl;
+	//	}
+	//}
+
 
 
 }
@@ -541,16 +552,30 @@ void voting()
 	int partyId, citizenId;
 	cout << "Insert a citizen's id and the party's id he wants to vote to:" << endl;
 	cin >> citizenId >> partyId;
-	if (!election->votingAction(citizenId, partyId))
-	{
-		cout << "Error:Citizen already voted or citizen doesn't exist" << endl;
+	try {
+		const int lenofId = checkLen(citizenId);
+		if (lenofId != 9)
+		{
+			throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+		}
+
+
+		if (!election->votingAction(citizenId, partyId))
+		{
+			cout << "Error:Citizen already voted or citizen doesn't exist" << endl;
+		}
+		else
+		{
+			cout << "Vote was successful inserted." << endl;
+		}
 	}
-	else
-	{
-		cout << "Vote was successful inserted." << endl;
+		catch (const exception&ex)
+		{
+			cout << "Error " << ex.what();
+			return;
+		}
 	}
 
-}
 
 void results()
 {
@@ -561,7 +586,7 @@ void results()
 	}
 	catch (ResultsException msg)
 	{
-		cout <<  msg.getMessage() << endl;
+		cout << msg.getMessage() << endl;
 	}
 }
 
@@ -583,7 +608,7 @@ void saveElections()
 	cout << "election system saved successfully." << endl;
 }
 
-bool loadElection()
+void loadElection()
 {
 
 	ifstream _inFile;
@@ -610,13 +635,11 @@ bool loadElection()
 			election = new SimpleElectionRound(loader);
 		}
 	}
-		catch (const ifstream::failure& ex)
-		{
-			return false;
-		}
-		return true;
-
-
+	catch (const char* ex)
+	{
+		cout << ex;
+		throw;
+	}
 }
 
 
