@@ -49,7 +49,10 @@ namespace elec {
 
 	District::~District()
 	{
-		
+		for (auto j = _citizens.begin(); j != _citizens.end(); ++j)
+		{
+			delete (*j);
+		}
 	}
 
 	const string& District::getName() const
@@ -111,9 +114,9 @@ namespace elec {
 	
 	
 	//use only if you know that citizen exist
-	const Citizen& District::getCitizenById(int id) const
+	const Citizen& District::getCitizenById(int id) const noexcept(false)
 	{
-		
+		const Citizen* cit = nullptr;
 		auto j = _citizens.begin();
 		bool found = false;
 		for (; j !=_citizens.end() && !found; ++j)
@@ -121,25 +124,35 @@ namespace elec {
 			if ((*j)->getCitizenID() == id)
 			{
 				found=true;
-
+				cit = (*j);
 			}
-		}//todo: to check if works
-		return (**j);
+		}
+		if (found)
+		{
+			return *cit;
+		}
+		throw CitizenNotExistException(id);
 	}
 
-	Citizen& District::getCitizenById(int id)
+	Citizen& District::getCitizenById(int id) noexcept(false)
 	{
+		Citizen* cit = nullptr;
 		auto j = _citizens.begin();
 		bool found = false;
 		for (; !found && j != _citizens.end(); ++j)
 		{
 			if ((*j)->getCitizenID() == id)
 			{
-				break;
-				//todo: fix - not working for last citizen in the vector when using "found=true" instead break
+				found = true;
+				cit = (*j);
 			}
-		}//todo: to check if works
-		return *j.operator*();
+		}
+		if(found)
+		{
+			return *cit;
+		}
+		throw CitizenNotExistException(id);
+		
 	}
 
 	int District::getNumOfReps() const

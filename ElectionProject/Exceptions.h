@@ -279,6 +279,26 @@ namespace elec
 		int _id;
 	};
 
+	class PartyNotExistException :public ElectionSystemException
+	{
+
+	public:
+		explicit PartyNotExistException(int id)
+			: _id(id)
+		{
+		}
+
+		virtual ~PartyNotExistException() = default;
+
+		virtual void Error() override
+		{
+			ElectionSystemException::Error();
+			_output.append(" The party with id :" + to_string(_id) + " wasn't found.\n");
+		}
+	private:
+		int _id;
+	};
+
 
 
 

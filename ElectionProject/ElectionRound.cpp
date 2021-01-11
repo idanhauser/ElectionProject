@@ -20,6 +20,14 @@ namespace elec {
 		setDate(date_d, date_m, date_y);
 	}
 
+	ElectionRound::~ElectionRound()
+	{
+		for (auto j = _districts.begin(); j != _districts.end(); ++j)
+		{
+			delete* j;
+		}
+	}
+
 	ElectionRound::ElectionRound(LoadElectionSystem& loader) /*: _districts(), _parties(), _results(0, 0)*/
 	{
 		bool represntAdded;
@@ -69,16 +77,22 @@ namespace elec {
 			//reading partyLeaderId:
 			reader.read(rcastc(&partyLeaderId), sizeof(int));
 			if (isCitizenExist(partyLeaderId, indexOfDist)) {
-				Party* party = new Party(loader, _districts.at(indexOfDist)->getCitizenById(partyLeaderId), numberOfdist);
-				_parties.push_back(party);
-
+				try {
+					Party* party = new Party(loader, _districts.at(indexOfDist)->getCitizenById(partyLeaderId), numberOfdist);
+					_parties.push_back(party);
+				}
+				catch (CitizenNotExistException&ex)
+				{
+					ex.Error();
+					cout << "Error at loading data" << ex.getMessage();
+				}
 			}
 		}
 		//	cout << "read parties done" << endl;
 
 		//cout << "resultarr" << endl;
 		//Reading _votesByIDs:
-		_results= resultsArr(loader);
+		_results = resultsArr(loader);
 
 		string output;
 		//-------------------------------------------------------------------------
@@ -185,8 +199,8 @@ namespace elec {
 		{
 			if (isDistcritExist(districtId))
 			{
-				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, *_districts.at(districtId-DISTRICT_ID_INIT));
-				_districts.at(districtId-DISTRICT_ID_INIT)->addCitizen(*citiz);//need to check if added susccessfuly.
+				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, *_districts.at(districtId - DISTRICT_ID_INIT));
+				_districts.at(districtId - DISTRICT_ID_INIT)->addCitizen(*citiz);//need to check if added susccessfuly.
 			}
 			else
 			{
@@ -210,15 +224,21 @@ namespace elec {
 		Citizen* leader = nullptr;
 		if (isCitizenExist(pdId, distIndex))
 		{
-			leader = &(_districts.at(distIndex)->getCitizenById(pdId));
-			Party* par = new Party(name, pdId, _districts.size(), *leader);
-			partyId = par->getPartyID();
-			leader->setParty(par);
-			_parties.push_back(par);
-			_results.addParty(_parties.size(), _districts.size());
-			for (auto j = _districts.begin(); j != _districts.end(); ++j)
+			try {
+				leader = &(_districts.at(distIndex)->getCitizenById(pdId));
+				Party* par = new Party(name, pdId, _districts.size(), *leader);
+				partyId = par->getPartyID();
+				leader->setParty(par);
+				_parties.push_back(par);
+				_results.addParty(_parties.size(), _districts.size());
+				for (auto j = _districts.begin(); j != _districts.end(); ++j)
+				{
+					(*j)->updateRepsArr();
+				}
+			}
+			catch (...)
 			{
-				(*j)->updateRepsArr();
+				throw;
 			}
 		}
 		else
@@ -227,21 +247,39 @@ namespace elec {
 		}
 	}
 
-	bool ElectionRound::addNewPartyRepresentative(int representId, int partyId, int districtId)
+	void ElectionRound::addNewPartyRepresentative(int representId, int partyId, int districtId)
 	{
 		int distIndex;
-		bool represntAdded = false;
 		if (isCitizenExist(representId, distIndex))
 		{
-			Citizen& citizenReprenst = _districts.at(distIndex)->getCitizenById(representId);
-			if (isDistcritExist(districtId) &&  IsPartyExist(partyId))
+			try {
+				Citizen& citizenReprenst = _districts.at(distIndex)->getCitizenById(representId);
+				bool distExist = isDistcritExist(districtId);
+				bool partyExist = IsPartyExist(partyId);
+				if (distExist && partyExist)
+				{
+					Party& currParty = *_parties[partyId];
+					represntAdded = currParty.addPartyMember(citizenReprenst, abs(DISTRICT_ID_INIT - districtId));
+					citizenReprenst.setParty(&currParty);
+				}
+				else
+				{
+					if(!partyExist)
+					{
+						throw PartyNotExistException(partyId);
+					}
+					else
+					{
+						throw DistcritsNotExistException(districtId);
+					}
+				}
+			}
+			catch (CitizenNotExistException& ex)
 			{
-				Party& currParty = *_parties[partyId];
-				represntAdded = currParty.addPartyMember(citizenReprenst, abs(DISTRICT_ID_INIT - districtId));
-				citizenReprenst.setParty(&currParty);
+				ex.Error();
+				cout << ex.getMessage() << endl;
 			}
 		}
-		return represntAdded;
 
 	}
 
@@ -327,9 +365,9 @@ namespace elec {
 	{
 		if (!_districts.empty())
 		{
-			for (auto i = _districts.begin(); i !=_districts.end(); ++i)
+			for (auto i = _districts.begin(); i != _districts.end(); ++i)
 			{
-			
+
 				if (!(*i)->getCitizens().empty())
 					cout << "The citizens who live in " << (*i)->getName() << " are: " << endl;
 
@@ -372,9 +410,10 @@ namespace elec {
 		if (isCitizenExist(citizenId, distIndex) && (IsPartyExist(partyId)))
 		{
 			District& tempDistrict = *_districts.at(distIndex);
-			Citizen& tempCitizen = tempDistrict.getCitizenById(citizenId);
-			if (tempCitizen.hasVoted() == false) {
-				tempCitizen.setHasVoted(true);
+			try {
+				Citizen& tempCitizen = tempDistrict.getCitizenById(citizenId);
+				if (tempCitizen.hasVoted() == false) {
+					tempCitizen.setHasVoted(true);
 
 				_results.AddSingleVoteToArr(partyId, tempCitizen.getDistrictNum());
 				tempDistrict.setVotersPrecentage(static_cast<double>(static_cast<double>(tempDistrict.getVotingCitizensAmountInDistrict()) / static_cast<double>(tempDistrict.getNumberOfCitizens()) * 100));
@@ -383,10 +422,16 @@ namespace elec {
 					static_cast<double>(_districts.at(distIndex)->getVotingCitizensAmountInDistrict()) * 100);
 				_parties[partyId - PARTY_ID_INIT]->setVotingPercentagesDistrict(votingForPartyFromVotersInDistrictPrecentage, distIndex + DISTRICT_ID_INIT);
 
+				}
+				else
+				{
+					isVotedCheck = false;
+				}
 			}
-			else
+			catch(CitizenNotExistException& ex)
 			{
-				isVotedCheck = false;
+				ex.Error();
+				cout << ex.getMessage();
 			}
 		}
 		else
@@ -400,7 +445,7 @@ namespace elec {
 
 	void ElectionRound::theResults() throw(const string)
 	{
-			calcReps();
+		calcReps();
 	}
 
 	ostream& operator<<(ostream& os, ElectionRound& electionRound) {
@@ -444,7 +489,7 @@ namespace elec {
 				for (int m = 0; m < partiesAmount; m++)
 				{
 					vector<int> partyIndexesSotedByReps(partiesAmount);
-					for (auto w = electionRound._districts.begin(); w != electionRound._districts.end(); ++w) 
+					for (auto w = electionRound._districts.begin(); w != electionRound._districts.end(); ++w)
 					{
 						electionRound.sortDistrictWinners((*w)->getSerialNum(), partyIndexesSotedByReps);
 					}
@@ -588,7 +633,7 @@ namespace elec {
 		_districts.at(districtID-DISTRICT_ID_INIT)->setLeader(&(_parties[leaderWithMostRepsPartyID]->getPartyLeader()));
 		for (int i = 0; i < _parties.size(); i++)
 		{
-			_districts.at(districtID-DISTRICT_ID_INIT)->setRepsArrByPartyID(i, 0);
+			_districts.at(districtID - DISTRICT_ID_INIT)->setRepsArrByPartyID(i, 0);
 		}
 		_districts.at(districtID - DISTRICT_ID_INIT)->setRepsArrByPartyID(
 			leaderWithMostRepsPartyID, _districts.at(districtID - DISTRICT_ID_INIT)->getNumOfReps());
