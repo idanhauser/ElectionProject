@@ -40,6 +40,16 @@ namespace elec {
 	}
 	Party::~Party()
 	{
+		for(int i=0;i<_representativesByDist.size();i++)
+		{
+			for (int j = 0; j < _representativesByDist[i].size(); j++)
+				delete _representativesByDist[i][j];
+
+		}
+		for (int n = 0; n < _partyMembers.size(); n++)
+		{
+			delete _partyMembers[n];
+		}
 	}
 
 
