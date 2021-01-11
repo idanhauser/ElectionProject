@@ -4,7 +4,6 @@
 #include <fstream>
 #include <iostream>
 #include "Citizen.h"
-#include "CitizenList.h"
 
 
 namespace elec {

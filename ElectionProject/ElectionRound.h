@@ -2,9 +2,7 @@
 #pragma once
 #include "resultsArr.h"
 #include <string>
-
-#include "DistrictList.h"
-#include "PartyList.h"
+#include "Party.h"
 #include "Citizen.h"
 #include "District.h"
 #include <algorithm>
@@ -14,8 +12,6 @@ using namespace std;
 
 namespace elec {
 	class LoadElectionSystem;
-	class DistrictList;
-	class PartyList;
 
 	class ElectionRound
 	{
@@ -24,8 +20,7 @@ namespace elec {
 		int _dateMonth;
 		int _dateYear;
 		vector<District*> _districts;
-		//DistrictList _districts;
-		PartyList _parties;
+		vector<Party*> _parties;
 		resultsArr _results;
 		int NoChangeSinceLastCalc; //flag to check if current and last calculation of results is the same
 
@@ -92,6 +87,7 @@ namespace elec {
 		/// <param name="districtId">the district id of the dist the citizen live in</param>
 		/// <returns>returns true if party's rep was added, else false</returns>
 		bool addNewPartyRepresentative(int representId, int partyId, int districtId);
+		bool IsPartyExist(int partyId) const;
 		bool isDistcritExist(int id) const;
 		/// <summary>
 		/// prints all the Districts

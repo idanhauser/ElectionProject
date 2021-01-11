@@ -57,12 +57,13 @@ namespace elec
 
 	void Citizen::setParty(const Party* party)  noexcept(false)
 	{
-		if (party != nullptr)
+		if (party == nullptr)
 		{
-			_party = party;
-			_partyId = party->getPartyID();
+			throw "Couldn't set party to citizen.";
 		}
-		throw "Couldn't set party to citizen.";
+		_party = party;
+		_partyId = party->getPartyID();
+
 	}
 
 	bool Citizen::setHasVoted(bool voted)

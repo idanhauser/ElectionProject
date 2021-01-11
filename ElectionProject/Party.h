@@ -1,12 +1,11 @@
 ﻿//code verison 3.1
 #pragma once
 #include "Utils.h"
-#include "CitizenList.h"
 #include "LoadElectionSystem.h"
 #include <string>
+#include "Citizen.h"
 namespace elec
 {
-	class CitizenList;
 	class Party
 	{
 	private:
@@ -33,7 +32,6 @@ namespace elec
 		~Party();
 		friend ostream& operator<<(ostream& os, const Party& party);
 
-		friend class PartyList;
 	
 		bool setPMCandidateID(int idNums);
 		bool setVotingPercentagesDistrict(double num, int districtID);

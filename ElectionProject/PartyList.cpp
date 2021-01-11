@@ -37,16 +37,4 @@ namespace elec {
 			return *_parties[index];
 	}
 
-	bool PartyList::IsPartyExist(int partyId) const
-	{
-		bool found = false;
-		for (int i = 0; i < _parties.size() && !found; ++i)
-		{
-			if (i == abs(partyId - PARTY_ID_INIT))
-			{
-				found = true;
-			}
-		}
-		return found;
-	}
 }

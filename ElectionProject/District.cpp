@@ -5,7 +5,6 @@
 #include <string>
 #include "Citizen.h"
 #include <iostream>
-#include "CitizenList.h"
 #include "Exceptions.h"
 #include "LoadElectionSystem.h"
 using namespace std;
@@ -132,15 +131,15 @@ namespace elec {
 	{
 		auto j = _citizens.begin();
 		bool found = false;
-		for (; j != _citizens.end() && !found; ++j)
+		for (; !found && j != _citizens.end(); ++j)
 		{
 			if ((*j)->getCitizenID() == id)
 			{
-				found = true;
-
+				break;
+				//todo: fix - not working for last citizen in the vector when using "found=true" instead break
 			}
 		}//todo: to check if works
-		return (**j);
+		return *j.operator*();
 	}
 
 	int District::getNumOfReps() const

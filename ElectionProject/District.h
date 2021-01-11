@@ -3,7 +3,6 @@
 #pragma once
 #include <vector>
 
-#include "CitizenList.h"
 using namespace std;
 #include <string>
 #include <vector>
@@ -11,7 +10,6 @@ using namespace std;
 namespace elec
 {
 	class LoadElectionSystem;
-	class CitizenList;
 	class Citizen;
 
 	class District

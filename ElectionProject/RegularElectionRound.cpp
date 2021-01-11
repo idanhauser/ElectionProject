@@ -27,21 +27,21 @@ namespace elec
 		bool districtAdded;
 		if (districtType == DistcritType::UnifiedDistrict)
 		{
-			UnifiedDistrict* dist = new UnifiedDistrict(name, numberRepresentatives, _parties.getLogicSize());
+			UnifiedDistrict* dist = new UnifiedDistrict(name, numberRepresentatives, _parties.size());
 			districtId = static_cast<UnifiedDistrict*>(dist)->getSerialNum();
 			 _districts.push_back(dist);
 		}
 
 		else
 		{
-			DividedDistrict* dist = new DividedDistrict(name, numberRepresentatives, _parties.getLogicSize());
+			DividedDistrict* dist = new DividedDistrict(name, numberRepresentatives, _parties.size());
 
 			districtId = static_cast<DividedDistrict*>(dist)->getSerialNum();
 			_districts.push_back(dist);
 		}
-		for (int i = 0; i < _parties.getLogicSize(); ++i)
+		for (int i = 0; i < _parties.size(); ++i)
 		{
-			_parties.getPartyByIndex(i).updateDistricts();
+			_parties[i]->updateDistricts();
 		}
 		_results.addDistrict(_districts.size());
 
