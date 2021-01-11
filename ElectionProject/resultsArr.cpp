@@ -3,11 +3,13 @@
 #include "Utils.h"
 #include "Party.h"
 #include <algorithm>
+#include <vector>
+#include <utility>
 #include "LoadElectionSystem.h"
 using namespace std;
 namespace elec
 {
-	
+
 	resultsArr::resultsArr(LoadElectionSystem& loader)
 	{
 		ifstream& reader = loader.getReader();
@@ -34,7 +36,7 @@ namespace elec
 		{
 			fill(repsInVec.begin(), repsInVec.end(), 0);
 		});
-		
+
 	}
 
 	void resultsArr::AddSingleVoteToArr(int party_id, int district_id)
@@ -51,8 +53,8 @@ namespace elec
 
 	int resultsArr::getDistrictNumberOfVotesInParty(int partyID, int districtSN)const
 	{
-		int value= _votesByIDs[partyID][districtSN - DISTRICT_ID_INIT];
-		if(value<0)
+		int value = _votesByIDs[partyID][districtSN - DISTRICT_ID_INIT];
+		if (value < 0)
 		{
 			return 0;
 		}
@@ -62,7 +64,7 @@ namespace elec
 	int resultsArr::getTotalPartyNumberOfVotes(int partyID) const
 	{
 		int res = 0;
-		for (int i = 0; i < _votesByIDs[partyID-PARTY_ID_INIT].size(); i++)
+		for (int i = 0; i < _votesByIDs[partyID - PARTY_ID_INIT].size(); i++)
 		{
 			res = res + getDistrictNumberOfVotesInParty(partyID, i + DISTRICT_ID_INIT);
 		}
@@ -77,7 +79,7 @@ namespace elec
 	{
 		return _repsPartiesByID[partyId];
 	}
-	
+
 	int resultsArr::getPmsRepsTotalByDistrictID(int districtID) const
 	{
 		int res = 0;
@@ -123,7 +125,8 @@ namespace elec
 	{
 		//saving _votesByIDs:
 		int size = _votesByIDs.size();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < size; i++)
+		{
 			for (int j = 0; j < _votesByIDs[i].size(); j++)
 			{
 				outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
@@ -136,12 +139,14 @@ namespace elec
 		if (this != &other)
 		{
 			vector<vector<int>> _votesByIDs;
-			for (int i = 0; i < _votesByIDs.size(); i++) {
+			for (int i = 0; i < _votesByIDs.size(); i++)
+			{
 				for (int j = 0; j < _votesByIDs[i].size(); j++)
 					_votesByIDs[i][j] = other._votesByIDs[i][j];
 			}
 			vector<vector<int>> _repsPartiesByID;
-			for (int i = 0; i < _repsPartiesByID.size(); i++) {
+			for (int i = 0; i < _repsPartiesByID.size(); i++)
+			{
 				for (int j = 0; j < _repsPartiesByID[i].size(); j++)
 					_repsPartiesByID[i][j] = other._repsPartiesByID[i][j];
 			}
@@ -160,8 +165,8 @@ namespace elec
 		vector<int> districtsForRepsVec(districtsAmount);
 		_repsPartiesByID.push_back(districtsForRepsVec);
 
-		 _PMsRepsTotalByPartyID.resize(_PMsRepsTotalByPartyID.size() + 1);
-		
+		_PMsRepsTotalByPartyID.resize(_PMsRepsTotalByPartyID.size() + 1);
+
 		return true;
 
 	}
@@ -187,12 +192,13 @@ namespace elec
 		return true;
 
 	}
-	
+
 	bool resultsArr::VotesToRepsInDistrictByDistrictID(int districtID, int repsAmount, District* district) noexcept(false) {
 		try
 		{
 			int _partiesLogicSize = _votesByIDs.size();
-			pair* leftForPartyForElector = new pair[_partiesLogicSize];
+			vector<pair<int, double>> leftForPartyForElector;
+			//pair* leftForPartyForElector = new pair[_partiesLogicSize];
 			int allVotesInDis = 0;
 			for (int n = 0; n < _partiesLogicSize; n++)
 			{
@@ -213,62 +219,63 @@ namespace elec
 						amountOfElectedFromDistrict = 0;
 					AddToPMRepsCount(districtID, i, amountOfElectedFromDistrict);
 					if (amountOfElectedFromDistrict == repsAmount)
-						leftForPartyForElector[i].repsAmount = 0;
+						leftForPartyForElector.at(i).second = 0;
 					else
-						leftForPartyForElector[i].repsAmount = getDistrictNumberOfVotesInParty(i, districtID) -
+						leftForPartyForElector.at(i).second = getDistrictNumberOfVotesInParty(i, districtID) -
 						double(amountOfElectedFromDistrict * minVotesForRep);
-					leftForPartyForElector[i].index = i;
+					leftForPartyForElector.at(i).first = i;
 				}
 				int leftReps = repsAmount;
 				for (int k = 0; k < _partiesLogicSize; k++)
 				{
 					leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
 				}
-				bubbleSort(leftForPartyForElector, _partiesLogicSize);
+				sort(leftForPartyForElector.begin(), leftForPartyForElector.end());
+				//	bubbleSort(leftForPartyForElector, _partiesLogicSize);
 				for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
 				{
-					AddToPMRepsCount(districtID, leftForPartyForElector[l].index, 1);
+					AddToPMRepsCount(districtID, leftForPartyForElector.at(l).first, 1);
 				}
 				// copy all values from _repsPartiesByID[districtID] to parameter "district" reps member
 				for (int i = 0; i < _partiesLogicSize; i++)
 				{
 					district->setRepsArrByPartyID(i, getPMNumberOfRepsInDistrict(districtID, i));
 				}
-				delete[] leftForPartyForElector;
+				//	delete[] leftForPartyForElector;
 			}
 			return true;
 		}
-		catch(bad_alloc& ex)
+		catch (bad_alloc& ex)
 		{
 			throw ex;
 		}
 	}
-	
-
-
-	void resultsArr::swap(pair* xp, pair* yp)
-	{
-		pair temp = *xp;
-		*xp = *yp;
-		*yp = temp;
-	}
 
 
 
+	//void resultsArr::swap(pair* xp, pair* yp)
+	//{
+	//	pair temp = *xp;
+	//	*xp = *yp;
+	//	*yp = temp;
+	//}
 
 
 
-	void resultsArr::bubbleSort(pair arr[], int n)
-	{
-		int i, j;
-		for (i = 0; i < n - 1; i++)
-		{
-			for (j = 0; j < n - i - 1; j++)
-			{
-				if (arr[j] > arr[j + 1])
-					swap(&arr[j], &arr[j + 1]);
-			}
-		}
-	}
+
+
+
+	//void resultsArr::bubbleSort(pair arr[], int n)
+	//{
+	//	int i, j;
+	//	for (i = 0; i < n - 1; i++)
+	//	{
+	//		for (j = 0; j < n - i - 1; j++)
+	//		{
+	//			if (arr[j] > arr[j + 1])
+	//				swap(&arr[j], &arr[j + 1]);
+	//		}
+	//	}
+	//}
 
 }
