@@ -14,15 +14,15 @@ namespace elec {
 
 	Party::Party(const string& partyName, int PMCandidateID, int numOfDist, Citizen& partyLeader) : _partyID(pdGenerator++),
 		_name(partyName),
-		_PMCandidateID(PMCandidateID), _partyMembers(new CitizenList()), _representativesByDist(new CitizenList[numOfDist]),
+		_PMCandidateID(PMCandidateID), _partyMembers(0), _representativesByDist(numOfDist),
 		_partyLeader(partyLeader), _VotingPercentagesDistrict(numOfDist)
 	{
-		_partyMembers->addToList(partyLeader);
+		_partyMembers.push_back(&partyLeader);
 
 	}
 
-	Party::Party(LoadElectionSystem& loader, Citizen& partyLeader, int numOfDist): _partyMembers(new CitizenList()),
-		_representativesByDist(new CitizenList[numOfDist]), _partyLeader(partyLeader)
+	Party::Party(LoadElectionSystem& loader, Citizen& partyLeader, int numOfDist): _partyMembers(0),
+		_representativesByDist(numOfDist), _partyLeader(partyLeader)
 	{
 		ifstream& reader = loader.getReader();
 		//Reading serial num of party _partyID:
@@ -40,6 +40,16 @@ namespace elec {
 	}
 	Party::~Party()
 	{
+		for(int i=0;i<_representativesByDist.size();i++)
+		{
+			for (int j = 0; j < _representativesByDist[i].size(); j++)
+				delete _representativesByDist[i][j];
+
+		}
+		for (int n = 0; n < _partyMembers.size(); n++)
+		{
+			delete _partyMembers[n];
+		}
 	}
 
 
@@ -53,9 +63,9 @@ namespace elec {
 		return _partyID;
 	}
 
-	bool Party::addToRepByDists(CitizenList& reps, int district)
+	bool Party::addToRepByDists(Citizen* reps, int district)
 	{
-		_representativesByDist[district] = reps;
+		_representativesByDist[district].push_back(reps);
 		return true;
 	}
 
@@ -69,15 +79,16 @@ namespace elec {
 		return _PMCandidateID;
 	}
 
-	const CitizenList& Party::getPartyMembers() const
+	const vector<Citizen*> Party::getPartyMembers() const
 	{
 
-		return *_partyMembers;
+		return _partyMembers;
 	}
 
-	bool Party::addToMembers(Citizen& citizen) 
+	bool Party::addToMembers(Citizen* citizen) 
 	{
-		return _partyMembers->addToList(citizen);
+		_partyMembers.push_back(citizen);
+		return true;
 	}
 
 
@@ -92,9 +103,9 @@ namespace elec {
 	string Party::printPartyRepsFromDistrictByAmount(int num, int districtID) const
 	{
 		string output;
-		CitizenList& represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];
-		int amountToPrint = min(num, represnts.getLogicSize());
-		if(amountToPrint==0)
+		vector<Citizen*> represnts = _representativesByDist[abs(districtID - DISTRICT_ID_INIT)];
+		int amountToPrint = min(num, int(represnts.size()));
+		if (amountToPrint == 0)
 		{
 			output.append("\n The are no any representatives.(user didn't add any representatives). \n");
 		}
@@ -103,7 +114,7 @@ namespace elec {
 			cout << "And they are:" << endl;
 			for (int i = 0; i < amountToPrint; ++i)
 			{
-				cout << (represnts.getCitizenByIndex(i)).getCitizenName() << endl;
+				cout << represnts[i]->getCitizenName() << endl;
 			}
 		}
 		output += "**********************************\n";
@@ -113,7 +124,8 @@ namespace elec {
 
 	bool Party::addToRepresentativesByDis(Citizen& citizen, int distIndex) 
 	{
-		return  _representativesByDist[distIndex].addToList(citizen);
+		_representativesByDist[distIndex].push_back(&citizen);
+		return true;
 	}
 
 	Citizen& Party::getPartyLeader() const
@@ -147,7 +159,7 @@ namespace elec {
 		
 	}
 
-	CitizenList* Party::getRepresentativesByDis() const
+	vector<vector<Citizen*>> Party::getRepresentativesByDis() const
 	{
 		return _representativesByDist;
 	}
@@ -163,7 +175,7 @@ namespace elec {
 	{
 		bool addtodis = false, addtomembers = false;
 		addtodis = addToRepresentativesByDis(citizen, distIndex);
-		addtomembers = addToMembers(citizen);
+		addtomembers = addToMembers(&citizen);
 		return addtomembers && addtodis;
 	}
 
@@ -181,12 +193,12 @@ namespace elec {
 		os << "**********************************" << endl;
 		os << party._name << ","<< static_cast<int>(party._partyID) << endl<<"The party leader candidate name and ID is " << party.getPartyLeader().getCitizenName() << ", " <<
 			static_cast<int>(party.getPartyPMCandidateID()) << "." << endl << "Party members are:" << endl;
-		int sizeOfPartyMemberList = party.getPartyMembers().getLogicSize();
+		int sizeOfPartyMemberList = party.getPartyMembers().size();
 		if (sizeOfPartyMemberList > 1)
 		{
 			for (int i = 1; i < sizeOfPartyMemberList; ++i)
 			{
-				os << party.getPartyMembers().getCitizenByIndex(i).getCitizenName() << endl;
+				os << party.getPartyMembers()[i]->getCitizenName() << endl;
 			}
 		}
 		else
