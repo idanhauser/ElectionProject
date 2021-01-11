@@ -270,10 +270,10 @@ namespace elec {
 	
 
 		int i;
-		int len = _districts.getLogicSize();
+		int len = _districts.size();
 		for (i = 0; i < len; i++)
 		{
-			cout << _districts.getDistcritByIndex(i) << endl;
+			cout << _districts[i] << endl;
 		}
 
 		if (i == 0)
