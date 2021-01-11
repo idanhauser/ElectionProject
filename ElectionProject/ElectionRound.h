@@ -24,7 +24,6 @@ namespace elec {
 		int _dateMonth;
 		int _dateYear;
 		vector<District*> _districts;
-		//DistrictList _districts;
 		PartyList _parties;
 		resultsArr _results;
 		int NoChangeSinceLastCalc; //flag to check if current and last calculation of results is the same
@@ -45,7 +44,7 @@ namespace elec {
 		ElectionRound() = delete;
 		void setDate(int date_d, int date_m, int date_y) noexcept(false);
 		ElectionRound(int date_d, int date_m, int date_y) noexcept(false);
-		virtual ~ElectionRound() = default;
+		virtual ~ElectionRound();
 
 		explicit ElectionRound(LoadElectionSystem& loader);
 
@@ -91,7 +90,7 @@ namespace elec {
 		/// <param name="partyId">the ID of the party</param>
 		/// <param name="districtId">the district id of the dist the citizen live in</param>
 		/// <returns>returns true if party's rep was added, else false</returns>
-		bool addNewPartyRepresentative(int representId, int partyId, int districtId);
+		void addNewPartyRepresentative(int representId, int partyId, int districtId) noexcept(false);
 		bool isDistcritExist(int id) const;
 		/// <summary>
 		/// prints all the Districts

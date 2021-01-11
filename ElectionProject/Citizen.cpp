@@ -62,7 +62,10 @@ namespace elec
 			_party = party;
 			_partyId = party->getPartyID();
 		}
-		throw "Couldn't set party to citizen.";
+		else
+		{
+			throw "Couldn't set party to citizen.";
+		}
 	}
 
 	bool Citizen::setHasVoted(bool voted)
