@@ -153,7 +153,7 @@ namespace elec {
 		bool sortDistrictWinners(int districtID, vector<int>& partiesIndexes);
 
 
-		void calcReps() throw(const string);
+		void calcReps() noexcept(false);
 		void isResultsAllowed() const noexcept(false);
 		friend ostream& operator<<(ostream& os, ElectionRound& electionRound);
 

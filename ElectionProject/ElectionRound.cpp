@@ -267,27 +267,24 @@ namespace elec {
 
 	void ElectionRound::viewAllDistricts()  noexcept(false)
 	{
-		try {
-			if (!_districts.empty())
-			{
-				calcReps();
-				this->NoChangeSinceLastCalc = 1;
-				for (auto i = _districts.begin(); i != _districts.end(); ++i)
-				{
-					cout << *(*i) << endl;
-				}
-
-			}
-		}
-		catch(ResultsException msg)
-		{
-			throw msg;
-		}
 	
+
+		int i;
+		int len = _districts.getLogicSize();
+		for (i = 0; i < len; i++)
+		{
+			cout << _districts.getDistcritByIndex(i) << endl;
+		}
+
+		if (i == 0)
+		{
+			throw DistrictsException();
+		}
+
 
 	}
 
-	void ElectionRound::calcReps() throw(const string)
+	void ElectionRound::calcReps() noexcept(false)
 	{
 		isResultsAllowed();
 		if (NoChangeSinceLastCalc)
@@ -399,7 +396,7 @@ namespace elec {
 	ostream& operator<<(ostream& os, ElectionRound& electionRound) {
 
 
-		cout << "Election Round" << endl;
+		os << "Election Round" << endl;
 		electionRound.printElectionDate(os);
 
 		int partiesAmount = electionRound._parties.getLogicSize();
