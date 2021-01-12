@@ -560,7 +560,7 @@ namespace elec {
 		//cout << "saving districts" << endl;
 		for (auto i = _districts.begin(); i != _districts.end(); ++i)
 		{
-			if (typeid((*i)) == typeid(UnifiedDistrict))
+			if (typeid(*(*i)) == typeid(UnifiedDistrict))
 			{
 				type = DistcritType::UnifiedDistrict;
 			}
@@ -577,12 +577,12 @@ namespace elec {
 		//Saving number of parties:
 		outFile.write(rcastcc(&numOfParties), sizeof(int));
 		//Saving the parties:
-		for (int i = 0; i < numOfParties; ++i)
+		for (auto i = _parties.begin(); i != _parties.end(); ++i)
 		{
 			//saving the partyLeadr id of party[i].
-			int partyLeaderId = _parties[i]->getPartyPMCandidateID();
+			int partyLeaderId = (*i)->getPartyPMCandidateID();
 			outFile.write(rcastcc(&partyLeaderId), sizeof(int));
-			_parties[i]->save(outFile);
+			(*i)->save(outFile);
 		}
 		//Saving resultArr:
 		_results.save(outFile);

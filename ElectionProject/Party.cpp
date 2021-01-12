@@ -31,11 +31,17 @@ namespace elec {
 		reader.read(rcastc(&_name), sizeof(string));
 		//Reading _PMCandidateID//
 		reader.read(rcastc(&_PMCandidateID), sizeof(int));
+		int size;
+		reader.read(rcastc(&size), sizeof(int));
 		//Reading double arr:
-		for (int i = 0; i < _VotingPercentagesDistrict.size(); ++i)
+		for (int i = 0; i < size; ++i)
 		{
-			reader.read(rcastc(&_VotingPercentagesDistrict[i]), sizeof(double));
+			double value;
+			reader.read(rcastc(&value), sizeof(double));
+			_VotingPercentagesDistrict.push_back(value);
 		}
+
+	
 	}
 	Party::~Party()
 	{
@@ -148,14 +154,14 @@ namespace elec {
 		outFile.write(rcastcc(&_name), sizeof(string));
 		//saving _PMCandidateID
 		outFile.write(rcastcc(&_PMCandidateID), sizeof(int));
+		//saving _logicSize
+		int size = _VotingPercentagesDistrict.size();
+		outFile.write(rcastcc(&size), sizeof(int));
 		//saving double arr:
-		for (int i = 0; i < _VotingPercentagesDistrict.size(); ++i)
+		for (int i = 0; i < size; ++i)
 		{
 			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
 		}
-
-		
-		
 	}
 
 	vector<vector<Citizen*>> Party::getRepresentativesByDis() const

@@ -12,17 +12,35 @@ namespace elec
 
 	resultsArr::resultsArr(LoadElectionSystem& loader)
 	{
+		int size1;
 		ifstream& reader = loader.getReader();
-		int size = _votesByIDs.size();
-		for (int i = 0; i < size; ++i)
+		reader.read(rcastc(&size1), sizeof(int));
+		for (int i = 0; i < size1; ++i)
 		{
-			for (int j = 0; j < _votesByIDs[i].size(); ++j)
+			int size2;
+			reader.read(rcastc(&size2), sizeof(int));
+			for (int j = 0; j < size2; ++j)
 			{
 				reader.read(rcastc(&_votesByIDs[i][j]), sizeof(int));
 			}
 		}
 	}
 
+	//void resultsArr::save(ofstream& outFile) const
+	//{
+	//	//saving _votesByIDs:
+	//	int size = _votesByIDs.size();
+	//	outFile.write(rcastcc(&size), sizeof(int));
+	//	for (int i = 0; i < size; i++)
+	//	{
+	//		int size2 = _votesByIDs.size();
+	//		outFile.write(rcastcc(&size2), sizeof(int));
+	//		for (int j = 0; j < size2; j++)
+	//		{
+	//			outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
+	//		}
+	//	}
+	//}
 
 
 
@@ -125,9 +143,12 @@ namespace elec
 	{
 		//saving _votesByIDs:
 		int size = _votesByIDs.size();
+		outFile.write(rcastcc(&size), sizeof(int));
 		for (int i = 0; i < size; i++)
 		{
-			for (int j = 0; j < _votesByIDs[i].size(); j++)
+			int size2 = _votesByIDs.size();
+			outFile.write(rcastcc(&size2), sizeof(int));
+			for (int j = 0; j < size2; j++)
 			{
 				outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
 			}
@@ -256,10 +277,6 @@ namespace elec
 		}
 	}
 
-	bool resultsArr::sortbysec(const pair<int, double>& a, const pair<int, double>& b)
-	{
-		return (a.second < b.second);
-	}
 
 
 	//void resultsArr::swap(pair* xp, pair* yp)
