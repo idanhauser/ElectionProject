@@ -239,7 +239,7 @@ namespace elec
 				sort(leftForPartyForElector.begin(), leftForPartyForElector.end());
 				for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
 				{
-					AddToPMRepsCount(districtID, leftForPartyForElector.at(l).first, 1);
+					AddToPMRepsCount(districtID, leftForPartyForElector.at(l).second, 1);
 				}
 				// copy all values from _repsPartiesByID[districtID] to parameter "district" reps member
 				for (int i = 0; i < _partiesLogicSize; i++)
