@@ -125,7 +125,7 @@ namespace elec {
 		//
 		//		bool isResultsAllowed()const;
 		//
-
+		bool sortbysec(const pair<int, double>& a,const pair<int, double>& b);
 
 
 

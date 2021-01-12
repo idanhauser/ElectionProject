@@ -197,7 +197,7 @@ namespace elec
 		try
 		{
 			int _partiesLogicSize = _votesByIDs.size();
-			vector<pair<int, double>> leftForPartyForElector;
+			vector<pair<double,int >> leftForPartyForElector;
 			//pair* leftForPartyForElector = new pair[_partiesLogicSize];
 			int allVotesInDis = 0;
 			for (int n = 0; n < _partiesLogicSize; n++)
@@ -213,17 +213,23 @@ namespace elec
 				double minVotesForRep = double(allVotesInDis) / repsAmount;
 				for (int i = 0; i < _partiesLogicSize; i++)
 				{
+					pair<double,int> p;
 					if (minVotesForRep)
 						amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
 					else
 						amountOfElectedFromDistrict = 0;
 					AddToPMRepsCount(districtID, i, amountOfElectedFromDistrict);
 					if (amountOfElectedFromDistrict == repsAmount)
-						leftForPartyForElector.at(i).second = 0;
+					{
+						p.first = 0;
+					}
 					else
-						leftForPartyForElector.at(i).second = getDistrictNumberOfVotesInParty(i, districtID) -
-						double(amountOfElectedFromDistrict * minVotesForRep);
-					leftForPartyForElector.at(i).first = i;
+					{
+						p.first = getDistrictNumberOfVotesInParty(i, districtID) -
+							double(amountOfElectedFromDistrict * minVotesForRep);
+					}
+					p.second = i;
+					leftForPartyForElector.push_back(p);
 				}
 				int leftReps = repsAmount;
 				for (int k = 0; k < _partiesLogicSize; k++)
@@ -231,7 +237,6 @@ namespace elec
 					leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
 				}
 				sort(leftForPartyForElector.begin(), leftForPartyForElector.end());
-				//	bubbleSort(leftForPartyForElector, _partiesLogicSize);
 				for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
 				{
 					AddToPMRepsCount(districtID, leftForPartyForElector.at(l).first, 1);
@@ -241,7 +246,7 @@ namespace elec
 				{
 					district->setRepsArrByPartyID(i, getPMNumberOfRepsInDistrict(districtID, i));
 				}
-				//	delete[] leftForPartyForElector;
+				
 			}
 			return true;
 		}
@@ -251,6 +256,10 @@ namespace elec
 		}
 	}
 
+	bool resultsArr::sortbysec(const pair<int, double>& a, const pair<int, double>& b)
+	{
+		return (a.second < b.second);
+	}
 
 
 	//void resultsArr::swap(pair* xp, pair* yp)

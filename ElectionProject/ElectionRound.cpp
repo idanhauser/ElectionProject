@@ -108,7 +108,7 @@ namespace elec {
 					if (citizTemp.GetPartyId() != -1)
 					{
 
-						Party& currParty = *_parties[citizTemp.GetPartyId() - PARTY_ID_INIT];
+						Party& currParty = *_parties.at(citizTemp.GetPartyId() - PARTY_ID_INIT);
 						currParty.addPartyMember(citizTemp, (*i)->getSerialNum() - DISTRICT_ID_INIT);
 						citizTemp.setParty(&currParty);
 					}
@@ -317,14 +317,13 @@ namespace elec {
 	{
 	
 
-		int i;
 		int len = _districts.size();
-		for (i = 0; i < len; i++)
+		for (auto j = _districts.begin(); j != _districts.end(); ++j)
 		{
-			cout << _districts[i] << endl;
+			cout << *(*j) << endl;
 		}
 
-		if (i == 0)
+		if (len == 0)
 		{
 			throw DistrictsException();
 		}
@@ -391,9 +390,9 @@ namespace elec {
 		int len = _parties.size();
 		if (len > 0)
 		{
-			for (int i = 0; i < len; ++i)
+			for (auto j = _parties.begin(); j != _parties.end(); ++j)
 			{
-				cout << *_parties[i] << endl;
+				cout << *(*j) << endl;
 			}
 		}
 		else
