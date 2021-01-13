@@ -278,7 +278,7 @@ namespace elec
 	}
 
 
-
+	//todo: delete
 	//void resultsArr::swap(pair* xp, pair* yp)
 	//{
 	//	pair temp = *xp;
@@ -290,7 +290,7 @@ namespace elec
 
 
 
-
+	//todo: delete
 	//void resultsArr::bubbleSort(pair arr[], int n)
 	//{
 	//	int i, j;

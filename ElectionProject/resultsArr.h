@@ -16,7 +16,7 @@ namespace elec {
 		DynamicArray<vector<int>> _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
 		vector<int> _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
-		/*struct pair {
+		/*struct pair { //todo: delete
 			int index;
 			double repsAmount;
 			bool operator>(const pair& other) const
@@ -108,7 +108,7 @@ namespace elec {
 
 
 
-
+		//todo: delete
 		//		/// <summary>
 		//		/// swap between two pairs.
 		//		/// </summary>
