@@ -217,7 +217,7 @@ namespace elec
 						amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
 					else
 						amountOfElectedFromDistrict = 0;
-					AddToPMRepsCount(districtID, i, amountOfElectedFromDistrict);
+					AddToPMRepsCount(districtID, i,static_cast<int>(amountOfElectedFromDistrict));
 					if (amountOfElectedFromDistrict == repsAmount)
 						leftForPartyForElector.at(i).second = 0;
 					else
