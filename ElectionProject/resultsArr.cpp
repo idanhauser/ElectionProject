@@ -12,17 +12,35 @@ namespace elec
 
 	resultsArr::resultsArr(LoadElectionSystem& loader)
 	{
+		int size1;
 		ifstream& reader = loader.getReader();
-		int size = _votesByIDs.size();
-		for (int i = 0; i < size; ++i)
+		reader.read(rcastc(&size1), sizeof(int));
+		for (int i = 0; i < size1; ++i)
 		{
-			for (int j = 0; j < _votesByIDs[i].size(); ++j)
+			int size2;
+			reader.read(rcastc(&size2), sizeof(int));
+			for (int j = 0; j < size2; ++j)
 			{
 				reader.read(rcastc(&_votesByIDs[i][j]), sizeof(int));
 			}
 		}
 	}
 
+	//void resultsArr::save(ofstream& outFile) const
+	//{
+	//	//saving _votesByIDs:
+	//	int size = _votesByIDs.size();
+	//	outFile.write(rcastcc(&size), sizeof(int));
+	//	for (int i = 0; i < size; i++)
+	//	{
+	//		int size2 = _votesByIDs.size();
+	//		outFile.write(rcastcc(&size2), sizeof(int));
+	//		for (int j = 0; j < size2; j++)
+	//		{
+	//			outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
+	//		}
+	//	}
+	//}
 
 
 
@@ -125,9 +143,12 @@ namespace elec
 	{
 		//saving _votesByIDs:
 		int size = _votesByIDs.size();
+		outFile.write(rcastcc(&size), sizeof(int));
 		for (int i = 0; i < size; i++)
 		{
-			for (int j = 0; j < _votesByIDs[i].size(); j++)
+			int size2 = _votesByIDs.size();
+			outFile.write(rcastcc(&size2), sizeof(int));
+			for (int j = 0; j < size2; j++)
 			{
 				outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
 			}
@@ -197,7 +218,7 @@ namespace elec
 		try
 		{
 			int _partiesLogicSize = _votesByIDs.size();
-			vector<pair<int, double>> leftForPartyForElector;
+			vector<pair<double,int >> leftForPartyForElector;
 			//pair* leftForPartyForElector = new pair[_partiesLogicSize];
 			int allVotesInDis = 0;
 			for (int n = 0; n < _partiesLogicSize; n++)
@@ -213,17 +234,23 @@ namespace elec
 				double minVotesForRep = double(allVotesInDis) / repsAmount;
 				for (int i = 0; i < _partiesLogicSize; i++)
 				{
+					pair<double,int> p;
 					if (minVotesForRep)
 						amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
 					else
 						amountOfElectedFromDistrict = 0;
 					AddToPMRepsCount(districtID, i,static_cast<int>(amountOfElectedFromDistrict));
 					if (amountOfElectedFromDistrict == repsAmount)
-						leftForPartyForElector.at(i).second = 0;
+					{
+						p.first = 0;
+					}
 					else
-						leftForPartyForElector.at(i).second = getDistrictNumberOfVotesInParty(i, districtID) -
-						double(amountOfElectedFromDistrict * minVotesForRep);
-					leftForPartyForElector.at(i).first = i;
+					{
+						p.first = getDistrictNumberOfVotesInParty(i, districtID) -
+							double(amountOfElectedFromDistrict * minVotesForRep);
+					}
+					p.second = i;
+					leftForPartyForElector.push_back(p);
 				}
 				int leftReps = repsAmount;
 				for (int k = 0; k < _partiesLogicSize; k++)
@@ -231,17 +258,16 @@ namespace elec
 					leftReps = leftReps - getPMNumberOfRepsInDistrict(districtID, k);
 				}
 				sort(leftForPartyForElector.begin(), leftForPartyForElector.end());
-				//	bubbleSort(leftForPartyForElector, _partiesLogicSize);
 				for (int l = 0; l < min(_partiesLogicSize, leftReps); l++)
 				{
-					AddToPMRepsCount(districtID, leftForPartyForElector.at(l).first, 1);
+					AddToPMRepsCount(districtID, leftForPartyForElector.at(l).second, 1);
 				}
 				// copy all values from _repsPartiesByID[districtID] to parameter "district" reps member
 				for (int i = 0; i < _partiesLogicSize; i++)
 				{
 					district->setRepsArrByPartyID(i, getPMNumberOfRepsInDistrict(districtID, i));
 				}
-				//	delete[] leftForPartyForElector;
+				
 			}
 			return true;
 		}

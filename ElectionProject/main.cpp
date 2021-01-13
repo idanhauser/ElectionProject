@@ -78,7 +78,7 @@ void StartMenu()
 			}
 			catch (const char* ex)
 			{
-				cout << "Election was not loaded successfully." << endl;
+				cout << endl<<"Election was not loaded." << endl;
 			}
 
 			cout << endl;
@@ -273,7 +273,7 @@ void showMainMenu()
 			}
 			catch (...)
 			{
-				cout << "Election was not loaded successfully." << endl;
+				cout <<endl <<"Election was not loaded." << endl;
 				return;
 			}
 		
@@ -610,8 +610,7 @@ void saveElections()
 
 void loadElection()
 {
-
-	ifstream _inFile;
+ifstream _inFile;
 
 
 	char fileName[MAX_SIZE];

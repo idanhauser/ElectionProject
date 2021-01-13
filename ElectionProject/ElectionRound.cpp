@@ -108,7 +108,7 @@ namespace elec {
 					if (citizTemp.GetPartyId() != -1)
 					{
 
-						Party& currParty = *_parties[citizTemp.GetPartyId() - PARTY_ID_INIT];
+						Party& currParty = *_parties.at(citizTemp.GetPartyId() - PARTY_ID_INIT);
 						currParty.addPartyMember(citizTemp, (*i)->getSerialNum() - DISTRICT_ID_INIT);
 						citizTemp.setParty(&currParty);
 					}
@@ -317,14 +317,13 @@ namespace elec {
 	{
 	
 
-		int i;
 		int len = _districts.size();
-		for (i = 0; i < len; i++)
+		for (auto j = _districts.begin(); j != _districts.end(); ++j)
 		{
-			cout << _districts[i] << endl;
+			cout << *(*j) << endl;
 		}
 
-		if (i == 0)
+		if (len == 0)
 		{
 			throw DistrictsException();
 		}
@@ -391,9 +390,9 @@ namespace elec {
 		int len = _parties.size();
 		if (len > 0)
 		{
-			for (int i = 0; i < len; ++i)
+			for (auto j = _parties.begin(); j != _parties.end(); ++j)
 			{
-				cout << *_parties[i] << endl;
+				cout << *(*j) << endl;
 			}
 		}
 		else
@@ -561,7 +560,7 @@ namespace elec {
 		//cout << "saving districts" << endl;
 		for (auto i = _districts.begin(); i != _districts.end(); ++i)
 		{
-			if (typeid((*i)) == typeid(UnifiedDistrict))
+			if (typeid(*(*i)) == typeid(UnifiedDistrict))
 			{
 				type = DistcritType::UnifiedDistrict;
 			}
@@ -578,12 +577,12 @@ namespace elec {
 		//Saving number of parties:
 		outFile.write(rcastcc(&numOfParties), sizeof(int));
 		//Saving the parties:
-		for (int i = 0; i < numOfParties; ++i)
+		for (auto i = _parties.begin(); i != _parties.end(); ++i)
 		{
 			//saving the partyLeadr id of party[i].
-			int partyLeaderId = _parties[i]->getPartyPMCandidateID();
+			int partyLeaderId = (*i)->getPartyPMCandidateID();
 			outFile.write(rcastcc(&partyLeaderId), sizeof(int));
-			_parties[i]->save(outFile);
+			(*i)->save(outFile);
 		}
 		//Saving resultArr:
 		_results.save(outFile);
