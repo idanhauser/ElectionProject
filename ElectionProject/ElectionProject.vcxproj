@@ -141,7 +141,6 @@
   <ItemGroup>
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="District.cpp" />
-    <ClCompile Include="DistrictList.cpp" />
     <ClCompile Include="DividedDistrict.cpp" />
     <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="LoadElectionSystem.cpp" />
@@ -150,15 +149,12 @@
     <ClCompile Include="UnifiedDistrict.cpp" />
     <ClCompile Include="resultsArr.cpp" />
     <ClCompile Include="ElectionRound.cpp" />
-    <ClCompile Include="CitizenList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Party.cpp" />
-    <ClCompile Include="PartyList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h" />
     <ClInclude Include="District.h" />
-    <ClInclude Include="DistrictList.h" />
     <ClInclude Include="DividedDistrict.h" />
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="Exceptions.h" />
@@ -170,9 +166,7 @@
     <ClInclude Include="resultsArr.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ElectionRound.h" />
-    <ClInclude Include="CitizenList.h" />
     <ClInclude Include="Party.h" />
-    <ClInclude Include="PartyList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

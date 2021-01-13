@@ -27,15 +27,6 @@
     <ClCompile Include="ElectionRound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CitizenList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PartyList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DistrictList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="District.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,15 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ElectionRound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CitizenList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PartyList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DistrictList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="District.h">
