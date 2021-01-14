@@ -158,9 +158,9 @@ namespace elec {
 		int size = _VotingPercentagesDistrict.size();
 		outFile.write(rcastcc(&size), sizeof(int));
 		//saving double arr:
-		for (int i = 0; i < size; ++i)
+		for (auto i = _VotingPercentagesDistrict.begin(); i != _VotingPercentagesDistrict.end(); ++i)
 		{
-			outFile.write(rcastcc(&_VotingPercentagesDistrict[i]), sizeof(double));
+			outFile.write(rcastcc(&*i), sizeof(double));
 		}
 	}
 

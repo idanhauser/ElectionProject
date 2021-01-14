@@ -9,7 +9,20 @@
 using namespace std;
 namespace elec
 {
+	/*resultsArr::resultsArr(int partiesAmount, int districtsAmount):_votesByIDs(partiesAmount), _repsPartiesByID(partiesAmount),
+	_PMsRepsTotalByPartyID(partiesAmount)
+	{
+		for (int j = 0; j < partiesAmount; ++j)
+		{
+			vector<int> districtVotes(districtsAmount);
+			_votesByIDs.push_back(districtVotes);
+			vector<int> districtReps(districtsAmount);
+			_repsPartiesByID.push_back(districtReps);
+		}
 
+		
+	}*/
+	
 	resultsArr::resultsArr(LoadElectionSystem& loader)
 	{
 		int size1;
@@ -20,14 +33,18 @@ namespace elec
 			int size2;
 			reader.read(rcastc(&size2), sizeof(int));
 			vector<int>temp;
+			vector<int>tempReps;
 			for (int j = 0; j < size2; ++j)
 			{
 				int a;
 				reader.read(rcastc(&a), sizeof(int));
 				temp.push_back(a);
+				tempReps.push_back(0);
 			}
 			_votesByIDs.push_back(temp);
+			_repsPartiesByID.push_back(tempReps);
 		}
+		
 	}
 
 
@@ -118,7 +135,7 @@ namespace elec
 
 	bool resultsArr::AddToPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps)
 	{
-		_repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] = _repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] + amountOfReps;
+		_repsPartiesByID[RepPartyID].at(DistrictID - DISTRICT_ID_INIT) += amountOfReps;
 		return true;
 	}
 	bool resultsArr::setNewNumForPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps)
@@ -134,7 +151,7 @@ namespace elec
 		outFile.write(rcastcc(&size), sizeof(int));
 		for (int i = 0; i < size; i++)
 		{
-			int size2 = _votesByIDs.size();
+			int size2 = _votesByIDs[i].size();
 			outFile.write(rcastcc(&size2), sizeof(int));
 			for (int j = 0; j < size2; j++)
 			{
