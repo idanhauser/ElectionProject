@@ -39,6 +39,10 @@ namespace elec {
 			Citizen* citiz = new Citizen(loader,*this);
 			_citizens.push_back(citiz);
 		}
+		int zizew;
+		reader.read(rcastc(&zizew), sizeof(int));
+		_repsByPartyID=vector<int>(zizew, 0);
+		
 	}
 
 	District::District(string& name, int numOfReps, int numOfParties) : _serialNum(snGenerator++), _name(name),
@@ -105,11 +109,6 @@ namespace elec {
 	
 			_citizens.push_back(&citz);
 		
-	/*	else
-		{
-			string msg = "Add Citizen";
-			throw NullObjectException(msg);
-		}*/
 	}
 	
 	
@@ -230,6 +229,10 @@ namespace elec {
 		{
 			(*i)->save(outFile);
 		}
+		//saving numofParties:
+		int sizw = _repsByPartyID.size();
+		outFile.write(rcastcc(&sizw), sizeof(int));
+		
 	}
 	int District::getRepsByPartyID(int partyID) const
 	{

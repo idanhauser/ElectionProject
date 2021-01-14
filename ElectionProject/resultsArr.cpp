@@ -23,7 +23,7 @@ namespace elec
 		
 	}*/
 	
-	resultsArr::resultsArr(LoadElectionSystem& loader)
+	resultsArr::resultsArr(LoadElectionSystem& loader, int numPfParties)
 	{
 		int size1;
 		ifstream& reader = loader.getReader();
@@ -44,6 +44,7 @@ namespace elec
 			_votesByIDs.push_back(temp);
 			_repsPartiesByID.push_back(tempReps);
 		}
+		_PMsRepsTotalByPartyID=vector<int>(numPfParties, 0);
 		
 	}
 

@@ -25,7 +25,7 @@ namespace elec {
 			}
 		};*/
 		resultsArr() = default;
-		resultsArr(LoadElectionSystem& loader);
+		resultsArr(LoadElectionSystem& loader, int numofparties);
 		~resultsArr();
 
 

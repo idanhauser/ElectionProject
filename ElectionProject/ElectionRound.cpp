@@ -93,7 +93,7 @@ namespace elec {
 
 		//cout << "resultarr" << endl;
 		//Reading _votesByIDs:
-		_results = resultsArr(loader);
+		_results = resultsArr(loader,numberOfparties);
 
 		string output;
 		//-------------------------------------------------------------------------
