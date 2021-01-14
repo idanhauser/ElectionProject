@@ -239,7 +239,7 @@ namespace elec
 						amountOfElectedFromDistrict = getDistrictNumberOfVotesInParty(i, districtID) / minVotesForRep;
 					else
 						amountOfElectedFromDistrict = 0;
-					AddToPMRepsCount(districtID, i, amountOfElectedFromDistrict);
+					AddToPMRepsCount(districtID, i,static_cast<int>(amountOfElectedFromDistrict));
 					if (amountOfElectedFromDistrict == repsAmount)
 					{
 						p.first = 0;
@@ -278,7 +278,7 @@ namespace elec
 	}
 
 
-
+	//todo: delete
 	//void resultsArr::swap(pair* xp, pair* yp)
 	//{
 	//	pair temp = *xp;
@@ -290,7 +290,7 @@ namespace elec
 
 
 
-
+	//todo: delete
 	//void resultsArr::bubbleSort(pair arr[], int n)
 	//{
 	//	int i, j;

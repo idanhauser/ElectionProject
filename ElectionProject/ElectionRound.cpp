@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <fstream>
+#include <vector>
 
 #include "Party.h"
 #include "Exceptions.h"
@@ -594,24 +595,24 @@ namespace elec {
 
 
 
+	//todo: delete
+	//void ElectionRound::swap(pair* xp, pair* yp)
+	//{
+	//	pair temp = *xp;
+	//	*xp = *yp;
+	//	*yp = temp;
+	//}
 
-	void ElectionRound::swap(pair* xp, pair* yp)
-	{
-		pair temp = *xp;
-		*xp = *yp;
-		*yp = temp;
-	}
-
-	void ElectionRound::bubbleSort(pair arr[], int n)
-	{
-		int i, j;
-		for (i = 0; i < n - 1; i++) {
-			for (j = 0; j < n - i - 1; j++) {
-				if (arr[j + 1] > arr[j])
-					swap(&arr[j], &arr[j + 1]);
-			}
-		}
-	}
+	//void ElectionRound::bubbleSort(pair arr[], int n)
+	//{
+	//	int i, j;
+	//	for (i = 0; i < n - 1; i++) {
+	//		for (j = 0; j < n - i - 1; j++) {
+	//			if (arr[j + 1] > arr[j])
+	//				swap(&arr[j], &arr[j + 1]);
+	//		}
+	//	}
+	//}
 
 
 
@@ -646,42 +647,40 @@ namespace elec {
 
 	bool ElectionRound::checkElectionsWinner(vector<int>& partiesIndexes) {
 		//check elections winner
-		pair* totalRepsForPmByID = new pair[_parties.size()];
+		vector<pair<int, int >> totalRepsForPmByID(_parties.size());
 
 		for (int n = 0; n < _parties.size(); n++)
 		{
-			totalRepsForPmByID[n].index = n;
-			totalRepsForPmByID[n].repsAmount = _results.getPmsRepsTotalByPartyID(n);
+			totalRepsForPmByID[n].first = n;
+			totalRepsForPmByID[n].second = _results.getPmsRepsTotalByPartyID(n);
 		}
-		bubbleSort(totalRepsForPmByID, _parties.size());
+		sort(totalRepsForPmByID.begin(), totalRepsForPmByID.end());
 
 		for (int p = 0; p < _parties.size(); p++)
 		{
-			partiesIndexes[p] = totalRepsForPmByID[p].index;
+			partiesIndexes[p] = totalRepsForPmByID[p].first;
 
 		}
-		delete[] totalRepsForPmByID;
 		return true;
 	}
 
 
 	bool ElectionRound::sortDistrictWinners(int districtID, vector<int>& partiesIndexes) {
 
-		pair* totalRepsForPmByID = new pair[_parties.size()];
+		vector<pair<int, int >> totalRepsForPmByID(_parties.size());
 
 		for (int n = 0; n < _parties.size(); n++)
 		{
-			totalRepsForPmByID[n].index = n;
-			totalRepsForPmByID[n].repsAmount = _results.getPMNumberOfRepsInDistrict(districtID, n);
+			totalRepsForPmByID[n].first = n;
+			totalRepsForPmByID[n].second= _results.getPMNumberOfRepsInDistrict(districtID, n);
 		}
-		bubbleSort(totalRepsForPmByID, _parties.size());
+		sort(totalRepsForPmByID.begin(), totalRepsForPmByID.end());
 
 		for (int p = 0; p < _parties.size(); p++)
 		{
-			partiesIndexes[p] = totalRepsForPmByID[p].index;
+			partiesIndexes[p] = totalRepsForPmByID[p].first;
 
 		}
-		delete[] totalRepsForPmByID;
 		return true;
 	}
 
