@@ -9,7 +9,10 @@ namespace elec
 
 	class UnifiedDistrict :public District
 	{
+	private:
 		const Citizen* _partyLeader;
+		UnifiedDistrict(const UnifiedDistrict& other);
+		const UnifiedDistrict& operator=(const UnifiedDistrict&);
 	public:
 		UnifiedDistrict(string& name, int numOfReps, int numOfParties);
 		UnifiedDistrict(LoadElectionSystem& loader);

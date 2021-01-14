@@ -19,41 +19,29 @@ namespace elec
 		{
 			int size2;
 			reader.read(rcastc(&size2), sizeof(int));
+			vector<int>temp;
 			for (int j = 0; j < size2; ++j)
 			{
-				reader.read(rcastc(&_votesByIDs[i][j]), sizeof(int));
+				int a;
+				reader.read(rcastc(&a), sizeof(int));
+				temp.push_back(a);
 			}
+			_votesByIDs.push_back(temp);
 		}
 	}
-
-	//void resultsArr::save(ofstream& outFile) const
-	//{
-	//	//saving _votesByIDs:
-	//	int size = _votesByIDs.size();
-	//	outFile.write(rcastcc(&size), sizeof(int));
-	//	for (int i = 0; i < size; i++)
-	//	{
-	//		int size2 = _votesByIDs.size();
-	//		outFile.write(rcastcc(&size2), sizeof(int));
-	//		for (int j = 0; j < size2; j++)
-	//		{
-	//			outFile.write(rcastcc(&_votesByIDs[i][j]), sizeof(int));
-	//		}
-	//	}
-	//}
 
 
 
 	resultsArr::~resultsArr()
-	{
-		for_each(_votesByIDs.begin(), _votesByIDs.end(), [](vector<int>& votesInVec)
-		{
-			fill(votesInVec.begin(), votesInVec.end(), 0);
-		});
-		for_each(_repsPartiesByID.begin(), _repsPartiesByID.end(), [](vector<int>& repsInVec)
-		{
-			fill(repsInVec.begin(), repsInVec.end(), 0);
-		});
+	{//todo:roee check if we really need it, its a vectior and dynamic arrays..so we dont delete them or something
+		//for_each(_votesByIDs.begin(), _votesByIDs.end(), [](vector<int>& votesInVec)
+		//{
+		//	fill(votesInVec.begin(), votesInVec.end(), 0);
+		//});
+		//for_each(_repsPartiesByID.begin(), _repsPartiesByID.end(), [](vector<int>& repsInVec)
+		//{
+		//	fill(repsInVec.begin(), repsInVec.end(), 0);
+		//});
 
 	}
 
@@ -159,23 +147,31 @@ namespace elec
 	{
 		if (this != &other)
 		{
-			vector<vector<int>> _votesByIDs;
-			for (int i = 0; i < _votesByIDs.size(); i++)
+			for (int i = 0; i < other._votesByIDs.size(); i++)
 			{
-				for (int j = 0; j < _votesByIDs[i].size(); j++)
-					_votesByIDs[i][j] = other._votesByIDs[i][j];
+				vector<int> temp;
+				for (int j = 0; j < other._votesByIDs[i].size(); j++)
+				{
+					temp.push_back(other._votesByIDs[i][j]);
+				}
+				_votesByIDs.push_back(temp);
 			}
-			vector<vector<int>> _repsPartiesByID;
-			for (int i = 0; i < _repsPartiesByID.size(); i++)
+			//DynamicArray<vector<int>> _repsPartiesByID;
+			for (int i = 0; i < other._repsPartiesByID.size(); i++)
 			{
-				for (int j = 0; j < _repsPartiesByID[i].size(); j++)
-					_repsPartiesByID[i][j] = other._repsPartiesByID[i][j];
+				vector<int> temp;
+				for (int j = 0; j < other._repsPartiesByID[i].size(); j++)
+				{
+					temp.push_back(other._repsPartiesByID[i][j]);
+				}
+				_repsPartiesByID.push_back(temp);
 			}
-			vector<int> _PMsRepsTotalByPartyID;
-			for (int k = 0; k < _votesByIDs.size(); k++)
-				_PMsRepsTotalByPartyID[k] = other._PMsRepsTotalByPartyID[k];
+			//vector<int> _PMsRepsTotalByPartyID;
+			for (int k = 0; k < other._PMsRepsTotalByPartyID.size(); k++)
+				_PMsRepsTotalByPartyID.push_back(other._PMsRepsTotalByPartyID[k]);
 		}
-		return *this;
+			return *this;
+		
 	}
 
 	bool resultsArr::addParty(int paretiesAmount, int districtsAmount)

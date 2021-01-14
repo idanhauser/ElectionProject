@@ -135,29 +135,17 @@ void initElection()
 				cin >> numofreps;
 				election = new SimpleElectionRound(date_d, date_m, date_y, numofreps);
 			}
+			cout << endl;
 			isDataValid = false;
+			showMainMenu();
 		}
-		catch (DayException& day)
+		catch (...)
 		{
-			day.Error();
-			cout << day.getMessage();
-			cout << "\nPlease try again." << endl;
+			cout << "Election couldn't initialized." << endl;
+			return;
 		}
-		catch (MonthException& month)
-		{
-			month.Error();
-			cout << month.getMessage();
-			cout << "\nPlease try again." << endl;
-		}
-		catch (DayMonthException& e)
-		{
-			e.Error();
-			cout << e.getMessage();
-			cout << "\nPlease try again." << endl;
-		}
-		cout << endl;
 	}
-	showMainMenu();
+
 }
 
 
@@ -301,13 +289,19 @@ void addDistrict()
 		cout << "ERROR: You chose 'Simple election round' therefor you can not add districts." << endl;
 	}
 	else
-	{
+	{	
 		cout << "Insert a district's name and a number of representatives:" << endl;
 		cin >> name >> numberRepresentatives;
 		cout << "Choose district type:" << endl;
 		cout << "Press 1 for unified District" << endl;
 		cout << "Press 2 for divided District" << endl;
 		cin >> userChoise;
+		while (userChoise != 1 && userChoise != 2)
+		{
+			cout << "There is no option: " << userChoise << ". please try again" << endl;
+			cout << "\nChoose type of Election:\n 1 - unified District.\n 2 - divided District." << endl;
+			cin >> userChoise;
+		}
 		DistcritType distType = static_cast<DistcritType>(userChoise);
 		try
 		{
@@ -367,9 +361,9 @@ void addCitizen()
 	}
 	try {
 		const int lenofId = checkLen(id);
-		if (lenofId != 9)
+		if ((lenofId != 9) || (id < 0))
 		{
-			throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+			throw invalid_argument("The len of the id is is too short, when it must be 9 digits and a positive number.\n");
 		}
 	}
 	catch (exception& ex)
@@ -445,9 +439,9 @@ void addParty()
 	cin >> name >> idPd;
 	try {
 		const int lenofId = checkLen(idPd);
-		if (lenofId != 9)
+		if ((lenofId != 9)||(idPd <0))
 		{
-			throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+			throw invalid_argument("The len of the id is is too short, when it must be 9 digits and a positive number.\n");
 		}
 	}
 	catch (exception& ex)
@@ -492,18 +486,6 @@ void addPartyRepresentative()
 		return;
 	}
 	cout << "Party's representative added." << endl;
-
-	//{
-	//	if (typeid(*election) == typeid(RegularElectionRound)) {
-	//		cout << "Error:Citizen and/or district and/or party doesn't exist." << endl;
-	//	}
-	//	else
-	//	{
-	//		cout << "Error:Citizen and/or party doesn't exist." << endl;
-	//	}
-	//}
-
-
 
 }
 void viewDistricts() noexcept(false)
@@ -554,9 +536,9 @@ void voting()
 	cin >> citizenId >> partyId;
 	try {
 		const int lenofId = checkLen(citizenId);
-		if (lenofId != 9)
+		if ((lenofId != 9) || (citizenId < 0))
 		{
-			throw invalid_argument("The len of the id is is too short, when it must be 9 digits.\n");
+			throw invalid_argument("The len of the id is is too short, when it must be 9 digits and a positive number.\n");
 		}
 
 

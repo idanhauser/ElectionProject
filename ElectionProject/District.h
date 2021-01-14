@@ -26,7 +26,7 @@ namespace elec
 		int _electionResult;
 		int _numberOfVotesinDist;
 		District(const District& other);
-
+		const District& operator=(const District&);
 
 	public:
 		District(LoadElectionSystem& loader);

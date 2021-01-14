@@ -146,45 +146,55 @@ namespace elec {
 	}
 	void ElectionRound::setDate(int date_d, int date_m, int date_y) noexcept(false)
 	{
-		if (date_y <= 0)
-		{
-			throw YearException(date_y);
-		}
-		if (date_d < 1 || date_d>31)
-		{
-			throw DayException(date_d);
-		}
-
-		if (date_m < 1 || date_m>12)
-		{
-			throw MonthException(date_m);
-		}
-		const Months month = static_cast<Months>(date_m);
-		if (month == Months::February)
-		{
-			if (date_d < 1 || date_d>28)
+		try {
+			if (date_y <= 0)
 			{
-				throw DayMonthException(date_d, date_m);
+				throw YearException(date_y);
 			}
-		}
-		else if ((month == Months::January) || (month == Months::March) || (month == Months::May) || (month ==
-			Months::July) || (month == Months::August) || (month == Months::October) || (month == Months::December))
-		{
 			if (date_d < 1 || date_d>31)
 			{
-				throw DayMonthException(date_d, date_m);
+				throw DayException(date_d);
 			}
-		}
-		else
-		{
-			if (date_d < 1 || date_d>30)
+
+			if (date_m < 1 || date_m>12)
 			{
-				throw DayMonthException(date_d, date_m);
+				throw MonthException(date_m);
 			}
+			const Months month = static_cast<Months>(date_m);
+			if (month == Months::February)
+			{
+				if (date_d < 1 || date_d>28)
+				{
+					throw DayMonthException(date_d, date_m);
+				}
+			}
+			else if ((month == Months::January) || (month == Months::March) || (month == Months::May) || (month ==
+				Months::July) || (month == Months::August) || (month == Months::October) || (month == Months::December))
+			{
+				if (date_d < 1 || date_d>31)
+				{
+					throw DayMonthException(date_d, date_m);
+				}
+			}
+			else
+			{
+				if (date_d < 1 || date_d>30)
+				{
+					throw DayMonthException(date_d, date_m);
+				}
+			}
+
+			_dateDay = date_d;
+			_dateYear = date_y;
+			_dateMonth = date_m;
 		}
-		_dateDay = date_d;
-		_dateYear = date_y;
-		_dateMonth = date_m;
+		catch (DateException& date)
+		{
+			date.Error();
+			cout << date.getMessage();
+			cout << "\nPlease try again." << endl;
+			throw;
+		}
 	}
 
 
@@ -280,6 +290,10 @@ namespace elec {
 				ex.Error();
 				cout << ex.getMessage() << endl;
 			}
+		}
+		else
+		{
+			throw CitizenNotExistException(representId);
 		}
 
 	}
