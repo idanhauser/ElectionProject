@@ -206,13 +206,8 @@ namespace elec {
 		{
 			if (isDistcritExist(districtId))
 			{
-<<<<<<< HEAD
 				
 				_districts.at(districtId - DISTRICT_ID_INIT)->addCitizen(name,id,birthYear);
-=======
-				Citizen* citiz = new Citizen(name, id, birthYear, nullptr, *_districts.at(districtId - DISTRICT_ID_INIT));
-				_districts.at(districtId - DISTRICT_ID_INIT)->addCitizen(*citiz);//need to check if added susccessfuly.
->>>>>>> RoeeHT
 			}
 			else
 			{
