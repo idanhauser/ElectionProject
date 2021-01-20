@@ -1,7 +1,7 @@
 ﻿#include "RegularElectionRound.h"
 #include "LoadElectionSystem.h"
 #include <fstream>
-
+#include <algorithm>
 
 #include "DividedDistrict.h"
 #include "UnifiedDistrict.h"

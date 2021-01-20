@@ -1,9 +1,9 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
 #include <fstream>
 #include <string>
 #include "Utils.h"
-
+#include <algorithm>
 namespace elec
 {
 	class LoadElectionSystem
@@ -19,7 +19,8 @@ namespace elec
 		///closing the file.
 		 ~LoadElectionSystem();
 		/// <summary>
-		/// checks what type of election the file holds.
+		/// checks what 
+///  of election the file holds.
 		/// </summary>
 		/// <returns>return election type regular or simple.</returns>
 		ElectionType getElectionType();

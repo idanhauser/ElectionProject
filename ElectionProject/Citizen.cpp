@@ -1,22 +1,22 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #include "Citizen.h"
 
 #include <fstream>
-
-
+#include "District.h"
+#include <algorithm>
 
 #include "LoadElectionSystem.h"
 #include "Party.h"
 
 namespace elec
 {
-	Citizen::Citizen(string& citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
-		const District& district) : _name(citizen_name), _idNum(id_num),
-		_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false), _party(nullptr),
-		_partyId(-1), _district(district)
-	{
-		
-	}
+	//Citizen::Citizen(string& citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
+	//	const District& district) : _name(citizen_name), _idNum(id_num),
+	//	_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false), _party(nullptr),
+	//	_partyId(-1), _district(district)
+	//{
+	//	
+	//}
 
 	Citizen::Citizen(LoadElectionSystem& loader, const District& district):_district(district)
 	{
@@ -32,7 +32,8 @@ namespace elec
 		//Reading _birthYear
 		reader.read(rcastc(&_birthYear), sizeof(int));
 		//Reading _districtNum
-		reader.read(rcastc(&_districtNum), sizeof(int));
+		int distnum;
+		reader.read(rcastc(&distnum), sizeof(int));
 		//reading _hasVoted
 		reader.read(rcastc(&_hasVoted), sizeof(bool));
 		//reading _partyID:
@@ -45,6 +46,13 @@ namespace elec
 		{
 			_partyId = -1;
 		}
+	}
+
+	Citizen::Citizen(const string& citizen_name, int id_num, int birthYear, const Party* party,
+		const District& district): _name(citizen_name), _idNum(id_num),
+		_birthYear(birthYear), _hasVoted(false), _party(nullptr),
+		_partyId(-1), _district(district)
+	{
 	}
 
 	Citizen::~Citizen()
@@ -93,7 +101,7 @@ namespace elec
 
 	 int Citizen::getDistrictNum() const
 	{
-		return _districtNum;
+		return _district.getSerialNum();
 
 	}
 
@@ -130,7 +138,8 @@ namespace elec
 		//saving _birthYear
 		outFile.write(rcastcc(&_birthYear), sizeof(int));
 		//saving _districtNum
-		outFile.write(rcastcc(&_districtNum), sizeof(int));
+		int num = _district.getSerialNum();
+		outFile.write(rcastcc(&num), sizeof(int));
 		//saving _hasVoted
 		outFile.write(rcastcc(&_hasVoted), sizeof(bool));
 		//saving _party Id

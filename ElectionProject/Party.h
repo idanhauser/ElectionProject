@@ -1,9 +1,10 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
 #include "Utils.h"
 #include "LoadElectionSystem.h"
 #include <string>
 #include "Citizen.h"
+#include <algorithm>
 namespace elec
 {
 	class Party

@@ -1,7 +1,7 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 
 #pragma once
-#include <vector>
+#include <algorithm>
 
 using namespace std;
 #include <string>
@@ -57,8 +57,8 @@ namespace elec
 
 		int getSerialNum() const;
 		int getNumberOfCitizens() const;
-		
-		void addCitizen(Citizen& citz) noexcept(false);
+		void addCitizen(string& name, int id, int birthYear);
+
 		//todo: to any getCitizenById i need to handle an error.
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);

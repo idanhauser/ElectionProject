@@ -1,9 +1,9 @@
-//code verison 3.1
+//code verison 3.2
 #pragma once
 #pragma  warning(disable:4996)
 #include <ostream>
 #include <vector>
-
+#include <algorithm>
 using namespace std;
 
 

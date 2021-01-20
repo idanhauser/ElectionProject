@@ -1,6 +1,6 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #include "LoadElectionSystem.h"
-
+#include <algorithm>
 #include <iostream>
 using namespace std;
 namespace elec

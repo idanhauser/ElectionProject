@@ -1,9 +1,9 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #include "DividedDistrict.h"
 #include <iostream>
 
 #include "Utils.h"
-
+#include <algorithm>
 
 using namespace std;
 

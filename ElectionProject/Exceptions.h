@@ -1,7 +1,8 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
 #include <string>
 using namespace std;
+#include <algorithm>
 #include "Utils.h"
 
 namespace elec

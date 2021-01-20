@@ -1,6 +1,6 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #include "District.h"
-
+#include <algorithm>
 #include <fstream>
 #include <string>
 #include "Citizen.h"
@@ -104,16 +104,21 @@ namespace elec {
 		return _citizens.size();
 	}
 
-	void District::addCitizen(Citizen& citz) noexcept(false)
+	void District::addCitizen(string& name,int id,int birthYear)
 	{
-	
-			_citizens.push_back(&citz);
-		
+		try {
+			Citizen* citiz = new Citizen(name, id, birthYear, nullptr, *this);
+			_citizens.push_back(citiz);
+		}
+		catch (const char *msg)
+		{
+			cout << "Error couldn't add new citizen.";
+		}
 	}
 	
 	
 	//use only if you know that citizen exist
-	const Citizen& District::getCitizenById(int id) const noexcept(false)
+	const Citizen& District::getCitizenById(int id) const 
 	{
 		const Citizen* cit = nullptr;
 		auto j = _citizens.begin();

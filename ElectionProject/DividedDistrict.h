@@ -1,6 +1,7 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
 #include "District.h"
+#include <algorithm>
 #include <string>
 using namespace std;
 

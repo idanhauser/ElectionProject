@@ -1,7 +1,8 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
 #include "ElectionRound.h"
 #include <string>
+#include <algorithm>
 namespace elec
 {
 	class LoadElectionSystem;

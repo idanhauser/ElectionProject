@@ -1,4 +1,4 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #include "Party.h"
 #include <algorithm>
 #include <fstream>
@@ -119,6 +119,8 @@ namespace elec {
 			cout << "And they are:" << endl;
 			for (int i = 0; i < amountToPrint; ++i)
 			{
+				const District *d = &represnts[i]->getDistrict();
+			//	cout << typeid(d).name() + 12<<" ";
 				cout << represnts[i]->getCitizenName() << endl;
 			}
 		}
@@ -203,6 +205,7 @@ namespace elec {
 		{
 			for (int i = 1; i < sizeOfPartyMemberList; ++i)
 			{
+			
 				os << party.getPartyMembers()[i]->getCitizenName() << endl;
 			}
 		}

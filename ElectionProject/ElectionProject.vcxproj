@@ -142,7 +142,6 @@
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="District.cpp" />
     <ClCompile Include="DividedDistrict.cpp" />
-    <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="LoadElectionSystem.cpp" />
     <ClCompile Include="RegularElectionRound.cpp" />
     <ClCompile Include="SimpleElectionRound.cpp" />

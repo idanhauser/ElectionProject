@@ -1,6 +1,7 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
 #include "Utils.h"
+#include <algorithm>
 #include <string>
 using namespace std;
 namespace elec
@@ -15,7 +16,6 @@ namespace elec
 		string _name;
 		int _idNum;
 		int _birthYear;
-		int _districtNum;
 		bool _hasVoted;
 		const Party* _party;
 		int _partyId;
@@ -26,12 +26,13 @@ namespace elec
 
 	public:
 		Citizen() = delete;
-		Citizen(string& citizen_name, int id_num, int birthYear, int districtNum, const Party* party,const District& district);
+	
 		 Citizen(LoadElectionSystem& loader, const District& district);
+		Citizen(const string& cs, int id, int birth_year, const Party* party, const District& district);
 
 
 		~Citizen();
-
+		friend District;
 		friend ostream& operator<<(ostream& os, const Citizen& citizen);
 
 		/// <summary>

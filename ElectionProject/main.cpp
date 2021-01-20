@@ -1,10 +1,10 @@
 
-//code verison 3.1
+//code verison 3.2
 
 #include <iostream>
 #include <fstream>
 #include <vector>
-
+#include <algorithm>
 #include "Exceptions.h"
 #include "Utils.h"
 #include "ElectionRound.h"
@@ -585,9 +585,16 @@ void saveElections()
 	}
 
 
-	cout << "Saving election system..." << endl;
-	election->save(outFile);
-	cout << "election system saved successfully." << endl;
+	try {
+		cout << "Saving election system..." << endl;
+		election->save(outFile);
+		cout << "election system saved successfully." << endl;
+	}
+	catch (const char *msg)
+	{
+		cout << msg << endl;
+	}
+
 }
 
 void loadElection()

@@ -1,8 +1,9 @@
-//code verison 3.1
+//code verison 3.2
 #pragma once
 #include <fstream>
 #include <vector>
 #include <utility>
+#include <algorithm>
 using namespace std;
 #include "District.h"
 #include "DynamicArray.h"
@@ -80,7 +81,9 @@ namespace elec {
 		bool addParty(int partiesAmount, int districtsAmount);
 		bool addDistrict(int districtAmount);
 		/// <summary>
-		/// get the amount of all the reps party leader got
+		/// get the amount of all 
+		///  party leader got
+		///  
 		/// </summary>
 		/// <param name="index">the id of the party</param>
 		/// <returns></returns>

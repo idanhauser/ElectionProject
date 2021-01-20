@@ -1,6 +1,7 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 template <class T>

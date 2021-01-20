@@ -1,10 +1,9 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #include "ElectionRound.h"
 #include <iostream>
-#include <algorithm>
 #include <fstream>
 #include <vector>
-
+#include <algorithm>
 #include "Party.h"
 #include "Exceptions.h"
 #include "LoadElectionSystem.h"
@@ -203,15 +202,12 @@ namespace elec {
 		bool validData = true;
 		int saveDis;
 		bool citizenExist = true;
-
-
-
 		if (!isCitizenExist(id, saveDis))
 		{
 			if (isDistcritExist(districtId))
 			{
-				Citizen* citiz = new Citizen(name, id, birthYear, districtId, nullptr, *_districts.at(districtId - DISTRICT_ID_INIT));
-				_districts.at(districtId - DISTRICT_ID_INIT)->addCitizen(*citiz);//need to check if added susccessfuly.
+				
+				_districts.at(districtId - DISTRICT_ID_INIT)->addCitizen(name,id,birthYear);
 			}
 			else
 			{
@@ -601,7 +597,11 @@ namespace elec {
 		}
 		//Saving resultArr:
 		_results.save(outFile);
-
+		if(!outFile.good())
+		{
+			throw "Error saving to file";
+		}
+		
 		//		cout << "done" << endl;
 	}
 

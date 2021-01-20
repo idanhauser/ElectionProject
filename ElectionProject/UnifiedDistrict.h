@@ -1,6 +1,6 @@
-﻿//code verison 3.1
+﻿//code verison 3.2
 #pragma once
-
+#include <algorithm>
 #include "District.h"
 #include <string>
 namespace elec
