@@ -206,8 +206,13 @@ namespace elec {
 		{
 			if (isDistcritExist(districtId))
 			{
+<<<<<<< HEAD
 				
 				_districts.at(districtId - DISTRICT_ID_INIT)->addCitizen(name,id,birthYear);
+=======
+				Citizen* citiz = new Citizen(name, id, birthYear, nullptr, *_districts.at(districtId - DISTRICT_ID_INIT));
+				_districts.at(districtId - DISTRICT_ID_INIT)->addCitizen(*citiz);//need to check if added susccessfuly.
+>>>>>>> RoeeHT
 			}
 			else
 			{
@@ -356,7 +361,7 @@ namespace elec {
 			_results.VotesToRepsInDistrictByDistrictID((*j)->getSerialNum(),
 				(*j)->getNumOfReps(), (*j));
 
-			if (typeid((*j)) == typeid(UnifiedDistrict))
+			if (typeid((**j)) == typeid(UnifiedDistrict))
 			{
 				setWinnerInUnifiedDistrictByDistrictID((*j)->getSerialNum(), (*j)->getNumOfReps());
 
@@ -473,15 +478,15 @@ namespace elec {
 
 
 			//print results:
-			if (typeid((*j)) == typeid(UnifiedDistrict))
+			if (typeid((**j)) == typeid(UnifiedDistrict))
 			{
 				for (int m = 0; m < partiesAmount; m++)
 				{
 					
 						os << *electionRound._parties[m];
-						os << "And the have ";
-						os << electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), m) << " representatives." << endl;
-						os << electionRound._parties[m]->printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), m), (*j)->getSerialNum());
+						os << "And it has ";
+						os << (*j)->getRepsByPartyID(m) << " representatives." << endl;
+						os << electionRound._parties[m]->printPartyRepsFromDistrictByAmount((*j)->getRepsByPartyID(m), (*j)->getSerialNum());
 						os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
 							electionRound._results.getDistrictNumberOfVotesInParty(m, (*j)->getSerialNum()) << endl;
 						os << "Percentages of votes For The Party from Voting Citizens In The District is: " <<
@@ -504,7 +509,7 @@ namespace elec {
 						electionRound.sortDistrictWinners((*w)->getSerialNum(), partyIndexesSotedByReps);
 					}
 					os << *electionRound._parties[partyIndexesSotedByReps[m]] << endl;
-					os << electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), partyIndexesSotedByReps[m]) << " Reps" << endl;
+					os << electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), partyIndexesSotedByReps[m]) << " Reps elected" << endl;
 					electionRound._parties[partyIndexesSotedByReps[m]]->
 						printPartyRepsFromDistrictByAmount(electionRound._results.getPMNumberOfRepsInDistrict((*j)->getSerialNum(), partyIndexesSotedByReps[m]), (*j)->getSerialNum());
 					os << "Amount of Votes For The Party from Voting Citizens In The District: " <<
@@ -519,6 +524,7 @@ namespace elec {
 		//elections winner
 		vector<int> partiesIndexs(partiesAmount);
 		electionRound.checkElectionsWinner(partiesIndexs);
+		os << endl << "~~ Election Reuslts ~~" << endl;
 		for (int p = 0; p < partiesAmount; p++)
 		{
 
@@ -527,6 +533,7 @@ namespace elec {
 			os << "his party got total amount of " << electionRound._results.getTotalPartyNumberOfVotes(partiesIndexs[p]) << " votes" << endl;
 
 		}
+		os << endl;
 		return os;
 
 
