@@ -96,7 +96,7 @@ namespace elec
 	}
 	int resultsArr::getPMNumberOfRepsInDistrict(int districtId, int partyId) const
 	{
-		return _repsPartiesByID[partyId][districtId - DISTRICT_ID_INIT];
+		return _repsPartiesByID[partyId].at(districtId - DISTRICT_ID_INIT);
 	}
 
 	vector<int> resultsArr::getPMRepsVecInDistrict(int partyId)
@@ -109,7 +109,7 @@ namespace elec
 		int res = 0;
 		for (int i = 0; i < _votesByIDs.size(); i++)
 		{
-			res = res + _repsPartiesByID[i][districtID - DISTRICT_ID_INIT];
+			res = res + _repsPartiesByID[i].at(districtID - DISTRICT_ID_INIT);
 		}
 		return res;
 	}
@@ -127,7 +127,7 @@ namespace elec
 	}
 
 
-	bool resultsArr::addToPmsRepsTotalByPartyID(int partyID, int reps)
+	bool resultsArr::addToPmsRepsTotalByPartyID(int partyID, int reps) //todo: fix +=
 	{
 		_PMsRepsTotalByPartyID[partyID] = _PMsRepsTotalByPartyID[partyID] + reps;
 		return true;
@@ -141,7 +141,7 @@ namespace elec
 	}
 	bool resultsArr::setNewNumForPMRepsCount(int DistrictID, int RepPartyID, int amountOfReps)
 	{
-		_repsPartiesByID[RepPartyID][DistrictID - DISTRICT_ID_INIT] = amountOfReps;
+		_repsPartiesByID[RepPartyID].at(DistrictID - DISTRICT_ID_INIT) = amountOfReps;
 		return true;
 	}
 
@@ -180,7 +180,7 @@ namespace elec
 				vector<int> temp;
 				for (int j = 0; j < other._repsPartiesByID[i].size(); j++)
 				{
-					temp.push_back(other._repsPartiesByID[i][j]);
+					temp.push_back(other._repsPartiesByID[i].at(j));
 				}
 				_repsPartiesByID.push_back(temp);
 			}

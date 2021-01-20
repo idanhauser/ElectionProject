@@ -5,14 +5,15 @@
 
 
 
+#include "District.h"
 #include "LoadElectionSystem.h"
 #include "Party.h"
 
 namespace elec
 {
-	Citizen::Citizen(string& citizen_name, int id_num, int birthYear, int districtNum, const Party* party,
+	Citizen::Citizen(string& citizen_name, int id_num, int birthYear, const Party* party,
 		const District& district) : _name(citizen_name), _idNum(id_num),
-		_birthYear(birthYear), _districtNum(districtNum), _hasVoted(false), _party(nullptr),
+		_birthYear(birthYear),  _hasVoted(false), _party(nullptr),
 		_partyId(-1), _district(district)
 	{
 		
@@ -31,8 +32,6 @@ namespace elec
 		reader.read(rcastc(&_idNum), sizeof(int));
 		//Reading _birthYear
 		reader.read(rcastc(&_birthYear), sizeof(int));
-		//Reading _districtNum
-		reader.read(rcastc(&_districtNum), sizeof(int));
 		//reading _hasVoted
 		reader.read(rcastc(&_hasVoted), sizeof(bool));
 		//reading _partyID:
@@ -93,7 +92,7 @@ namespace elec
 
 	 int Citizen::getDistrictNum() const
 	{
-		return _districtNum;
+		return _district.getSerialNum();
 
 	}
 
@@ -129,8 +128,6 @@ namespace elec
 		outFile.write(rcastcc(&_idNum), sizeof(int));
 		//saving _birthYear
 		outFile.write(rcastcc(&_birthYear), sizeof(int));
-		//saving _districtNum
-		outFile.write(rcastcc(&_districtNum), sizeof(int));
 		//saving _hasVoted
 		outFile.write(rcastcc(&_hasVoted), sizeof(bool));
 		//saving _party Id

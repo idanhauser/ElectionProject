@@ -10,7 +10,6 @@ namespace elec
 	{
 	private:
 		DividedDistrict(const DividedDistrict& other);
-		const DividedDistrict& operator=(const DividedDistrict&);
 	public:
 		DividedDistrict(string& name, int numOfReps, int numOfParties);
 		DividedDistrict(LoadElectionSystem& loader);

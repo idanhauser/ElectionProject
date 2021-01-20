@@ -15,7 +15,6 @@ namespace elec
 		string _name;
 		int _idNum;
 		int _birthYear;
-		int _districtNum;
 		bool _hasVoted;
 		const Party* _party;
 		int _partyId;
@@ -26,7 +25,7 @@ namespace elec
 
 	public:
 		Citizen() = delete;
-		Citizen(string& citizen_name, int id_num, int birthYear, int districtNum, const Party* party,const District& district);
+		Citizen(string& citizen_name, int id_num, int birthYear, const Party* party,const District& district);
 		 Citizen(LoadElectionSystem& loader, const District& district);
 
 
