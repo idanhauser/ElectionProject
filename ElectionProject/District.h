@@ -59,7 +59,6 @@ namespace elec
 		int getNumberOfCitizens() const;
 		void addCitizen(string& name, int id, int birthYear);
 
-		//todo: to any getCitizenById i need to handle an error.
 		const Citizen& getCitizenById(int id) const;
 		Citizen& getCitizenById(int id);
 		

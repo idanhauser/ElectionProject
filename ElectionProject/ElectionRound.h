@@ -29,14 +29,6 @@ namespace elec {
 
 
 	public:
-		//struct pair { //todo: delete
-		//	int index;
-		//	double repsAmount;
-		//	bool operator>(const pair& other) const
-		//	{
-		//		return (repsAmount > other.repsAmount);
-		//	}	
-		//};
 		ElectionRound() = delete;
 		void setDate(int date_d, int date_m, int date_y) noexcept(false);
 		ElectionRound(int date_d, int date_m, int date_y) noexcept(false);
@@ -126,20 +118,6 @@ namespace elec {
 		/// </summary>
 		void printElectionDate(ostream& os) const;
 	private:
-		//todo: delete
-		/// <summary>
-		/// swap between two pairs.
-		/// </summary>
-		/// <param name="xp">the first pair</param>
-		/// <param name="yp">the second pair</param>
-		//void swap(pair* xp, pair* yp);
-
-		/// <summary>
-		/// bubble sorting
-		/// </summary>
-		/// <param name="arr">arr of pairs to be sorted</param>
-		/// <param name="n">number of element in the arr</param>
-		//void bubbleSort(pair arr[], int n);
 
 		void setDate();
 

@@ -17,14 +17,6 @@ namespace elec {
 		DynamicArray<vector<int>> _repsPartiesByID; //arr of reps by order of PartyID holding in each cell all districts given reps
 		vector<int> _PMsRepsTotalByPartyID; //KEEPING NUMBER OF REPS A PM GOT AFTER ALL VOTING
 	public:
-		/*struct pair { //todo: delete
-			int index;
-			double repsAmount;
-			bool operator>(const pair& other) const
-			{
-				return (repsAmount > other.repsAmount);
-			}
-		};*/
 		resultsArr() = default;
 		resultsArr(LoadElectionSystem& loader, int numofparties);
 		~resultsArr();
@@ -111,23 +103,6 @@ namespace elec {
 
 
 
-		//todo: delete
-		//		/// <summary>
-		//		/// swap between two pairs.
-		//		/// </summary>
-		//		/// <param name="xp">the first pair</param>
-		//		/// <param name="yp">the second pair</param>
-		//		void swap(pair* xp, pair* yp);
-		//		/// <summary>
-		///// bubble sorting
-		///// </summary>
-		///// <param name="arr">arr of pairs to be sorted</param>
-		///// <param name="n">number of element in the arr</param>
-		//		void bubbleSort(pair arr[], int n); 
-		//		//todo: change bubblesort to template
-		//
-		//		bool isResultsAllowed()const;
-		//
 
 
 

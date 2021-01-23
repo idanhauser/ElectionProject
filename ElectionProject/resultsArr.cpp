@@ -51,15 +51,7 @@ namespace elec
 
 
 	resultsArr::~resultsArr()
-	{//todo:roee check if we really need it, its a vectior and dynamic arrays..so we dont delete them or something
-		//for_each(_votesByIDs.begin(), _votesByIDs.end(), [](vector<int>& votesInVec)
-		//{
-		//	fill(votesInVec.begin(), votesInVec.end(), 0);
-		//});
-		//for_each(_repsPartiesByID.begin(), _repsPartiesByID.end(), [](vector<int>& repsInVec)
-		//{
-		//	fill(repsInVec.begin(), repsInVec.end(), 0);
-		//});
+	{
 
 	}
 
@@ -127,7 +119,7 @@ namespace elec
 	}
 
 
-	bool resultsArr::addToPmsRepsTotalByPartyID(int partyID, int reps) //todo: fix +=
+	bool resultsArr::addToPmsRepsTotalByPartyID(int partyID, int reps) 
 	{
 		_PMsRepsTotalByPartyID[partyID] = _PMsRepsTotalByPartyID[partyID] + reps;
 		return true;
@@ -292,30 +284,10 @@ namespace elec
 	}
 
 
-	//todo: delete
-	//void resultsArr::swap(pair* xp, pair* yp)
-	//{
-	//	pair temp = *xp;
-	//	*xp = *yp;
-	//	*yp = temp;
-	//}
 
 
 
 
 
-	//todo: delete
-	//void resultsArr::bubbleSort(pair arr[], int n)
-	//{
-	//	int i, j;
-	//	for (i = 0; i < n - 1; i++)
-	//	{
-	//		for (j = 0; j < n - i - 1; j++)
-	//		{
-	//			if (arr[j] > arr[j + 1])
-	//				swap(&arr[j], &arr[j + 1]);
-	//		}
-	//	}
-	//}
 
 }
